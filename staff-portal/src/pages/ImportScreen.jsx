@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function ImportScreen(){
-    return(<>This is import screen</>);
+    return(<p>Import screen here</p>);
 }
