@@ -10,9 +10,13 @@ const router = createBrowserRouter([{
   
   path:"/",
   element: <Layout/>,
-  children:[{
-path:"import",element:<ImportScreen/>,
-  },],
+  children:[
+    {
+    index:true,
+    
+    element:<ImportScreen/>,
+  },
+],
 }
 ]);
 
