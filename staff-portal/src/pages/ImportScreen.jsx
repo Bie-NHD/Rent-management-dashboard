@@ -13,6 +13,12 @@ export default function ImportScreen(){
 
         var reader =new FileReader();
         reader.readAsText(file);
+
+        reader.onload = (event)=>{
+            let csvData = event.target.result;
+            let headerRow = csvData.split('\n')[0];
+            let headers = headerRow.split(/(,|;)/gm);
+        }
     }
 
     return( 
