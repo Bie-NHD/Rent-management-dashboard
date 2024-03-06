@@ -3,10 +3,12 @@ import React, { useState } from "react";
 
 export default function ImportScreen(){
 
-    const [file,setFiles] = useState();
+    const [files,setFiles] = useState([]);
 
     function handleChange(event){
-        setFiles(event.target.files[0]);
+        let updatedFileList = files;
+        updatedFileList.append(event.target.files);
+        setFiles();
         readCSVFile(file);
     }
     function readCSVFile(file){
@@ -14,10 +16,12 @@ export default function ImportScreen(){
         var reader =new FileReader();
         reader.readAsText(file);
 
+        let headers;
+
         reader.onload = (event)=>{
             let csvData = event.target.result;
             let headerRow = csvData.split('\n')[0];
-            let headers = headerRow.split(/(,|;)/gm);
+            headers = headerRow.split(/(,|;)/gm);
         }
     }
 
@@ -26,7 +30,7 @@ export default function ImportScreen(){
         <form>
             <input type="file" accept=".csv" onChange=""/>
             <br/>
-            <input type="submit" disabled value="Submit"/>
+            
         </form>
     <p>hi</p>
     </>

@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@table-library/react-table-library": "^4.1.7",
     "autoprefixer": "^10.4.17",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
