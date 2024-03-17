@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 // import './App.css'
 import ImportScreen from './pages/ImportScreen'
 import SideBar from './shared/SideBar'
+import { Container } from '@mui/material'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -31,10 +32,16 @@ function App() {
     //     Click on the Vite and React logos to learn more
     //   </p>
     // </>
-    <>
-    <SideBar/>
-    <ImportScreen/>
-    </>
+    <Container
+    sx={
+      {
+        display: "flex"
+      }
+    }
+   >
+      <SideBar/>
+      <ImportScreen/>
+    </Container>
   );
 }
 
