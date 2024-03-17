@@ -1,9 +1,14 @@
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 
 const ImportScreen = () => {
 
-return <Container>
+return <Container
+sx={{
+    height: 3000,
+    background: 'yellow',
+    flexGrow:3
+}}>
     Hi
 </Container>;
 }
