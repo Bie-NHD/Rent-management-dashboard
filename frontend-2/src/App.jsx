@@ -1,48 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
 // import './App.css'
-import ImportScreen from './pages/ImportScreen'
-import SideBar from './shared/SideBar'
-import { Container } from '@mui/material'
+import ImportScreen from "./pages/ImportPage";
+import SideBar from "./shared/SideBar";
+import { Container } from "@mui/material";
+import ApartmentPage from "./pages/ApartmentPage";
+import Layout from "./shared/Layout";
+// import ApartmentPage from "./pages/ApartmentPage";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
-    // <>
-    //   <div>
-    //     <a href="https://vitejs.dev" target="_blank">
-    //       <img src={viteLogo} className="logo" alt="Vite logo" />
-    //     </a>
-    //     <a href="https://react.dev" target="_blank">
-    //       <img src={reactLogo} className="logo react" alt="React logo" />
-    //     </a>
-    //   </div>
-    //   <h1>Vite + React</h1>
-    //   <div className="card">
-    //     <button onClick={() => setCount((count) => count + 1)}>
-    //       count is {count}
-    //     </button>
-    //     <p>
-    //       Edit <code>src/App.jsx</code> and save to test HMR
-    //     </p>
-    //   </div>
-    //   <p className="read-the-docs">
-    //     Click on the Vite and React logos to learn more
-    //   </p>
-    // </>
     <Container
-    sx={
-      {
-        display: "flex"
-      }
-    }
-   >
-      <SideBar/>
-      <ImportScreen/>
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        minWidth: "100vw",
+      }}
+    >
+      <SideBar />
+      {/* <ImportScreen /> */}
+      <ApartmentPage />
     </Container>
+    // <Layout/>
   );
 }
 
-export default App
+export default App;
