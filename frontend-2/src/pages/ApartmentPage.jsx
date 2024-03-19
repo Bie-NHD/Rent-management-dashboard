@@ -12,12 +12,13 @@ import { fetchApartmentsAPI, fetchTestApartment } from "../api";
 const rowHeaders = ["ID", "Address", "Retail Price", "Number of rooms"];
 
 const ApartmentPage = () => {
+  
   const [apartments, setApartments] = React.useState([]);
 
   React.useEffect(() => {
     // fetchApartmentsAPI().then((data) => setApartments(data.apartments));
 //  fetchTestApartment().then((data)=> setApartments(data.apartments))
-setApartments(fetchTestApartment.apartments)
+setApartments(fetchTestApartment)
   }, []);
 
   return (
