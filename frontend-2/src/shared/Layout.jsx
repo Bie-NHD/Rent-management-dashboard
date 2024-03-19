@@ -1,11 +1,13 @@
 import { Container } from "@mui/material";
-import SideBar from "./SideBar/SideBar";
+import SideBar from "./SideBar";
 
-const  Layout = ({children}) => {
-    
+const Layout = () => {
+  return (
+    <Container>
+      <SideBar />
+      <Container></Container>
+    </Container>
+  );
+};
 
-    return (<Container>
-        <SideBar/>
-        {children}
-    </Container>);
-}
+export default Layout;
