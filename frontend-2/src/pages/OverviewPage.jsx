@@ -1,5 +1,8 @@
-const OverviewPage = () => {
-  return <div>Overview</div>;
-};
+import React from 'react'
 
-export default OverviewPage;
+export const OverviewPage = () => {
+  return (
+    <div>OverviewPage</div>
+  )
+}
+

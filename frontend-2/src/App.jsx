@@ -5,12 +5,12 @@ import viteLogo from "/vite.svg";
 import ImportScreen from "./pages/ImportPage";
 import SideBar from "./shared/SideBar";
 import { Container } from "@mui/material";
-import ApartmentPage from "./pages/ApartmentPage";
-import Layout from "./shared/Layout";
+// import ApartmentPage from "./pages/ApartmentPage";
+// import Layout from "./shared/Layout";
+import ContractPage from "./pages/ContractPage";
 // import ApartmentPage from "./pages/ApartmentPage";
 
 function App() {
-  const [count, setCount] = useState(0);
 
   return (
     <Container
@@ -22,7 +22,8 @@ function App() {
     >
       <SideBar />
       {/* <ImportScreen /> */}
-      <ApartmentPage />
+      {/* <ApartmentPage /> */}
+      <ContractPage/>
     </Container>
     // <Layout/>
   );

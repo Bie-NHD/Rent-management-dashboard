@@ -1,16 +1,7 @@
-import { Box, Container } from "@mui/material";
+import React from "react";
 
+const ImportPage = () => {
+  return <div>ImportPage</div>;
+};
 
-const ImportScreen = () => {
-
-return <Container
-sx={{
-    height: 3000,
-    background: 'yellow',
-    flexGrow:3
-}}>
-    Hi
-</Container>;
-}
-
-export default ImportScreen;
+export default ImportPage;
