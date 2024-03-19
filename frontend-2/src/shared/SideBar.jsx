@@ -1,30 +1,33 @@
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { red } from "@mui/material/colors";
-import {
-  IconHome,
-  IconScript,
-  IconUsers,
-  IconBorderAll,
-} from "@tabler/icons-react";
+import AppsIcon from '@mui/icons-material/Apps';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
+import PeopleIcon from '@mui/icons-material/People';
+import { Link } from "react-router-dom";
+
 
 // import './SideBar.module.css';
 
 const appRoutes = [
   {
-    icon: <IconBorderAll />,
-    text:"Overview"
+    icon: <AppsIcon/>,
+    text:"Overview",
+    link: '/index.html'
   },
   {
-    icon: <IconUsers />,
-    text:"Customers"
+    icon: <PeopleIcon/>,
+    text:"Customers",
+    link:'/customer'
   },
   {
-    icon: <IconHome />,
-    text:"Apartments"
+    icon: <HolidayVillageIcon/>,
+    text:"Apartments",
+    link: '/apartment'
   },
   {
-    icon: <IconScript />,
-    text:"Contracts"
+    icon: <ReceiptLongIcon/>,
+    text:"Contracts",
+    link: '/contract'
   }
 ];
 
@@ -35,15 +38,15 @@ const SideBar = () => {
       flexShrink:0
     }}>
       <List>
-        {appRoutes.map((item,index)=>(
-          <ListItem key={item.text}>
-            <ListItemButton>
-
+        {appRoutes.map((item)=>(
+          <ListItemButton key={item.text} components={Link} to={item.link}>
+           
             <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText>{item.text}</ListItemText>
-            </ListItemButton>
-          </ListItem>
-        ))        }
+            
+          </ListItemButton>
+        ))        
+        }
       </List>
     </Box>
   );
