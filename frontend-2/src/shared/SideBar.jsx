@@ -12,7 +12,7 @@ const appRoutes = [
   {
     icon: <AppsIcon/>,
     text:"Overview",
-    link: '/index.html'
+    link: '/'
   },
   {
     icon: <PeopleIcon/>,
