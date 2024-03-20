@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { fetchTestContract } from "../api";
-import { formatDate } from "../utils/stringHelper";
+import { formatDate, formatId } from "../utils/stringHelper";
 import {
   TableContainer,
   Table,
@@ -41,12 +41,12 @@ const AllContractsPage = () => {
                 key={item.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell>{item.id}</TableCell>
+                <TableCell>{formatId(item.id)}</TableCell>
                 <TableCell>
                   {formatDate(item.startDate)} - {formatDate(item.endDate)}
                 </TableCell>
                 <TableCell>
-                  <p>{item.customer.id}</p>
+                  {/* <p>{item.customer.id}</p> */}
                   <p>
                     {item.customer.firstName}, {item.customer.lastName}
                   </p>
@@ -54,7 +54,7 @@ const AllContractsPage = () => {
                   <p>{item.customer.status}</p>
                 </TableCell>
                 <TableCell>
-                  <p>{item.apartment.id}</p>
+                  {/* <p>{item.apartment.id}</p> */}
                   <p>{item.apartment.address}</p>
                   <p>{item.apartment.retailPrice}</p>
                   <p>{item.apartment.numberOfRoom}</p>
