@@ -7,10 +7,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { fetchApartmentsAPI, fetchTestApartment } from "../api";
-import { Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import ImportButton from "../shared/ImportButton";
 import { API_ROUTE_APARMENT } from "../utils/constants";
 import PageHeader from "../shared/PageHeader";
+import ExportButton from "../shared/ExportButton";
+import { formatId } from "../utils/stringHelper";
 
 const rowHeaders = ["ID", "Address", "Retail Price", "Number of rooms"];
 
@@ -26,7 +28,16 @@ const AllApartmentsPage = () => {
   return (
     <>
       <PageHeader>Apartments</PageHeader>
+      <Container sx={{
+        display: "flex",
+        justifyContent: "end",
+        justifyItems: "flex-end"
+        
+      }}>
+
+      <ExportButton exportType={API_ROUTE_APARMENT}/>
       <ImportButton importType={API_ROUTE_APARMENT} />
+      </Container>
       <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -42,7 +53,7 @@ const AllApartmentsPage = () => {
                 key={item.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell>{item.id}</TableCell>
+                <TableCell>{formatId(item.id)}</TableCell>
                 <TableCell>{item.address}</TableCell>
                 <TableCell>{item.retailPrice}</TableCell>
                 <TableCell>{item.numberOfRoom}</TableCell>
