@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import { OverviewPage } from "./pages/OverviewPage";
-import {loader as importLoader}  from "./pages/ImportPage";
+import { loader as importLoader } from "./pages/ImportPage";
 
 import Layout from "./shared/Layout";
 import ErrorPage from "./pages/ErrorPage";
-import CustomerPage from "./pages/CustomerPage";
-import ApartmentPage from "./pages/ApartmentPage";
-import ContractPage from "./pages/ContractPage";
+import AllCustomersPage from "./pages/AllCustomersPage";
+import AllApartmentsPage from "./pages/AllApartmentsPage";
+import AllContractsPage from "./pages/AllContractsPage";
 import ImportPage from "./pages/ImportPage";
 
 const routes = {
@@ -18,32 +18,32 @@ const routes = {
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout/>,
-    errorElement: <ErrorPage/>,
+    element: <Layout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
         element: <OverviewPage />,
       },
       {
-        path: "apartment",
-        element: <ApartmentPage/>
+        path: "apartments",
+        element: <AllApartmentsPage />,
       },
       {
-        path: "customer",
-        element: <CustomerPage />,
+        path: "customers",
+        element: <AllCustomersPage />,
       },
       {
-        path: "contract",
-        element: <ContractPage />,
+        path: "contracts",
+        element: <AllContractsPage />,
       },
       {
         path: "import/:importType",
-        element: <ImportPage/>,
-        loader : importLoader
-      }
+        element: <ImportPage />,
+        loader: importLoader,
+      },
     ],
   },
 ]);
 
-export default routes;
+// export default routes;
