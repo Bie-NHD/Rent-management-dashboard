@@ -1,9 +1,10 @@
-import React from 'react'
+import React from "react";
+import PropTypes from "prop-types";
 
+const CustomerPage = (props) => {
+  return <div>CustomerPage</div>;
+};
 
- const CustomerPage = () => {
-  return (
-    <div>CustomerPage</div>
-  )
-}
-export default CustomerPage
+CustomerPage.propTypes = {};
+
+export default CustomerPage;
