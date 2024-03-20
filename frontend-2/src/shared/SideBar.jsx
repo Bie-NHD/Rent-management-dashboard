@@ -44,11 +44,21 @@ const SideBar = () => {
       component="aside"
       sx={{
         flexShrink: 0,
+        // backgroundColor: "primary.light",
       }}
     >
       <List>
         {appRoutes.map((item) => (
-          <ListItemButton key={item.text} components={Link} to={item.link}>
+          <ListItemButton
+            key={item.text}
+            components={Link}
+            to={item.link}
+            sx={{
+              "&:hover": {
+                backgroundColor: "primary.light",
+              },
+            }}
+          >
             <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText>{item.text}</ListItemText>
           </ListItemButton>

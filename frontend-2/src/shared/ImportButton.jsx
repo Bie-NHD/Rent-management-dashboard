@@ -14,6 +14,7 @@ const ImportButton = ({ importType }) => {
       to={`/import${importType}`}
       sx={{
         boxShadow: "none",
+        alignSelf: "flex-end",
       }}
     >
       Import

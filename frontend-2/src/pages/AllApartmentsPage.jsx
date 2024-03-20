@@ -24,7 +24,7 @@ const AllApartmentsPage = () => {
   }, []);
 
   return (
-    <Container>
+    <>
       <PageHeader>Apartments</PageHeader>
       <ImportButton importType={API_ROUTE_APARMENT} />
       <TableContainer>
@@ -51,7 +51,7 @@ const AllApartmentsPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Container>
+    </>
   );
 };
 
