@@ -1,10 +1,13 @@
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import SideBar from "./SideBar";
+import MenuAppBar from "./MenuAppBar";
 
 const Layout = () => {
   return (
-    <Container
+    <>
+        <MenuAppBar/>
+    <Box
       sx={{
         display: "flex",
         minHeight: "100vh",
@@ -12,17 +15,18 @@ const Layout = () => {
         margin: 0,
         padding: 0,
       }}
-    >
+      >
       <SideBar />
       <Container
         sx={{
           display: "flex",
           flexDirection: "column",
         }}
-      >
+        >
         <Outlet />
       </Container>
-    </Container>
+    </Box>
+        </>
   );
 };
 

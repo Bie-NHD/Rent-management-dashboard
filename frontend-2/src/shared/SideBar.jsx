@@ -41,10 +41,12 @@ const appRoutes = [
 const SideBar = () => {
   return (
     <Box
-      component="aside"
+      component="nav"
       sx={{
         flexShrink: 0,
         // backgroundColor: "primary.light",
+        border: "1px solid",
+        borderColor: "primary.dark"
       }}
     >
       <List>
@@ -55,11 +57,14 @@ const SideBar = () => {
             to={item.link}
             sx={{
               "&:hover": {
-                backgroundColor: "primary.light",
+                // backgroundColor: "primary.light",
               },
+              padding: "20px"
             }}
           >
-            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemIcon sx={{
+              color: "inherit"
+            }}>{item.icon}</ListItemIcon>
             <ListItemText>{item.text}</ListItemText>
           </ListItemButton>
         ))}
