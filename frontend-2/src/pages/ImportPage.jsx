@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useLoaderData } from "react-router-dom";
+import FileUploadButton from "../components/FileUploadButton";
 
 const ImportPage = () => {
   const importType = useLoaderData();
@@ -20,6 +21,7 @@ const ImportPage = () => {
         display: "flex",
       }}
     >
+      <FileUploadButton/>
       <TableContainer
         sx={{
           alignSelf: "center",
