@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { OverviewPage } from "./pages/OverviewPage";
-import { loader as importLoader } from "./pages/ImportPage";
+// import { loader as importLoader } from "./pages/ImportPage";
 
 import Layout from "./shared/Layout";
 import ErrorPage from "./pages/ErrorPage";
@@ -38,9 +38,9 @@ export const router = createBrowserRouter([
         element: <AllContractsPage />,
       },
       {
-        path: "import/:importType",
+        path: "import",
         element: <ImportPage />,
-        loader: importLoader,
+        // loader: importLoader,
       },
     ],
   },

@@ -11,6 +11,9 @@ import {
   Container,
 } from "@mui/material";
 import PageHeader from "../shared/PageHeader";
+import { API_ROUTE_CONTRACT } from "../utils/constants";
+import ExportButton from "../shared/ExportButton";
+import ImportButton from "../shared/ImportButton";
 
 const rowHeaders = ["ID", "Period", "Customer", "Apartment"];
 
@@ -26,6 +29,16 @@ const AllContractsPage = () => {
   return (
     <Container>
       <PageHeader>Contracts</PageHeader>
+      <Container
+        sx={{
+          display: "flex",
+          justifyContent: "end",
+          justifyItems: "flex-end",
+        }}
+      >
+        <ExportButton exportType={API_ROUTE_CONTRACT} />
+        <ImportButton importType={API_ROUTE_CONTRACT} />
+      </Container>
       <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
