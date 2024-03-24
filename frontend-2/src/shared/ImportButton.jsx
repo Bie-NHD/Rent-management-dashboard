@@ -3,18 +3,20 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 /**
+ *
  * @param {string} importType
+ * @returns
  */
-
 const ImportButton = ({ importType }) => {
   return (
     <Button
-      variant="contained"
+      variant="outlined"
       component={Link}
-      to={`/import${importType}`}
+      to={`/import?type=${importType}`}
       sx={{
         boxShadow: "none",
         alignSelf: "flex-end",
+        marginInline: ".5rem",
       }}
     >
       Import

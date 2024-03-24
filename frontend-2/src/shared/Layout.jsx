@@ -6,27 +6,27 @@ import MenuAppBar from "./MenuAppBar";
 const Layout = () => {
   return (
     <>
-        <MenuAppBar/>
-    <Box
-      sx={{
-        display: "flex",
-        minHeight: "100vh",
-        minWidth: "100vw",
-        margin: 0,
-        padding: 0,
-      }}
-      >
-      <SideBar />
-      <Container
+      <MenuAppBar />
+      <Box
         sx={{
           display: "flex",
-          flexDirection: "column",
+          minHeight: "100vh",
+          minWidth: "100vw",
+          margin: 0,
+          padding: 0,
         }}
+      >
+        <SideBar />
+        <Container
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
         >
-        <Outlet />
-      </Container>
-    </Box>
-        </>
+          <Outlet />
+        </Container>
+      </Box>
+    </>
   );
 };
 

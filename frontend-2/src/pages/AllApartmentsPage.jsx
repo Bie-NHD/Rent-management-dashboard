@@ -6,14 +6,15 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import {  fetchTestApartment } from "../api";
-import {  Container,} from "@mui/material";
+import { fetchTestApartment } from "../api";
+import { Container } from "@mui/material";
 import ImportButton from "../shared/ImportButton";
 import { API_ROUTE_APARMENT } from "../utils/constants";
 import PageHeader from "../shared/PageHeader";
 import ExportButton from "../shared/ExportButton";
 // import { DataGrid } from '@mui/x-data-grid';
 import { formatId } from "../utils/stringHelper";
+import { fetchApartmentsAPI } from "../api";
 
 const rowHeaders = ["ID", "Address", "Retail Price", "Number of rooms"];
 
@@ -38,26 +39,26 @@ const columns = [
 ];
 
 /*
-* COMPONENT AllApartmentsPage
-*/ 
+ * COMPONENT AllApartmentsPage
+ */
 const AllApartmentsPage = () => {
   const [apartments, setApartments] = React.useState([]);
   const [currPage, setCurrPage] = useState(1);
   const [totalPages, setToTalPages] = useState(1);
 
   React.useEffect(() => {
-    // fetchApartmentsAPI().then((data) => {
-    //   setApartments(data.apartments);
-    //   const page = data.page;
+    fetchApartmentsAPI().then((data) => {
+      setApartments(data.apartments);
+      //   const page = data.page;
 
-    //   if (totalPages != page.totalPages) {
-    //     setToTalPages(page.totalPages);
-    //   }
+      //   if (totalPages != page.totalPages) {
+      //     setToTalPages(page.totalPages);
+      //   }
 
-    //   setCurrPage(page.pageNumber);
-    // });
+      //   setCurrPage(page.pageNumber);
+    });
 
-    setApartments(fetchTestApartment);
+    // setApartments(fetchTestApartment);
   }, [currPage]);
 
   return (
@@ -70,8 +71,8 @@ const AllApartmentsPage = () => {
           justifyItems: "flex-end",
         }}
       >
-        <ExportButton exportType={API_ROUTE_APARMENT} />
         <ImportButton importType={API_ROUTE_APARMENT} />
+        <ExportButton exportType={API_ROUTE_APARMENT} />
       </Container>
       <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -102,5 +103,3 @@ const AllApartmentsPage = () => {
 };
 
 export default AllApartmentsPage;
-
-

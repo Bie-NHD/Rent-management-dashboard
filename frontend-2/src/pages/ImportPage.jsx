@@ -24,7 +24,7 @@ import {
 } from "../utils/constants";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { addApartmentsAPI } from "../api";
+import { importApartmentsAPI } from "../api";
 
 // styled input button
 const VisuallyHiddenInput = styled("input")({
@@ -59,7 +59,6 @@ const ImportPage = () => {
         {
           value: file,
           filename: file.name,
-          // id: v1uuid()
         },
       ];
     setFiles(newFiles);
@@ -71,19 +70,19 @@ const ImportPage = () => {
     console.log(files);
 
     const fd = new FormData();
-    fd.append(
-      "file[]",
-      files.map((item) => item.value)
-    );
+
+    files.forEach((file) => {
+      fd.append("file", file.value);
+      console.log("APPEND ");
+      console.log(fd);
+    });
+
     switch (importType) {
       case API_ROUTE_APARMENT:
-        addApartmentsAPI(fd);
+        importApartmentsAPI(fd);
         break;
     }
   }
-
-  //
-  // useEffect(() => {}, []);
 
   return (
     <Container
@@ -113,19 +112,7 @@ const ImportPage = () => {
           Submit
         </Button>
       </FormControl>
-      <Box sx={{ display: "block", margin: ".5rem" }}>
-        <Select
-          defaultValue={importType}
-          onChange={(e) => {
-            importType = e.target.value;
-          }}
-          sx={{ flexGrow: 0 }}
-        >
-          <MenuItem value={API_ROUTE_APARMENT}>apartments</MenuItem>
-          <MenuItem value={API_ROUTE_CONTRACT}>contracts</MenuItem>
-          {/* <MenuItem value={API_ROUTE_USER}>users</MenuItem> */}
-        </Select>
-      </Box>
+      <Box sx={{ display: "block", margin: ".5rem" }}></Box>
       <TableContainer
         sx={{
           alignSelf: "center",
@@ -141,7 +128,6 @@ const ImportPage = () => {
           <TableBody>
             {files
               ? files.map((item) => (
-                  // <FileRow prop={item} key={item.filename}></FileRow>
                   <TableRow key={item.filename}>
                     <TableCell key={item.filename}>{item.filename}</TableCell>
                   </TableRow>
@@ -154,13 +140,4 @@ const ImportPage = () => {
   );
 };
 
-// const FileRow = ({ prop }) => {
-//   return (
-//     <TableRow key={this.key}>
-//       <TableCell>{prop.filename}</TableCell>
-//     </TableRow>
-//   );
-// };
-
 export default ImportPage;
-// export const loader = async ({ params }) => params.importType;

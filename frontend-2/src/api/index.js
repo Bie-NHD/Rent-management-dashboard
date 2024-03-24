@@ -9,10 +9,13 @@ import {
 
 import { TEST_URL, API_ROUTE_APARMENT } from "../utils/constants";
 
-export const fetchApartmentsAPI = async () =>
+export const fetchApartmentsAPI = async (page, pageSize) =>
   axios
-    .get(TEST_URL + API_ROUTE_APARMENT)
-    .then((response) => response.data.data)
+    .get(TEST_URL + API_ROUTE_APARMENT, { page, pageSize })
+    .then((response) => {
+      console.log(response.data.data);
+      return response.data.data;
+    })
     .catch(function (error) {
       // handle error
       console.log(error);
@@ -21,15 +24,24 @@ export const fetchApartmentsAPI = async () =>
       // always executed
     });
 
-export const addApartmentsAPI = async (formData) => {
+export const importApartmentsAPI = async (formData) => {
   console.log("SUBMIT FILES");
+  console.log(formData);
   axios
-    .postForm(TEST_URL + API_ROUTE_APARMENT, formData)
+    .post(TEST_URL + API_ROUTE_APARMENT + "/import", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
     .then((response) => console.log(response))
     .catch(function (error) {
       // handle error
       console.log(error);
     });
+};
+
+export const exportFileAPI = (route, getTemplate = false) => {
+  return TEST_URL + route + "/export?getTemplate=" + getTemplate;
 };
 
 export const fetchTestApartment = testApartmentsOnly;
