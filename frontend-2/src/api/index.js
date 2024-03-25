@@ -11,7 +11,12 @@ import { TEST_URL, API_ROUTE_APARMENT } from "../utils/constants";
 
 export const fetchApartmentsAPI = async (page, pageSize) =>
   axios
-    .get(TEST_URL + API_ROUTE_APARMENT, { page, pageSize })
+    .get(TEST_URL + API_ROUTE_APARMENT, {
+      params: {
+        page: page,
+        pageSize: pageSize,
+      },
+    })
     .then((response) => {
       console.log(response.data.data);
       return response.data.data;

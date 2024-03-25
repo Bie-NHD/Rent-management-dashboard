@@ -7,8 +7,6 @@ import {
   TableRow,
   Button,
   FormControl,
-  Select,
-  MenuItem,
   Box,
 } from "@mui/material";
 import Container from "@mui/material/Container";
@@ -16,7 +14,7 @@ import { CloudUploadOutlined } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import { Form, useLoaderData } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import { v1 as v1uuid } from "uuid";
+
 import {
   API_ROUTE_APARMENT,
   API_ROUTE_CONTRACT,

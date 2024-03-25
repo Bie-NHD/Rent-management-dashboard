@@ -5,36 +5,43 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Container from "@mui/material/Container";
+import Pagination from "@mui/material/Pagination";
 import { fetchTestApartment } from "../api";
-import { Container } from "@mui/material";
-import ImportButton from "../shared/ImportButton";
+
 import { API_ROUTE_APARMENT } from "../utils/constants";
-import PageHeader from "../shared/PageHeader";
-import ExportButton from "../shared/ExportButton";
+import PageHeader from "../components/PageHeader";
+import ImportButton from "../components/ImportButton";
+import ExportButton from "../components/ExportButton";
 // import { DataGrid } from '@mui/x-data-grid';
 import { formatId } from "../utils/stringHelper";
 import { fetchApartmentsAPI } from "../api";
+import { Box, FormControl } from "@mui/material";
 
 const rowHeaders = ["ID", "Address", "Retail Price", "Number of rooms"];
 
+const pageSizes = [5, 10, 15];
+
 const columns = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'firstName', headerName: 'First name', width: 130 },
-  { field: 'lastName', headerName: 'Last name', width: 130 },
+  { field: "id", headerName: "ID", width: 70 },
+  { field: "firstName", headerName: "First name", width: 130 },
+  { field: "lastName", headerName: "Last name", width: 130 },
   {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
+    field: "age",
+    headerName: "Age",
+    type: "number",
     width: 90,
   },
   {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
+    field: "fullName",
+    headerName: "Full name",
+    description: "This column has a value getter and is not sortable.",
     sortable: false,
     width: 160,
-    valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
+    valueGetter: (value, row) => `${row.firstName || ""} ${row.lastName || ""}`,
   },
 ];
 
@@ -43,23 +50,20 @@ const columns = [
  */
 const AllApartmentsPage = () => {
   const [apartments, setApartments] = React.useState([]);
-  const [currPage, setCurrPage] = useState(1);
+  const [currPage, setCurrPage] = useState(0);
   const [totalPages, setToTalPages] = useState(1);
+  const [pageSize, setPageSize] = useState(pageSizes[1]);
 
   React.useEffect(() => {
-    fetchApartmentsAPI().then((data) => {
+    console.log(`USEEFFECT: CURRPAGE ${currPage} | TOTALPAGE ${totalPages}`);
+    fetchApartmentsAPI(currPage, pageSize).then((data) => {
       setApartments(data.apartments);
-      //   const page = data.page;
-
-      //   if (totalPages != page.totalPages) {
-      //     setToTalPages(page.totalPages);
-      //   }
-
-      //   setCurrPage(page.pageNumber);
+      console.log(data.apartments);
+      setToTalPages(data.page.totalPages);
     });
 
     // setApartments(fetchTestApartment);
-  }, [currPage]);
+  }, [currPage, pageSize]);
 
   return (
     <>
@@ -98,6 +102,39 @@ const AllApartmentsPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Container
+        sx={{
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "end",
+        }}
+      >
+        <Box
+          component={FormControl}
+          sx={{ marginInline: 1, minWidth: 120 }}
+          size="small"
+        >
+          <InputLabel id="page-size-label">Page Size</InputLabel>
+          <Select
+            labelId="page-size-label"
+            label="Page Size"
+            defaultValue={pageSizes[1]}
+            onChange={(e) => setPageSize(e.target.value)}
+          >
+            {pageSizes.map((item) => (
+              <MenuItem key={`menu-item-${item}`} value={item}>
+                {item}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+        <Pagination
+          onChange={(e, p) => setCurrPage((cp) => p - 1)}
+          count={totalPages}
+          variant="outlined"
+          shape="rounded"
+        />
+      </Container>
     </>
   );
 };

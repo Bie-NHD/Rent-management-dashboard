@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { OverviewPage } from "./pages/OverviewPage";
 // import { loader as importLoader } from "./pages/ImportPage";
 
-import Layout from "./shared/Layout";
+import Layout from "./components/Layout.jsx";
 import ErrorPage from "./pages/ErrorPage";
 import AllCustomersPage from "./pages/AllCustomersPage";
 import AllApartmentsPage from "./pages/AllApartmentsPage";

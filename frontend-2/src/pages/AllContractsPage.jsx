@@ -10,10 +10,10 @@ import {
   TableCell,
   Container,
 } from "@mui/material";
-import PageHeader from "../shared/PageHeader";
+import PageHeader from "../components/PageHeader";
 import { API_ROUTE_CONTRACT } from "../utils/constants";
-import ExportButton from "../shared/ExportButton";
-import ImportButton from "../shared/ImportButton";
+import ExportButton from "../components/ExportButton";
+import ImportButton from "../components/ImportButton";
 
 const rowHeaders = ["ID", "Period", "Customer", "Apartment"];
 
