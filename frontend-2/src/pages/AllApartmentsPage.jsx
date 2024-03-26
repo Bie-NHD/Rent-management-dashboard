@@ -21,6 +21,7 @@ import { formatId } from "../utils/stringHelper";
 import { fetchApartmentsAPI } from "../api";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Box, Skeleton, Stack, Typography } from "@mui/material";
 
 const _pageSizeOptions = [5, 10, 15];
 
@@ -54,6 +55,13 @@ const AllApartmentsPage = () => {
     setPageSize(event.target.value);
   }
 
+  const PlaceHolder = () => (
+    <Stack spacing={2} sx={{ height: "40%", marginY: "2rem" }}>
+      <Skeleton variant="rectangular" height={"20%"} />
+      <Skeleton variant="rectangular" height={"80%"} />
+    </Stack>
+  );
+
   return (
     <>
       <PageHeader>Apartments</PageHeader>
@@ -67,38 +75,42 @@ const AllApartmentsPage = () => {
         <ImportButton importType={API_ROUTE_APARMENT} />
         <ExportButton exportType={API_ROUTE_APARMENT} />
       </Container>
-      <TableContainer
-        sx={{ height: "75%", maxHeight: "80%", overflow: "scroll" }}
-      >
-        <Table stickyHeader sx={{ minWidth: 650 }}>
-          <TableHead>
-            <TableRow>
-              {APARTMENTS_HEADERS.map((item) => (
-                <TableCell key={item}>{item}</TableCell>
-              ))}
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {apartments.map((item) => (
-              <TableRow
-                key={item.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell>{formatId(item.id)}</TableCell>
-                <TableCell>{item.address}</TableCell>
-                <TableCell>{item.retailPrice}</TableCell>
-                <TableCell>{item.numberOfRoom}</TableCell>
-                <TableCell>
-                  <IconButton aria-label="delete" color="warning">
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
+      {apartments && apartments.length ? (
+        <TableContainer sx={{ maxHeight: "80%", overflow: "scroll" }}>
+          <Table stickyHeader sx={{ minWidth: 650 }}>
+            <TableHead>
+              <TableRow>
+                {APARTMENTS_HEADERS.map((item) => (
+                  <TableCell key={item}>{item}</TableCell>
+                ))}
+                <TableCell></TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {apartments.map((item) => (
+                <TableRow
+                  key={item.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell>
+                    <Typography>{formatId(item.id)}</Typography>
+                  </TableCell>
+                  <TableCell>{item.address}</TableCell>
+                  <TableCell>{item.retailPrice}</TableCell>
+                  <TableCell>{item.numberOfRoom}</TableCell>
+                  <TableCell>
+                    <IconButton aria-label="delete" color="warning">
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <PlaceHolder />
+      )}
       <BottomPaginationBar
         pageSizeOptions={_pageSizeOptions}
         totalPages={totalPages}

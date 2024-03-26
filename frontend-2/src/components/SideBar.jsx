@@ -46,29 +46,38 @@ const SideBar = () => {
         flexShrink: 0,
         // backgroundColor: "primary.light",
         border: "1px solid",
-        borderColor: "primary.dark"
+        // borderColor: "primary.dark",
+        // position: "sticky",
+        margin: 0,
+        // height: "100%",
       }}
     >
-      <List>
-        {appRoutes.map((item) => (
-          <ListItemButton
-            key={item.text}
-            components={Link}
-            to={item.link}
-            sx={{
-              "&:hover": {
-                // backgroundColor: "primary.light",
-              },
-              padding: "20px"
-            }}
-          >
-            <ListItemIcon sx={{
-              color: "inherit"
-            }}>{item.icon}</ListItemIcon>
-            <ListItemText>{item.text}</ListItemText>
-          </ListItemButton>
-        ))}
-      </List>
+      <Drawer variant="permanent" open>
+        <List sx={{ paddingRight: "2rem" }}>
+          {appRoutes.map((item) => (
+            <ListItemButton
+              key={item.text}
+              components={Link}
+              to={item.link}
+              sx={{
+                "&:hover": {
+                  // backgroundColor: "primary.light",
+                },
+                padding: "20px",
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: "inherit",
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText>{item.text}</ListItemText>
+            </ListItemButton>
+          ))}
+        </List>
+      </Drawer>
     </Box>
   );
 };

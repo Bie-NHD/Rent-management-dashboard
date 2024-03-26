@@ -44,7 +44,6 @@ const MenuAppBar = () => {
       </FormGroup> */}
       <AppBar
         position="static"
-        color="transparent"
         sx={{
           boxShadow: "none",
         }}
