@@ -1,17 +1,14 @@
 import axios from "axios";
 
-import {
-  testApartments,
-  testApartmentsOnly,
-  testContracts,
-  testContractsOnly,
-} from "./test";
+import { testApartmentsOnly, testContractsOnly } from "./test";
 
 import { TEST_URL, API_ROUTE_APARMENT } from "../utils/constants";
 
+export const baseURL = axios.create({ baseURL: TEST_URL });
+
 export const fetchApartmentsAPI = async (page, pageSize) =>
-  axios
-    .get(TEST_URL + API_ROUTE_APARMENT, {
+  baseURL
+    .get(API_ROUTE_APARMENT, {
       params: {
         page: page,
         pageSize: pageSize,
@@ -32,8 +29,8 @@ export const fetchApartmentsAPI = async (page, pageSize) =>
 export const importApartmentsAPI = async (formData) => {
   console.log("SUBMIT FILES");
   console.log(formData);
-  axios
-    .post(TEST_URL + API_ROUTE_APARMENT + "/import", formData, {
+  baseURL
+    .post(API_ROUTE_APARMENT + "/import", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
