@@ -66,7 +66,7 @@ const ExportButton = ({ exportType: exportFileType }) => {
       </ButtonGroup>
       <Popper
         sx={{
-          zIndex: 1,
+          zIndex: 5,
         }}
         open={open}
         anchorEl={anchorRef.current}
