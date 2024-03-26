@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import BottomPaginationBar from "../components/BottomPaginationBar";
 import { fetchTestApartment } from "../api";
@@ -21,6 +21,7 @@ import { formatId } from "../utils/stringHelper";
 import { fetchApartmentsAPI } from "../api";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Box, Skeleton, Stack, Typography } from "@mui/material";
 
 const _pageSizeOptions = [5, 10, 15];
@@ -72,6 +73,9 @@ const AllApartmentsPage = () => {
           justifyItems: "flex-end",
         }}
       >
+        <Button variant="contained" startIcon={<AddCircleIcon />}>
+          New
+        </Button>
         <ImportButton importType={API_ROUTE_APARMENT} />
         <ExportButton exportType={API_ROUTE_APARMENT} />
       </Container>

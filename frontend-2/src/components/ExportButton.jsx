@@ -8,6 +8,7 @@ import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 
 import { exportFileAPI } from "../api";
 
@@ -44,12 +45,14 @@ const ExportButton = ({ exportType: exportFileType }) => {
   return (
     <React.Fragment>
       <ButtonGroup
-        variant="contained"
+        variant="outlined"
         ref={anchorRef}
         aria-label="Button group with a nested menu"
         sx={{ boxShadow: "none" }}
       >
-        <Button onClick={handleClick}>{options[selectedIndex]}</Button>
+        <Button startIcon={<CloudDownloadIcon />} onClick={handleClick}>
+          {options[selectedIndex]}
+        </Button>
         <Button
           size="small"
           aria-controls={open ? "split-button-menu" : undefined}
