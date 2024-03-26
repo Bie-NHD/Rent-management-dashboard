@@ -58,8 +58,8 @@ const AllApartmentsPage = () => {
 
   const PlaceHolder = () => (
     <Stack spacing={2} sx={{ height: "40%", marginY: "2rem" }}>
-      <Skeleton variant="rectangular" height={"20%"} />
-      <Skeleton variant="rectangular" height={"80%"} />
+      <Skeleton variant="rectangular" height={"20%"} sx={{ minHeight: 30 }} />
+      <Skeleton variant="rectangular" height={"70%"} sx={{ minHeight: 150 }} />
     </Stack>
   );
 
