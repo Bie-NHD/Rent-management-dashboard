@@ -7,7 +7,6 @@ import {
   API_ROUTE_APARMENT,
   API_ROUTE_CONTRACT,
 } from "../utils/constants";
-import { routes } from "react-micro-router";
 
 //
 //  REQUEST ACTION ROUTES
@@ -32,12 +31,11 @@ const baseRequestAddAPI = async (route, data) =>
 
 const baseRequestDeleteAPI = async (route, id) =>
   baseURL
-    .post(route + DELETE, {
-      params: {
-        id: id,
-      },
-    })
-    .then((response) => response);
+    .delete(route + DELETE + id)
+    .then((response) => response)
+    .catch((error) => {
+      console.log(error);
+    });
 
 const baseRequestSearchAPI = async (route, query, page = 0, pageSize = 10) =>
   baseURL.get(route + SEARCH, {

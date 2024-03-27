@@ -25,11 +25,16 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import PlaceHolder from "../components/PlaceHolder";
-import { Skeleton } from "@mui/material";
+import { Paper, Skeleton } from "@mui/material";
 import SuccessSnackBar from "../components/SuccessSnackBar";
-import FormDialog from "../components/FormDialog";
+import CustomReusableDialog from "../components/CustomReusableDialog";
 import ErrorPlaceHolder from "../components/ErrorPlaceHolder";
 import DeleteButton from "../components/DeleteButton";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 /*
  * COMPONENT AllApartmentsPage
  */
@@ -38,10 +43,13 @@ const AllApartmentsPage = () => {
   const [currPage, setCurrPage] = useState(0);
   const [totalPages, setToTalPages] = useState(1);
   const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[1]);
-  const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const [openFormDialog, setOpenFormDialog] = useState(false);
+  const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [alertDialog, setAlertDialog] = useState(null);
+  const [dialogContent, setDialogContent] = useState(null);
 
   React.useEffect(() => {
     console.log(`USEEFFECT: CURRPAGE ${currPage} | TOTALPAGE ${totalPages}`);
@@ -73,22 +81,23 @@ const AllApartmentsPage = () => {
   function _onPageSizeChange(event) {
     setPageSize(event.target.value);
   }
-  function _handleOpenDialog() {
-    setIsOpenDialog(true);
-  }
-  function _handleCloseDialog() {
-    setIsOpenDialog(false);
+  function _handleCloseFormDialog() {
+    setOpenFormDialog(false);
+    console.log("DIALOG CLOSED");
   }
   function _handleSubmitForm(event) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
     addAparmentAPI(formJson).then((value) => {
-      if (value == STATUS_SUCCESS) _handleOpenSnackBar();
+      if (value == STATUS_SUCCESS) {
+        _handleOpenSnackBar();
+        _loadData();
+      }
     });
     setIsLoading(true);
     _loadData();
-    _handleCloseDialog();
+    _handleCloseFormDialog();
   }
   function _handleOpenSnackBar() {
     setOpenSnackBar(true);
@@ -98,28 +107,73 @@ const AllApartmentsPage = () => {
     setOpenSnackBar(false);
     console.log("SET CLOSE SNACKBAR");
   }
-  function _handleDelete(id) {
-    deleteApartmentAPI(id).then((res) =>
-      [STATUS_OK, STATUS_SUCCESS].indexOf(res.status) != -1
-        ? _handleOpenSnackBar()
-        : console.log(res.statusText)
-    );
+  function _handleDeleteItem(id) {
+    deleteApartmentAPI(id).then((res) => {
+      if ([STATUS_OK, STATUS_SUCCESS].indexOf(res.status) != -1) {
+        _handleOpenSnackBar();
+        setIsLoading(true);
+        _loadData();
+      }
+    });
+  }
+
+  function _onClickButtonDelete(item) {
+    console.log("DEL BTN CLICKED");
+    _handleOpenDeleteWarningDialog(item);
+  }
+
+  function _handleOpenDeleteWarningDialog(item) {
+    console.log("HANDLING WN DLG");
+    setAlertDialog((curr) => <DeleteWarningDialog item={item} />);
+    setOpenAlertDialog(true);
+  }
+
+  function _handleOKDeleteWarningDialog(id) {
+    _handleDeleteItem(id);
+    _handleCloseDeleteWarningDialog();
+  }
+  function _handleCloseDeleteWarningDialog() {
+    setOpenAlertDialog(false);
+    setAlertDialog(null);
   }
 
   const NewApartmentFormDialog = () => (
-    <FormDialog
-      open={isOpenDialog}
-      setClose={_handleCloseDialog}
+    <CustomReusableDialog
+      open={openFormDialog}
+      handleClose={_handleCloseFormDialog}
       onSubmit={(event) => _handleSubmitForm(event)}
-      formContent={<NewApartmentFormContent />}
+      dialogContent={<NewApartmentFormContent />}
       title="New Apartment"
+      dialogType="form"
+      okText="Submit"
     />
   );
 
+  const DeleteWarningDialog = ({ item }) => {
+    const dialogContent = Object.entries(item).map((key) => (
+      <p key={key}>
+        <b>{key}:</b>
+        {item[key]}
+      </p>
+    ));
+    return (
+      <CustomReusableDialog
+        dialogType="warning"
+        open={openAlertDialog}
+        title={"Confirm Delete?"}
+        dialogContent={dialogContent}
+        handleClose={_handleCloseDeleteWarningDialog}
+        handleOK={() => _handleOKDeleteWarningDialog(item.id)}
+      />
+    );
+  };
+
   return (
     <>
-      <PageHeader>Apartments</PageHeader>
       <NewApartmentFormDialog />
+      {alertDialog}
+      <PageHeader>Apartments</PageHeader>
+
       <SuccessSnackBar
         open={openSnackBar}
         message="Successfully updated!"
@@ -138,7 +192,7 @@ const AllApartmentsPage = () => {
           <Button
             variant="contained"
             startIcon={<AddCircleIcon />}
-            onClick={_handleOpenDialog}
+            onClick={() => setOpenFormDialog(true)}
           >
             New
           </Button>
@@ -148,7 +202,10 @@ const AllApartmentsPage = () => {
       )}
 
       {apartments && apartments.length && !isLoading ? (
-        <MainTable apartments={apartments} handleDelete={_handleDelete} />
+        <MainTable
+          apartments={apartments}
+          handleDelete={_onClickButtonDelete}
+        />
       ) : error ? (
         <ErrorPlaceHolder onClick={_loadData} />
       ) : (
@@ -210,36 +267,38 @@ const NewApartmentFormContent = () => (
   </>
 );
 const MainTable = ({ apartments, handleDelete }) => (
-  <TableContainer
-    sx={{ maxHeight: "80%", overflow: "scroll", marginY: "2rem" }}
-  >
-    <Table stickyHeader sx={{ minWidth: 650 }}>
-      <TableHead>
-        <TableRow>
-          {APARTMENTS_HEADERS.map((item) => (
-            <TableCell key={item}>{item}</TableCell>
-          ))}
-          <TableCell></TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {apartments.map((item) => (
-          <TableRow
-            key={item.id}
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
-            <TableCell>
-              <Typography>{formatId(item.id)}</Typography>
-            </TableCell>
-            <TableCell>{item.address}</TableCell>
-            <TableCell>{item.retailPrice}</TableCell>
-            <TableCell>{item.numberOfRoom}</TableCell>
-            <TableCell>
-              <DeleteButton id={item.id} handleDelete={handleDelete} />
-            </TableCell>
+  <Paper>
+    <TableContainer
+      sx={{ maxHeight: "80%", overflow: "scroll", marginY: "2rem" }}
+    >
+      <Table stickyHeader sx={{ minWidth: 650 }}>
+        <TableHead>
+          <TableRow>
+            {APARTMENTS_HEADERS.map((item) => (
+              <TableCell key={item}>{item}</TableCell>
+            ))}
+            <TableCell></TableCell>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </TableContainer>
+        </TableHead>
+        <TableBody>
+          {apartments.map((item) => (
+            <TableRow
+              key={item.id}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell>
+                <Typography>{formatId(item.id)}</Typography>
+              </TableCell>
+              <TableCell>{item.address}</TableCell>
+              <TableCell>{item.retailPrice}</TableCell>
+              <TableCell>{item.numberOfRoom}</TableCell>
+              <TableCell>
+                <DeleteButton handleDelete={() => handleDelete(item)} />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  </Paper>
 );
