@@ -77,9 +77,11 @@ const Main = styled(Container, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   flexGrow: 1,
+  alignItems: "start",
   minHeight: "5rem",
   height: "100%",
-  // padding: theme.spacing(3),
+  padding: theme.spacing(3),
+  marginTop: theme.spacing(10),
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,

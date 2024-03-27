@@ -84,7 +84,7 @@ export const importApartmentsAPI = async (formData) => {
 };
 
 export const addAparmentAPI = async (apartmentDTO) =>
-  baseURL.post(API_ROUTE_APARMENT + ADD, apartmentDTO);
+  baseRequestAddAPI(API_ROUTE_APARMENT, apartmentDTO);
 
 export const deleteApartmentAPI = async (id) =>
   baseRequestDeleteAPI(API_ROUTE_APARMENT, id);
