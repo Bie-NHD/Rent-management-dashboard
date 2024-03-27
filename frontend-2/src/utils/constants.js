@@ -9,3 +9,5 @@ export const APARTMENTS_HEADERS = [
   "Retail Price",
   "Number of rooms",
 ];
+export const STATUS_OK = 200;
+export const PAGE_SIZE_OPTIONS = [5, 10, 15];

@@ -5,36 +5,30 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import BottomPaginationBar from "../components/BottomPaginationBar";
-import { addAparmentAPI, fetchTestApartment } from "../api";
-
-import { APARTMENTS_HEADERS, API_ROUTE_APARMENT } from "../utils/constants";
+import {
+  APARTMENTS_HEADERS,
+  API_ROUTE_APARMENT,
+  PAGE_SIZE_OPTIONS,
+} from "../utils/constants";
 import PageHeader from "../components/PageHeader";
 import ImportButton from "../components/ImportButton";
 import ExportButton from "../components/ExportButton";
 // import { DataGrid } from '@mui/x-data-grid';
 import { formatId } from "../utils/stringHelper";
-import { fetchApartmentsAPI } from "../api";
+import { fetchApartmentsAPI, addAparmentAPI } from "../api";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import PlaceHolder from "../components/PlaceHolder";
-import { Box, Skeleton } from "@mui/material";
+import { Skeleton } from "@mui/material";
 import SuccessSnackBar from "../components/SuccessSnackBar";
-
-const _pageSizeOptions = [5, 10, 15];
-
+import FormDialog from "../components/FormDialog";
+import ErrorPlaceHolder from "../components/ErrorPlaceHolder";
 /*
  * COMPONENT AllApartmentsPage
  */
@@ -42,7 +36,7 @@ const AllApartmentsPage = () => {
   const [apartments, setApartments] = React.useState([]);
   const [currPage, setCurrPage] = useState(0);
   const [totalPages, setToTalPages] = useState(1);
-  const [pageSize, setPageSize] = useState(_pageSizeOptions[1]);
+  const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[1]);
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -78,7 +72,7 @@ const AllApartmentsPage = () => {
   function _onPageSizeChange(event) {
     setPageSize(event.target.value);
   }
-  function _handleClickOpenDialog() {
+  function _handleOpenDialog() {
     setIsOpenDialog(true);
   }
   function _handleCloseDialog() {
@@ -91,9 +85,7 @@ const AllApartmentsPage = () => {
     addAparmentAPI(formJson).then((value) => {
       if (value == 201) _handleOpenSnackBar();
     });
-    setApartments((curr) => []);
     setIsLoading(true);
-    console.log(formJson);
     _loadData();
     _handleCloseDialog();
   }
@@ -106,73 +98,14 @@ const AllApartmentsPage = () => {
     console.log("SET CLOSE SNACKBAR");
   }
 
-  const ErrorPlaceHolder = () => (
-    <Box>
-      <h2>Something is wrong</h2>
-      <p>Please reload the page</p>
-      <Button variant="outlined" onClick={() => _loadData()}>
-        Reload
-      </Button>
-    </Box>
-  );
-
   const NewApartmentFormDialog = () => (
-    <Dialog
+    <FormDialog
       open={isOpenDialog}
-      onClose={_handleCloseDialog}
-      PaperProps={{
-        component: "form",
-        onSubmit: (event) => _handleSubmitForm(event),
-      }}
-    >
-      <DialogTitle>New Apartment</DialogTitle>
-      <DialogContent>
-        <DialogContentText>Fill in the form below</DialogContentText>
-        <TextField
-          autoFocus
-          required
-          margin="dense"
-          id="txt-address"
-          name="address"
-          label="Address"
-          type="text"
-          fullWidth
-          variant="outlined"
-        />
-        <TextField
-          autoFocus
-          required
-          margin="dense"
-          id="txt-retailPrice"
-          name="retailPrice"
-          label="Retail Price"
-          type="number"
-          fullWidth
-          variant="outlined"
-          inputProps={{
-            step: "10000",
-          }}
-        />
-        <TextField
-          autoFocus
-          required
-          margin="dense"
-          id="txt-numberOfRoom"
-          name="numberOfRoom"
-          label="Number of rooms"
-          type="number"
-          fullWidth
-          variant="outlined"
-          inputProps={{
-            min: "1",
-          }}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={_handleCloseDialog}>Cancel</Button>
-        <Button type="submit">Submit</Button>
-      </DialogActions>
-    </Dialog>
+      setClose={_handleCloseDialog}
+      onSubmit={(event) => _handleSubmitForm(event)}
+      formContent={<NewApartmentFormContent />}
+      title="New Apartment"
+    />
   );
 
   return (
@@ -197,7 +130,7 @@ const AllApartmentsPage = () => {
           <Button
             variant="contained"
             startIcon={<AddCircleIcon />}
-            onClick={_handleClickOpenDialog}
+            onClick={_handleOpenDialog}
           >
             New
           </Button>
@@ -207,47 +140,14 @@ const AllApartmentsPage = () => {
       )}
 
       {apartments && apartments.length && !isLoading ? (
-        <TableContainer
-          sx={{ maxHeight: "80%", overflow: "scroll", marginY: "2rem" }}
-        >
-          <Table stickyHeader sx={{ minWidth: 650 }}>
-            <TableHead>
-              <TableRow>
-                {APARTMENTS_HEADERS.map((item) => (
-                  <TableCell key={item}>{item}</TableCell>
-                ))}
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {apartments.map((item) => (
-                <TableRow
-                  key={item.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell>
-                    <Typography>{formatId(item.id)}</Typography>
-                  </TableCell>
-                  <TableCell>{item.address}</TableCell>
-                  <TableCell>{item.retailPrice}</TableCell>
-                  <TableCell>{item.numberOfRoom}</TableCell>
-                  <TableCell>
-                    <IconButton aria-label="delete" color="warning">
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <MainTable apartments={apartments} />
       ) : error ? (
-        <ErrorPlaceHolder />
+        <ErrorPlaceHolder onClick={_loadData} />
       ) : (
         <PlaceHolder />
       )}
       <BottomPaginationBar
-        pageSizeOptions={_pageSizeOptions}
+        pageSizeOptions={PAGE_SIZE_OPTIONS}
         totalPages={totalPages}
         onPaginationChange={_onPaginationChange}
         onPageSizeChange={_onPageSizeChange}
@@ -255,5 +155,86 @@ const AllApartmentsPage = () => {
     </>
   );
 };
-
+// EXPORT
 export default AllApartmentsPage;
+
+const NewApartmentFormContent = () => (
+  <>
+    <TextField
+      autoFocus
+      required
+      margin="dense"
+      id="txt-address"
+      name="address"
+      label="Address"
+      type="text"
+      fullWidth
+      variant="outlined"
+    />
+    <TextField
+      autoFocus
+      required
+      margin="dense"
+      id="txt-retailPrice"
+      name="retailPrice"
+      label="Retail Price"
+      type="number"
+      fullWidth
+      variant="outlined"
+      inputProps={{
+        step: "10000",
+      }}
+    />
+    <TextField
+      autoFocus
+      required
+      margin="dense"
+      id="txt-numberOfRoom"
+      name="numberOfRoom"
+      label="Number of rooms"
+      type="number"
+      fullWidth
+      variant="outlined"
+      inputProps={{
+        min: "1",
+      }}
+    />
+  </>
+);
+
+const MainTable = ({ apartments }) => (
+  <TableContainer
+    sx={{ maxHeight: "80%", overflow: "scroll", marginY: "2rem" }}
+  >
+    <Table stickyHeader sx={{ minWidth: 650 }}>
+      <TableHead>
+        <TableRow>
+          {APARTMENTS_HEADERS.map((item) => (
+            <TableCell key={item}>{item}</TableCell>
+          ))}
+          <TableCell></TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {apartments.map((item) => (
+          <TableRow
+            key={item.id}
+            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+          >
+            <TableCell>
+              <Typography>{formatId(item.id)}</Typography>
+            </TableCell>
+            <TableCell>{item.address}</TableCell>
+            <TableCell>{item.retailPrice}</TableCell>
+            <TableCell>{item.numberOfRoom}</TableCell>
+            <TableCell>
+              <IconButton aria-label="delete" color="warning">
+                <DeleteIcon />
+              </IconButton>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+);
