@@ -1,4 +1,3 @@
-import React from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -8,6 +7,7 @@ import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 
 const BottomPaginationBar = ({
+  page,
   totalPages,
   onPaginationChange,
   pageSizeOptions,
@@ -41,6 +41,8 @@ const BottomPaginationBar = ({
         </Select>
       </Box>
       <Pagination
+        defaultPage={1}
+        page={page}
         onChange={(e, p) => onPaginationChange(e, p)}
         count={totalPages}
         variant="outlined"

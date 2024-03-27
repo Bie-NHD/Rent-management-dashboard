@@ -18,7 +18,6 @@ import {
 import PageHeader from "../components/PageHeader";
 import ImportButton from "../components/ImportButton";
 import ExportButton from "../components/ExportButton";
-// import { DataGrid } from '@mui/x-data-grid';
 import { formatId } from "../utils/stringHelper";
 import { fetchApartmentsAPI, addAparmentAPI, deleteApartmentAPI } from "../api";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -30,18 +29,13 @@ import SuccessSnackBar from "../components/SuccessSnackBar";
 import CustomReusableDialog from "../components/CustomReusableDialog";
 import ErrorPlaceHolder from "../components/ErrorPlaceHolder";
 import DeleteButton from "../components/DeleteButton";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 /*
  * COMPONENT AllApartmentsPage
  */
 const AllApartmentsPage = () => {
   const [apartments, setApartments] = React.useState([]);
   const [currPage, setCurrPage] = useState(0);
-  const [totalPages, setToTalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[1]);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
@@ -52,7 +46,7 @@ const AllApartmentsPage = () => {
   const [dialogContent, setDialogContent] = useState(null);
 
   React.useEffect(() => {
-    console.log(`USEEFFECT: CURRPAGE ${currPage} | TOTALPAGE ${totalPages}`);
+    setIsLoading(true);
     _loadData();
 
     // setApartments(fetchTestApartment);
@@ -62,12 +56,18 @@ const AllApartmentsPage = () => {
     setError(null);
     fetchApartmentsAPI(currPage, pageSize)
       .then((data) => {
-        const p = data.page;
-        const a = data.apartments;
-        if (p.totalPages < currPage) setCurrPage(0);
-        if (totalPages != p.totalPages) setToTalPages(p.totalPages);
-        setApartments((curr) => a);
+        const pageInfo = data.page;
+        const apartments = data.apartments;
+
+        setApartments(apartments);
+
+        if (pageInfo.totalPages <= currPage) setCurrPage(currPage - 1);
+
+        if (pageInfo.totalPages != totalPages) setTotalPages(pageInfo.totalPages);
+
         setIsLoading(false);
+
+        console.log(`USEEFFECT: CURRPAGE ${currPage} | TOTALPAGE ${totalPages} | PageInfoTotal ${pageInfo.totalPages}`);
       })
       .catch((error) => {
         setError(error);
@@ -75,16 +75,18 @@ const AllApartmentsPage = () => {
   }
 
   function _onPaginationChange(event, page) {
-    setCurrPage((cp) => page - 1);
-    setIsLoading((curr) => true);
+    setCurrPage(page - 1);
   }
+
   function _onPageSizeChange(event) {
     setPageSize(event.target.value);
   }
+
   function _handleCloseFormDialog() {
     setOpenFormDialog(false);
     console.log("DIALOG CLOSED");
   }
+
   function _handleSubmitForm(event) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -95,23 +97,24 @@ const AllApartmentsPage = () => {
         _loadData();
       }
     });
-    setIsLoading(true);
     _loadData();
     _handleCloseFormDialog();
   }
+
   function _handleOpenSnackBar() {
     setOpenSnackBar(true);
     console.log("SET OPEN SNACKBAR");
   }
+
   function _handleCloseSnackBar() {
     setOpenSnackBar(false);
     console.log("SET CLOSE SNACKBAR");
   }
+
   function _handleDeleteItem(id) {
     deleteApartmentAPI(id).then((res) => {
       if ([STATUS_OK, STATUS_SUCCESS].indexOf(res.status) != -1) {
         _handleOpenSnackBar();
-        setIsLoading(true);
         _loadData();
       }
     });
@@ -132,6 +135,7 @@ const AllApartmentsPage = () => {
     _handleDeleteItem(id);
     _handleCloseDeleteWarningDialog();
   }
+
   function _handleCloseDeleteWarningDialog() {
     setOpenAlertDialog(false);
     setAlertDialog(null);
@@ -202,7 +206,7 @@ const AllApartmentsPage = () => {
         </Container>
       )}
 
-      {apartments && apartments.length && !isLoading ? (
+      {apartments && apartments.length >= 0 && !isLoading ? (
         <MainTable
           apartments={apartments}
           handleDelete={_onClickButtonDelete}
@@ -212,7 +216,9 @@ const AllApartmentsPage = () => {
       ) : (
         <PlaceHolder />
       )}
+
       <BottomPaginationBar
+        page={currPage + 1}
         pageSizeOptions={PAGE_SIZE_OPTIONS}
         totalPages={totalPages}
         onPaginationChange={_onPaginationChange}
@@ -221,6 +227,7 @@ const AllApartmentsPage = () => {
     </>
   );
 };
+
 // EXPORT
 export default AllApartmentsPage;
 
@@ -267,16 +274,17 @@ const NewApartmentFormContent = () => (
     />
   </>
 );
+
 const MainTable = ({ apartments, handleDelete }) => (
-  <Paper>
-    <TableContainer
-      sx={{ maxHeight: "80%", overflow: "scroll", marginY: "2rem" }}
-    >
-      <Table stickyHeader sx={{ minWidth: 650 }}>
+  <Paper sx={{ overflow: "hidden", marginY: "2rem" }}>
+    <TableContainer sx={{ maxHeight: "50%" }}>
+      <Table stickyHeader size="small" aria-label="sticky table" sx={{ minWidth: 650 }}>
         <TableHead>
           <TableRow>
             {APARTMENTS_HEADERS.map((item) => (
-              <TableCell key={item}>{item}</TableCell>
+              <TableCell
+                key={item}
+              > {item}</TableCell>
             ))}
             <TableCell></TableCell>
           </TableRow>
@@ -301,5 +309,5 @@ const MainTable = ({ apartments, handleDelete }) => (
         </TableBody>
       </Table>
     </TableContainer>
-  </Paper>
+  </Paper >
 );
