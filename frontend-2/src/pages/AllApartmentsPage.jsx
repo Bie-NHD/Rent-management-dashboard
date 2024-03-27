@@ -124,8 +124,8 @@ const AllApartmentsPage = () => {
 
   function _handleOpenDeleteWarningDialog(item) {
     console.log("HANDLING WN DLG");
-    setAlertDialog((curr) => <DeleteWarningDialog item={item} />);
     setOpenAlertDialog(true);
+    setAlertDialog(<DeleteWarningDialog item={item} />);
   }
 
   function _handleOKDeleteWarningDialog(id) {
@@ -150,10 +150,11 @@ const AllApartmentsPage = () => {
   );
 
   const DeleteWarningDialog = ({ item }) => {
-    const dialogContent = Object.entries(item).map((key) => (
+    console.log(item);
+    const dialogContent = Object.keys(item).map((key) => (
       <p key={key}>
         <b>{key}:</b>
-        {item[key]}
+        {`${item[key]}`}
       </p>
     ));
     return (
