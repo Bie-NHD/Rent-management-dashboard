@@ -31,7 +31,13 @@ const baseRequestAddAPI = async (route, data) =>
   baseURL.post(route + ADD, data).then((response) => response.status);
 
 const baseRequestDeleteAPI = async (route, id) =>
-  baseURL.post(route + DELETE + id).then((response) => response.status);
+  baseURL
+    .post(route + DELETE, {
+      params: {
+        id: id,
+      },
+    })
+    .then((response) => response);
 
 const baseRequestSearchAPI = async (route, query, page = 0, pageSize = 10) =>
   baseURL.get(route + SEARCH, {

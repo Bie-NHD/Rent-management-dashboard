@@ -12,15 +12,15 @@ import {
   APARTMENTS_HEADERS,
   API_ROUTE_APARMENT,
   PAGE_SIZE_OPTIONS,
+  STATUS_OK,
+  STATUS_SUCCESS,
 } from "../utils/constants";
 import PageHeader from "../components/PageHeader";
 import ImportButton from "../components/ImportButton";
 import ExportButton from "../components/ExportButton";
 // import { DataGrid } from '@mui/x-data-grid';
 import { formatId } from "../utils/stringHelper";
-import { fetchApartmentsAPI, addAparmentAPI } from "../api";
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { fetchApartmentsAPI, addAparmentAPI, deleteApartmentAPI } from "../api";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -29,6 +29,7 @@ import { Skeleton } from "@mui/material";
 import SuccessSnackBar from "../components/SuccessSnackBar";
 import FormDialog from "../components/FormDialog";
 import ErrorPlaceHolder from "../components/ErrorPlaceHolder";
+import DeleteButton from "../components/DeleteButton";
 /*
  * COMPONENT AllApartmentsPage
  */
@@ -83,7 +84,7 @@ const AllApartmentsPage = () => {
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
     addAparmentAPI(formJson).then((value) => {
-      if (value == 201) _handleOpenSnackBar();
+      if (value == STATUS_SUCCESS) _handleOpenSnackBar();
     });
     setIsLoading(true);
     _loadData();
@@ -96,6 +97,13 @@ const AllApartmentsPage = () => {
   function _handleCloseSnackBar() {
     setOpenSnackBar(false);
     console.log("SET CLOSE SNACKBAR");
+  }
+  function _handleDelete(id) {
+    deleteApartmentAPI(id).then((res) =>
+      [STATUS_OK, STATUS_SUCCESS].indexOf(res.status) != -1
+        ? _handleOpenSnackBar()
+        : console.log(res.statusText)
+    );
   }
 
   const NewApartmentFormDialog = () => (
@@ -140,7 +148,7 @@ const AllApartmentsPage = () => {
       )}
 
       {apartments && apartments.length && !isLoading ? (
-        <MainTable apartments={apartments} />
+        <MainTable apartments={apartments} handleDelete={_handleDelete} />
       ) : error ? (
         <ErrorPlaceHolder onClick={_loadData} />
       ) : (
@@ -201,8 +209,7 @@ const NewApartmentFormContent = () => (
     />
   </>
 );
-
-const MainTable = ({ apartments }) => (
+const MainTable = ({ apartments, handleDelete }) => (
   <TableContainer
     sx={{ maxHeight: "80%", overflow: "scroll", marginY: "2rem" }}
   >
@@ -228,9 +235,7 @@ const MainTable = ({ apartments }) => (
             <TableCell>{item.retailPrice}</TableCell>
             <TableCell>{item.numberOfRoom}</TableCell>
             <TableCell>
-              <IconButton aria-label="delete" color="warning">
-                <DeleteIcon />
-              </IconButton>
+              <DeleteButton id={item.id} handleDelete={handleDelete} />
             </TableCell>
           </TableRow>
         ))}
