@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -29,6 +29,7 @@ import SuccessSnackBar from "../components/SuccessSnackBar";
 import CustomReusableDialog from "../components/CustomReusableDialog";
 import ErrorPlaceHolder from "../components/ErrorPlaceHolder";
 import DeleteButton from "../components/DeleteButton";
+import { setItem } from "localforage";
 /*
  * COMPONENT AllApartmentsPage
  */
@@ -45,6 +46,11 @@ const AllApartmentsPage = () => {
     currPage: 0,
     totalPages: 1,
     pageSize: PAGE_SIZE_OPTIONS[1],
+  });
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [dialogState, setDialogState] = useState({
+    open: false,
+    dialogId: null,
   });
 
   React.useEffect(() => {
@@ -146,33 +152,54 @@ const AllApartmentsPage = () => {
   function _handleDeleteItem(id) {
     deleteApartmentAPI(id).then((res) => {
       if ([STATUS_OK, STATUS_SUCCESS].indexOf(res.status) != -1) {
+        // pop up snackbar
         _handleOpenSnackBar();
+        // reload data
         _loadApartments();
+        // then reset to no item to delete
+        setItemToDelete(null);
+        //
+        closeDialog();
       }
     });
   }
 
   function _onClickButtonDelete(item) {
     console.log("DEL BTN CLICKED");
-    _handleOpenDeleteWarningDialog(item);
+    // _handleOpenDeleteWarningDialog(item);
+    setItemToDelete(item);
+    openDialog("2"); // Open Warning Dialog
   }
 
-  function _handleOpenDeleteWarningDialog(item) {
-    console.log("HANDLING WN DLG");
-    setOpenAlertDialog(true);
-    setAlertDialog(<DeleteWarningDialog item={item} />);
-  }
+  // function _handleOpenDeleteWarningDialog(item) {
+  //   console.log("HANDLING WN DLG");
+  //   setOpenAlertDialog(true);
+  //   setAlertDialog(<DeleteWarningDialog item={item} />);
+  // }
 
-  function _handleOKDeleteWarningDialog(id) {
-    _handleDeleteItem(id);
-    _handleCloseDeleteWarningDialog();
+  function _handleOKDeleteWarningDialog() {
+    _handleDeleteItem(itemToDelete);
+    // _handleCloseDeleteWarningDialog();
   }
 
   function _handleCloseDeleteWarningDialog() {
     setOpenAlertDialog(false);
     setAlertDialog(null);
   }
-
+  //
+  // DIALOG HERE
+  //
+  const closeDialog = () => {
+    setDialogState((prevState) => {
+      return { ...prevState, open: false };
+    });
+  };
+  const openDialog = (dialogId) => {
+    setDialogState((prevState) => {
+      return { ...prevState, open: true, dialogId: dialogId };
+    });
+    console.log(`DIALOG STATE ${JSON.stringify(dialogState)}`);
+  };
   const NewApartmentFormDialog = () => (
     <CustomReusableDialog
       open={openFormDialog}
@@ -205,10 +232,53 @@ const AllApartmentsPage = () => {
     );
   };
 
+  const dialogs = [
+    // Form Dialog
+    {
+      id: "1",
+      dialogType: "form",
+      handleClose: closeDialog,
+      onSubmit: _handleSubmitForm,
+      title: "New Apartment",
+      okText: "Submit",
+      dialogContent: <NewApartmentFormContent />,
+      handleOK: undefined,
+    },
+    // Delete Warnign Dialog
+    {
+      id: "2",
+      dialogType: undefined,
+      handleClose: closeDialog,
+      title: "Confirm Delete?",
+      okText: undefined,
+      dialogContent: null,
+      handleOK: _handleOKDeleteWarningDialog,
+    },
+  ];
+  const PageDialog = () => {
+    const [index, setIndex] = useState(-1);
+
+    useEffect(() => {
+      setIndex((curr) =>
+        dialogs.indexOf((item) => item.id === dialogState.dialogId)
+      );
+    }, [dialogState]);
+    // if index not found <==> dialogId=null
+    // return null (or void ?)
+    return index === -1 ? null : (
+      <CustomReusableDialog
+        open={dialogState.open}
+        dialogType={dialogs[index].dialogType}
+        title={dialogs[index].title}
+        dialogContent={dialogs[index].dialogContent}
+        handleClose={dialogs[index].handleClose}
+        handleOK={dialogs[index].handleOK}
+      />
+    );
+  };
   return (
     <>
-      <NewApartmentFormDialog />
-      {alertDialog}
+      <PageDialog />
       <PageHeader>Apartments</PageHeader>
 
       <SuccessSnackBar
@@ -229,7 +299,8 @@ const AllApartmentsPage = () => {
           <Button
             variant="contained"
             startIcon={<AddCircleIcon />}
-            onClick={() => setOpenFormDialog(true)}
+            // onClick={() => setOpenFormDialog(true)}
+            onClick={() => openDialog("1")} // Open  Form Dialog
           >
             New
           </Button>
