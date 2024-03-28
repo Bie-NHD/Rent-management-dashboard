@@ -13,7 +13,6 @@ import {
   API_ROUTE_APARMENT,
   PAGE_SIZE_OPTIONS,
   STATUS_OK,
-  STATUS_SUCCESS,
 } from "../utils/constants";
 import PageHeader from "../components/PageHeader";
 import ImportButton from "../components/ImportButton";
@@ -39,7 +38,7 @@ const AllApartmentsPage = () => {
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [openSuccessSnackBar, setOpenSuccessSnackBar] = useState(false);
   const [alertDialog, setAlertDialog] = useState(null);
   const [dialogContent, setDialogContent] = useState(null);
   const [paginationState, setPaginationState] = useState({
@@ -48,6 +47,8 @@ const AllApartmentsPage = () => {
     pageSize: PAGE_SIZE_OPTIONS[1],
   });
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [failureSnackBarState, setFailureSnackBarState] = useState({open: false, message: ""});
+  
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -144,13 +145,11 @@ const AllApartmentsPage = () => {
   }
 
   function _handleOpenSnackBar() {
-    setOpenSnackBar(true);
-    console.log("SET OPEN SNACKBAR");
+    setOpenSuccessSnackBar(true);
   }
 
   function _handleCloseSnackBar() {
-    setOpenSnackBar(false);
-    console.log("SET CLOSE SNACKBAR");
+    setOpenSuccessSnackBar(false);
   }
 
   function _handleDeleteItem() {
@@ -231,9 +230,13 @@ const AllApartmentsPage = () => {
       {/* {alertDialog} */}
       <DeleteWarningDialog />
       <PageHeader>Apartments</PageHeader>
-
+      <FailureSnackBar 
+              open={failureSnackBarState.open}
+              message={failureSnackBarState.message}
+              setClose={()=>setFailureSnackBarState({open: false, message: ""})}
+      />
       <SuccessSnackBar
-        open={openSnackBar}
+        open={openSuccessSnackBar}
         message="Successfully updated!"
         setClose={_handleCloseSnackBar}
       />
