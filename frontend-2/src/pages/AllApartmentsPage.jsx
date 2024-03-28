@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -29,6 +29,7 @@ import SuccessSnackBar from "../components/SuccessSnackBar";
 import CustomReusableDialog from "../components/CustomReusableDialog";
 import ErrorPlaceHolder from "../components/ErrorPlaceHolder";
 import DeleteButton from "../components/DeleteButton";
+import FailureSnackBar from "../components/FailureSnackBar";
 /*
  * COMPONENT AllApartmentsPage
  */
@@ -46,6 +47,7 @@ const AllApartmentsPage = () => {
     totalPages: 1,
     pageSize: PAGE_SIZE_OPTIONS[1],
   });
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -123,10 +125,18 @@ const AllApartmentsPage = () => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
-    addAparmentAPI(formJson).then((value) => {
-      if (value == STATUS_SUCCESS) {
+    addAparmentAPI(formJson).then((data) => {
+      console.log(data);
+      if (STATUS_OK.indexOf(data.statusCode) !== -1) {
         _handleOpenSnackBar();
         _loadApartments();
+      }
+      else {
+        setFailureSnackBarState((prev)=>{return {
+          ...prev,
+          open: true,
+          message: data.message
+        }})
       }
     });
 
@@ -143,34 +153,37 @@ const AllApartmentsPage = () => {
     console.log("SET CLOSE SNACKBAR");
   }
 
-  function _handleDeleteItem(id) {
-    deleteApartmentAPI(id).then((res) => {
+  function _handleDeleteItem() {
+    //
+    // if itemToDelete != null
+    //
+    deleteApartmentAPI(itemToDelete.id).then((res) => {
       if ([STATUS_OK, STATUS_SUCCESS].indexOf(res.status) != -1) {
         _handleOpenSnackBar();
         _loadApartments();
+        setItemToDelete(null);
       }
     });
   }
 
   function _onClickButtonDelete(item) {
     console.log("DEL BTN CLICKED");
-    _handleOpenDeleteWarningDialog(item);
-  }
 
-  function _handleOpenDeleteWarningDialog(item) {
+    // Open Alert Dialog
     console.log("HANDLING WN DLG");
     setOpenAlertDialog(true);
-    setAlertDialog(<DeleteWarningDialog item={item} />);
+    setItemToDelete(item);
   }
 
-  function _handleOKDeleteWarningDialog(id) {
-    _handleDeleteItem(id);
+  function _handleOKDeleteWarningDialog() {
+    _handleDeleteItem();
     _handleCloseDeleteWarningDialog();
   }
 
   function _handleCloseDeleteWarningDialog() {
+    console.log("CLOSE_ITEM");
     setOpenAlertDialog(false);
-    setAlertDialog(null);
+    setItemToDelete(null);
   }
 
   const NewApartmentFormDialog = () => (
@@ -185,14 +198,21 @@ const AllApartmentsPage = () => {
     />
   );
 
-  const DeleteWarningDialog = ({ item }) => {
-    console.log(item);
-    const dialogContent = Object.keys(item).map((key) => (
-      <p key={key}>
-        <b>{key}:</b>
-        {`${item[key]}`}
-      </p>
-    ));
+  const DeleteWarningDialog = () => {
+    const [dialogContent, setDialogContent] = useState(null);
+
+    useEffect(() => {
+      if (itemToDelete !== null) {
+        const content = Object.keys(itemToDelete).map((key) => (
+          <p key={key}>
+            <b>{key}:</b>
+            {`${itemToDelete[key]}`}
+          </p>
+        ));
+        setDialogContent(content);
+      }
+    }, [itemToDelete]);
+
     return (
       <CustomReusableDialog
         dialogType="warning"
@@ -200,7 +220,7 @@ const AllApartmentsPage = () => {
         title={"Confirm Delete?"}
         dialogContent={dialogContent}
         handleClose={_handleCloseDeleteWarningDialog}
-        handleOK={() => _handleOKDeleteWarningDialog(item.id)}
+        handleOK={_handleOKDeleteWarningDialog}
       />
     );
   };
@@ -208,7 +228,8 @@ const AllApartmentsPage = () => {
   return (
     <>
       <NewApartmentFormDialog />
-      {alertDialog}
+      {/* {alertDialog} */}
+      <DeleteWarningDialog />
       <PageHeader>Apartments</PageHeader>
 
       <SuccessSnackBar
@@ -287,7 +308,9 @@ const NewApartmentFormContent = () => (
       type="number"
       fullWidth
       variant="outlined"
+      defaultValue={"100000"}
       inputProps={{
+        min: "100000",
         step: "10000",
       }}
     />
@@ -301,6 +324,7 @@ const NewApartmentFormContent = () => (
       type="number"
       fullWidth
       variant="outlined"
+      defaultValue={"1"}
       inputProps={{
         min: "1",
       }}
@@ -338,7 +362,7 @@ const MainTable = ({ apartments, handleDelete }) => (
               <TableCell>{item.retailPrice}</TableCell>
               <TableCell>{item.numberOfRoom}</TableCell>
               <TableCell>
-                <DeleteButton handleDelete={() => handleDelete(item)} />
+                <DeleteButton handleDelete={(e) => handleDelete(item)} />
               </TableCell>
             </TableRow>
           ))}
