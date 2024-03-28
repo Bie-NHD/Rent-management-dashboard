@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,22 +9,30 @@ import {
   Button,
   FormControl,
   Box,
+  Stack,
+  LinearProgress,
 } from "@mui/material";
 import Container from "@mui/material/Container";
+// icons
 import { CloudUploadOutlined } from "@mui/icons-material";
-import React, { useEffect, useState } from "react";
-import { Form, useLoaderData } from "react-router-dom";
-import { styled } from "@mui/material/styles";
-
-import {
-  API_ROUTE_APARMENT,
-  API_ROUTE_CONTRACT,
-  API_ROUTE_USER,
-} from "../utils/constants";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
+import { styled } from "@mui/material/styles";
+import {
+  API_ROUTE_APARMENT,
+} from "../utils/constants";
 import { importApartmentsAPI } from "../api";
+import DeleteButton from "../components/DeleteButton";
+const styles = {
+  button: {
+    boxShadow: "none",
+  },
+  //
+  // Setting animation : https://stackoverflow.com/a/68460725
+  //
 
+}
 // styled input button
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -46,6 +55,7 @@ const icons = {
 const ImportPage = () => {
   let importType = new URL(window.location.href).searchParams.get("type");
   const [files, setFiles] = useState([]);
+  const [showProgressBar, setShowProgressBar] = React.useState(false)
 
   console.log(importType);
 
@@ -81,6 +91,13 @@ const ImportPage = () => {
         break;
     }
   }
+  //
+  // HANDLE DELETE
+  //
+  const handleDelete = item => {
+    const newFiles = files.filter((file)=> file!= item);
+    setFiles(newFiles)
+  }
 
   return (
     <Container
@@ -91,13 +108,15 @@ const ImportPage = () => {
       }}
     >
       <FormControl>
+        <Stack spacing={1}>
+
         <Button
           component="label"
           role={undefined}
           variant="outlined"
           tabIndex={-1}
           startIcon={<CloudUploadOutlined />}
-          sx={{ marginRight: ".5rem" }}
+          sx={styles.button}
         >
           Upload file
           <VisuallyHiddenInput
@@ -106,34 +125,49 @@ const ImportPage = () => {
             onChange={(e) => updateFiles(e.target.files)}
           />
         </Button>
-        <Button variant="contained" onClick={() => handleSubmit()}>
+        <Button variant="contained" onClick={() => handleSubmit()}      sx={styles.button}>
           Submit
         </Button>
+        </Stack>
       </FormControl>
       <Box sx={{ display: "block", margin: ".5rem" }}></Box>
-      <TableContainer
-        sx={{
-          alignSelf: "center",
-        }}
-      >
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>File name</TableCell>
-              <TableCell>Size</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {files
-              ? files.map((item) => (
+      {
+        //
+        //  apartments != null && apartments.length > 0
+        //
+        files && files.length ? (
+
+//           <Paper>
+// <Container>File name</Container>
+// {showProgressBar? 
+// (<LinearProgress variant="indetermediate"/>):
+// }
+//           </Paper>
+
+          <TableContainer
+            sx={{
+              alignSelf: "center",
+            }}
+          >
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>File name</TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {files.map((item) => (
                   <TableRow key={item.filename}>
                     <TableCell key={item.filename}>{item.filename}</TableCell>
+                    <TableCell><DeleteButton handleDelete={()=>handleDelete(item)} /></TableCell>
                   </TableRow>
-                ))
-              : null}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : null
+      }
     </Container>
   );
 };
