@@ -18,7 +18,7 @@ import PageHeader from "../components/PageHeader";
 import ImportButton from "../components/ImportButton";
 import ExportButton from "../components/ExportButton";
 import { formatId } from "../utils/stringHelper";
-import { fetchApartmentsAPI, addAparmentAPI, deleteApartmentAPI } from "../api";
+import { fetchApartmentsAPI, addAparmentAPI, deleteApartmentAPI, updateApartmentAPI } from "../api";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -48,6 +48,8 @@ const AllApartmentsPage = () => {
   });
   const [itemToDelete, setItemToDelete] = useState(null);
   const [failureSnackBarState, setFailureSnackBarState] = useState({open: false, message: ""});
+  const [itemToUpdate,setItemToUpdate] = useState(null)
+  const [openUpdateDialog, setOpenUpdateDialog] = useState(false)
   
 
   React.useEffect(() => {
@@ -122,24 +124,47 @@ const AllApartmentsPage = () => {
     console.log("DIALOG CLOSED");
   }
 
-  function _handleSubmitForm(event) {
+  function _handleCloseUpdateFormDialog() {
+    setOpenUpdateDialog(false);
+    console.log("DIALOG CLOSED");
+  }
+
+  function _handleSubmitForm(event, type) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
-    addAparmentAPI(formJson).then((data) => {
-      console.log(data);
-      if (STATUS_OK.indexOf(data.statusCode) !== -1) {
-        _handleOpenSnackBar();
-        _loadApartments();
+    switch (type){
+      case "create":{
+        addAparmentAPI(formJson).then((data) => {
+          console.log(data);
+          if (STATUS_OK.indexOf(data.statusCode) !== -1) {
+            _handleOpenSnackBar();
+            _loadApartments();
+          }
+          else {
+            setFailureSnackBarState((prev)=>{return {
+              ...prev,
+              open: true,
+              message: data.message
+            }})
+          }
+        });
+        break;
       }
-      else {
-        setFailureSnackBarState((prev)=>{return {
-          ...prev,
-          open: true,
-          message: data.message
-        }})
+      case "update":{
+          updateApartmentAPI(formJson,itemToUpdate.id).then((respons)=>{
+            console.log(respons);
+
+            if (STATUS_OK.indexOf(respons.data.statusCode) !== -1) {
+              _handleOpenSnackBar();
+              _loadApartments();
+              setItemToUpdate(null)
+              setOpenUpdateDialog(false)
+            }
+          })
       }
-    });
+    }
+
 
     _handleCloseFormDialog();
   }
@@ -157,7 +182,7 @@ const AllApartmentsPage = () => {
     // if itemToDelete != null
     //
     deleteApartmentAPI(itemToDelete.id).then((res) => {
-      if ([STATUS_OK, STATUS_SUCCESS].indexOf(res.status) != -1) {
+      if (STATUS_OK.indexOf(res.status) != -1) {
         _handleOpenSnackBar();
         _loadApartments();
         setItemToDelete(null);
@@ -172,6 +197,11 @@ const AllApartmentsPage = () => {
     console.log("HANDLING WN DLG");
     setOpenAlertDialog(true);
     setItemToDelete(item);
+  }
+
+  function _onClickButtonUpdate(item){
+    setItemToUpdate(item);
+    setOpenUpdateDialog(true);
   }
 
   function _handleOKDeleteWarningDialog() {
@@ -189,12 +219,72 @@ const AllApartmentsPage = () => {
     <CustomReusableDialog
       open={openFormDialog}
       handleClose={_handleCloseFormDialog}
-      onSubmit={(event) => _handleSubmitForm(event)}
+      onSubmit={(event) => _handleSubmitForm(event,"create")}
       dialogContent={<NewApartmentFormContent />}
       title="New Apartment"
       dialogType="form"
       okText="Submit"
     />
+  );
+
+  const UpdateApartmentFormDialog =   () => (
+    <CustomReusableDialog
+      open={openUpdateDialog}
+      handleClose={_handleCloseUpdateFormDialog}
+      onSubmit={(event) => _handleSubmitForm(event,"update")}
+      dialogContent={<UpdateApartmentFormContent />}
+      title="Update Apartment"
+      dialogType="form"
+      okText="Submit"
+    />
+  );
+
+  const UpdateApartmentFormContent = () => (
+    <>
+      <TextField
+        autoFocus
+        required
+        margin="dense"
+        id="txt-address"
+        name="address"
+        label="Address"
+        type="text"
+        fullWidth
+        variant="outlined"
+        defaultValue={ itemToUpdate !==  null ?  itemToUpdate.address : undefined}
+      />
+      <TextField
+        autoFocus
+        required
+        margin="dense"
+        id="txt-retailPrice"
+        name="retailPrice"
+        label="Retail Price"
+        type="number"
+        fullWidth
+        variant="outlined"
+        defaultValue={itemToUpdate !==  null ? parseInt(itemToUpdate.retailPrice )   : undefined}
+        inputProps={{
+          min: "100000",
+          step: "10000",
+        }}
+      />
+      <TextField
+        autoFocus
+        required
+        margin="dense"
+        id="txt-numberOfRoom"
+        name="numberOfRoom"
+        label="Number of rooms"
+        type="number"
+        fullWidth
+        variant="outlined"
+        defaultValue={itemToUpdate !==  null ? itemToUpdate.numberOfRoom   : undefined}
+        inputProps={{
+          min: "1",
+        }}
+      />
+    </>
   );
 
   const DeleteWarningDialog = () => {
@@ -227,7 +317,7 @@ const AllApartmentsPage = () => {
   return (
     <>
       <NewApartmentFormDialog />
-      {/* {alertDialog} */}
+      <UpdateApartmentFormDialog/>
       <DeleteWarningDialog />
       <PageHeader>Apartments</PageHeader>
       <FailureSnackBar 
@@ -262,10 +352,15 @@ const AllApartmentsPage = () => {
         </Container>
       )}
 
-      {apartments && apartments.length >= 0 && !isLoading ? (
+      {
+      //
+      //  apartments != null && apartments.length > 0
+      //
+      apartments && apartments.length && !isLoading ? (
         <MainTable
           apartments={apartments}
           handleDelete={_onClickButtonDelete}
+          handleUpdate={_onClickButtonUpdate}
         />
       ) : error ? (
         <ErrorPlaceHolder onClick={_loadApartments} />
@@ -335,7 +430,8 @@ const NewApartmentFormContent = () => (
   </>
 );
 
-const MainTable = ({ apartments, handleDelete }) => (
+
+const MainTable = ({ apartments, handleDelete , handleUpdate}) => (
   <Paper sx={{ overflow: "hidden", marginY: "2rem" }}>
     <TableContainer sx={{ maxHeight: "50%" }}>
       <Table
@@ -365,6 +461,9 @@ const MainTable = ({ apartments, handleDelete }) => (
               <TableCell>{item.retailPrice}</TableCell>
               <TableCell>{item.numberOfRoom}</TableCell>
               <TableCell>
+                <Button onClick={(e)=> handleUpdate(item)}>
+                  Update
+                </Button >
                 <DeleteButton handleDelete={(e) => handleDelete(item)} />
               </TableCell>
             </TableRow>

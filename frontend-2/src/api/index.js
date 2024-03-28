@@ -16,6 +16,7 @@ const ADD = "/add";
 const DELETE = "/delete/";
 const IMPORT = "/import";
 const SEARCH = "/search";
+const UPDATE = "/update/"
 const FORM_HEADER = {
   "Content-Type": "multipart/form-data",
 };
@@ -49,7 +50,12 @@ const baseRequestSearchAPI = async (route, query, page = 0, pageSize = 10) =>
 const baseRequestImportFileAPI = async (route, formData) =>
   baseURL
     .post(route + IMPORT, formData, { headers: FORM_HEADER })
-    .then((response) => response.status);
+    .then((response) => {
+      console.log("FINISH REQUEST");
+      console.log(response);
+      return response;
+    })
+    .catch((error) => console.log(error));
 
 export const exportFileAPI = (route, getTemplate = false) => {
   return TEST_URL + route + "/export?getTemplate=" + getTemplate;
@@ -79,16 +85,13 @@ export const fetchApartmentsAPI = async (page, pageSize) =>
       // always executed
     });
 
-export const importApartmentsAPI = async (formData) => {
-  console.log("SUBMIT FILES");
-  console.log(formData);
-  baseRequestImportFileAPI(API_ROUTE_APARMENT, formData).catch((error) =>
-    console.log(error)
-  );
-};
+export const importApartmentsAPI = async (formData) =>
+  baseRequestImportFileAPI(API_ROUTE_APARMENT, formData);
 
 export const addAparmentAPI = async (apartmentDTO) =>
   baseRequestAddAPI(API_ROUTE_APARMENT, apartmentDTO);
+
+  export const updateApartmentAPI = async (apartmentDTO, id) => baseURL.post(API_ROUTE_APARMENT+UPDATE+id,apartmentDTO)
 
 export const deleteApartmentAPI = async (id) =>
   baseRequestDeleteAPI(API_ROUTE_APARMENT, id);

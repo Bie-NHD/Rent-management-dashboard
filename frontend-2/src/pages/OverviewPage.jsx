@@ -2,7 +2,7 @@ import React from 'react'
 
 export const OverviewPage = () => {
   return (
-    <div>OverviewPage</div>
+    <div>Nhóm 2</div>
   )
 }
 
