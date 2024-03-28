@@ -27,7 +27,7 @@ export const baseURL = axios.create({ baseURL: TEST_URL });
 //
 
 const baseRequestAddAPI = async (route, data) =>
-  baseURL.post(route + ADD, data).then((response) => response.status);
+  baseURL.post(route + ADD, data).then((response) => response.data);
 
 const baseRequestDeleteAPI = async (route, id) =>
   baseURL

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,7 +13,6 @@ import {
   API_ROUTE_APARMENT,
   PAGE_SIZE_OPTIONS,
   STATUS_OK,
-  STATUS_SUCCESS,
 } from "../utils/constants";
 import PageHeader from "../components/PageHeader";
 import ImportButton from "../components/ImportButton";
@@ -29,45 +28,67 @@ import SuccessSnackBar from "../components/SuccessSnackBar";
 import CustomReusableDialog from "../components/CustomReusableDialog";
 import ErrorPlaceHolder from "../components/ErrorPlaceHolder";
 import DeleteButton from "../components/DeleteButton";
+import FailureSnackBar from "../components/FailureSnackBar";
 /*
  * COMPONENT AllApartmentsPage
  */
 const AllApartmentsPage = () => {
   const [apartments, setApartments] = React.useState([]);
-  const [currPage, setCurrPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
-  const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[1]);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [openSuccessSnackBar, setOpenSuccessSnackBar] = useState(false);
   const [alertDialog, setAlertDialog] = useState(null);
   const [dialogContent, setDialogContent] = useState(null);
+  const [paginationState, setPaginationState] = useState({
+    currPage: 0,
+    totalPages: 1,
+    pageSize: PAGE_SIZE_OPTIONS[1],
+  });
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [failureSnackBarState, setFailureSnackBarState] = useState({open: false, message: ""});
+  
 
   React.useEffect(() => {
     setIsLoading(true);
-    _loadData();
+    _loadApartments();
+  }, [paginationState.currPage, paginationState.pageSize]);
 
-    // setApartments(fetchTestApartment);
-  }, [currPage, pageSize]);
-
-  function _loadData() {
+  function _loadApartments() {
     setError(null);
-    fetchApartmentsAPI(currPage, pageSize)
+    fetchApartmentsAPI(paginationState.currPage, paginationState.pageSize)
       .then((data) => {
         const pageInfo = data.page;
-        const apartments = data.apartments;
+        const apartmentsInfo = data.apartments;
 
-        setApartments(apartments);
+        setApartments(apartmentsInfo);
+        console.log("APARTMENTS LOADED");
 
-        if (pageInfo.totalPages <= currPage) setCurrPage(currPage - 1);
+        const newCurrPage =
+          pageInfo.totalPages <= paginationState.currPage
+            ? 0
+            : paginationState.currPage;
 
-        if (pageInfo.totalPages != totalPages) setTotalPages(pageInfo.totalPages);
+        const newTotalPages =
+          pageInfo.totalPages != paginationState.totalPages
+            ? pageInfo.totalPages
+            : paginationState.totalPages;
+
+        setPaginationState((prevState) => {
+          return {
+            ...prevState,
+            totalPages: newTotalPages,
+            currPage: newCurrPage,
+          };
+        });
 
         setIsLoading(false);
 
-        console.log(`USEEFFECT: CURRPAGE ${currPage} | TOTALPAGE ${totalPages} | PageInfoTotal ${pageInfo.totalPages}`);
+        console.log(
+          `USEEFFECT: CURRPAGE ${paginationState.currPage} | TOTALPAGE ${paginationState.totalPages} | PageInfoTotal ${pageInfo.totalPages}\n
+          PAGESIZE: ${paginationState.pageSize}`
+        );
       })
       .catch((error) => {
         setError(error);
@@ -75,11 +96,25 @@ const AllApartmentsPage = () => {
   }
 
   function _onPaginationChange(event, page) {
-    setCurrPage(page - 1);
+    //
+    // page index at 1, while currPage index at 0
+    //
+
+    setPaginationState((prevState) => {
+      return {
+        ...prevState,
+        currPage: page - 1,
+      };
+    });
   }
 
   function _onPageSizeChange(event) {
-    setPageSize(event.target.value);
+    setPaginationState((prevState) => {
+      return {
+        ...prevState,
+        pageSize: event.target.value,
+      };
+    });
   }
 
   function _handleCloseFormDialog() {
@@ -91,54 +126,63 @@ const AllApartmentsPage = () => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
-    addAparmentAPI(formJson).then((value) => {
-      if (value == STATUS_SUCCESS) {
+    addAparmentAPI(formJson).then((data) => {
+      console.log(data);
+      if (STATUS_OK.indexOf(data.statusCode) !== -1) {
         _handleOpenSnackBar();
-        _loadData();
+        _loadApartments();
+      }
+      else {
+        setFailureSnackBarState((prev)=>{return {
+          ...prev,
+          open: true,
+          message: data.message
+        }})
       }
     });
-    _loadData();
+
     _handleCloseFormDialog();
   }
 
   function _handleOpenSnackBar() {
-    setOpenSnackBar(true);
-    console.log("SET OPEN SNACKBAR");
+    setOpenSuccessSnackBar(true);
   }
 
   function _handleCloseSnackBar() {
-    setOpenSnackBar(false);
-    console.log("SET CLOSE SNACKBAR");
+    setOpenSuccessSnackBar(false);
   }
 
-  function _handleDeleteItem(id) {
-    deleteApartmentAPI(id).then((res) => {
+  function _handleDeleteItem() {
+    //
+    // if itemToDelete != null
+    //
+    deleteApartmentAPI(itemToDelete.id).then((res) => {
       if ([STATUS_OK, STATUS_SUCCESS].indexOf(res.status) != -1) {
         _handleOpenSnackBar();
-        _loadData();
+        _loadApartments();
+        setItemToDelete(null);
       }
     });
   }
 
   function _onClickButtonDelete(item) {
     console.log("DEL BTN CLICKED");
-    _handleOpenDeleteWarningDialog(item);
-  }
 
-  function _handleOpenDeleteWarningDialog(item) {
+    // Open Alert Dialog
     console.log("HANDLING WN DLG");
     setOpenAlertDialog(true);
-    setAlertDialog(<DeleteWarningDialog item={item} />);
+    setItemToDelete(item);
   }
 
-  function _handleOKDeleteWarningDialog(id) {
-    _handleDeleteItem(id);
+  function _handleOKDeleteWarningDialog() {
+    _handleDeleteItem();
     _handleCloseDeleteWarningDialog();
   }
 
   function _handleCloseDeleteWarningDialog() {
+    console.log("CLOSE_ITEM");
     setOpenAlertDialog(false);
-    setAlertDialog(null);
+    setItemToDelete(null);
   }
 
   const NewApartmentFormDialog = () => (
@@ -153,14 +197,21 @@ const AllApartmentsPage = () => {
     />
   );
 
-  const DeleteWarningDialog = ({ item }) => {
-    console.log(item);
-    const dialogContent = Object.keys(item).map((key) => (
-      <p key={key}>
-        <b>{key}:</b>
-        {`${item[key]}`}
-      </p>
-    ));
+  const DeleteWarningDialog = () => {
+    const [dialogContent, setDialogContent] = useState(null);
+
+    useEffect(() => {
+      if (itemToDelete !== null) {
+        const content = Object.keys(itemToDelete).map((key) => (
+          <p key={key}>
+            <b>{key}:</b>
+            {`${itemToDelete[key]}`}
+          </p>
+        ));
+        setDialogContent(content);
+      }
+    }, [itemToDelete]);
+
     return (
       <CustomReusableDialog
         dialogType="warning"
@@ -168,7 +219,7 @@ const AllApartmentsPage = () => {
         title={"Confirm Delete?"}
         dialogContent={dialogContent}
         handleClose={_handleCloseDeleteWarningDialog}
-        handleOK={() => _handleOKDeleteWarningDialog(item.id)}
+        handleOK={_handleOKDeleteWarningDialog}
       />
     );
   };
@@ -176,11 +227,16 @@ const AllApartmentsPage = () => {
   return (
     <>
       <NewApartmentFormDialog />
-      {alertDialog}
+      {/* {alertDialog} */}
+      <DeleteWarningDialog />
       <PageHeader>Apartments</PageHeader>
-
+      <FailureSnackBar 
+              open={failureSnackBarState.open}
+              message={failureSnackBarState.message}
+              setClose={()=>setFailureSnackBarState({open: false, message: ""})}
+      />
       <SuccessSnackBar
-        open={openSnackBar}
+        open={openSuccessSnackBar}
         message="Successfully updated!"
         setClose={_handleCloseSnackBar}
       />
@@ -212,15 +268,16 @@ const AllApartmentsPage = () => {
           handleDelete={_onClickButtonDelete}
         />
       ) : error ? (
-        <ErrorPlaceHolder onClick={_loadData} />
+        <ErrorPlaceHolder onClick={_loadApartments} />
       ) : (
         <PlaceHolder />
       )}
 
       <BottomPaginationBar
-        page={currPage + 1}
+        // page={currPage + 1}
+        page={paginationState.currPage + 1}
         pageSizeOptions={PAGE_SIZE_OPTIONS}
-        totalPages={totalPages}
+        totalPages={paginationState.totalPages}
         onPaginationChange={_onPaginationChange}
         onPageSizeChange={_onPageSizeChange}
       />
@@ -254,7 +311,9 @@ const NewApartmentFormContent = () => (
       type="number"
       fullWidth
       variant="outlined"
+      defaultValue={"100000"}
       inputProps={{
+        min: "100000",
         step: "10000",
       }}
     />
@@ -268,6 +327,7 @@ const NewApartmentFormContent = () => (
       type="number"
       fullWidth
       variant="outlined"
+      defaultValue={"1"}
       inputProps={{
         min: "1",
       }}
@@ -278,13 +338,16 @@ const NewApartmentFormContent = () => (
 const MainTable = ({ apartments, handleDelete }) => (
   <Paper sx={{ overflow: "hidden", marginY: "2rem" }}>
     <TableContainer sx={{ maxHeight: "50%" }}>
-      <Table stickyHeader size="small" aria-label="sticky table" sx={{ minWidth: 650 }}>
+      <Table
+        stickyHeader
+        size="small"
+        aria-label="sticky table"
+        sx={{ minWidth: 650 }}
+      >
         <TableHead>
           <TableRow>
             {APARTMENTS_HEADERS.map((item) => (
-              <TableCell
-                key={item}
-              > {item}</TableCell>
+              <TableCell key={item}> {item}</TableCell>
             ))}
             <TableCell></TableCell>
           </TableRow>
@@ -302,12 +365,12 @@ const MainTable = ({ apartments, handleDelete }) => (
               <TableCell>{item.retailPrice}</TableCell>
               <TableCell>{item.numberOfRoom}</TableCell>
               <TableCell>
-                <DeleteButton handleDelete={() => handleDelete(item)} />
+                <DeleteButton handleDelete={(e) => handleDelete(item)} />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
-  </Paper >
+  </Paper>
 );
