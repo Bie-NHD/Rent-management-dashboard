@@ -150,7 +150,7 @@ const Layout = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Persistent drawer
+           Nhóm 2
           </Typography>
         </Toolbar>
       </AppBar>
