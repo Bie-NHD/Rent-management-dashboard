@@ -1,15 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { RouterProvider } from "react-router-dom";
-import { router } from "./routes.jsx";
-import { ThemeProvider } from "@emotion/react";
-import appTheme from "./utils/themes.js";
+import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <ThemeProvider theme={appTheme}>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <App />
   </React.StrictMode>
 );

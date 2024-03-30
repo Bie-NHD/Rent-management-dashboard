@@ -1,19 +1,16 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+// import reactLogo from "./assets/react.svg";
+// import viteLogo from "/vite.svg";
 // import './App.css'
-
-import { Container } from "@mui/material";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes.jsx";
+import { ThemeProvider } from "@emotion/react";
+import appTheme from "./utils/themes.js";
 
 function App() {
   return (
-    <Container
-      sx={{
-        display: "flex",
-        minHeight: "100vh",
-        minWidth: "100vw",
-      }}
-    ></Container>
+    <ThemeProvider theme={appTheme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   );
 }
 

@@ -2,72 +2,17 @@ import axios from "axios";
 
 import { testApartmentsOnly, testContractsOnly } from "./test";
 
-import {
-  TEST_URL,
-  API_ROUTE_APARMENT,
-  API_ROUTE_CONTRACT,
-} from "../utils/constants";
+import { TEST_URL, ROUTES } from "../utils/constants";
 
-//
-//  REQUEST ACTION ROUTES
-//
-
-const ADD = "/add";
-const DELETE = "/delete/";
-const IMPORT = "/import";
-const SEARCH = "/search";
-const UPDATE = "/update/"
-const FORM_HEADER = {
-  "Content-Type": "multipart/form-data",
-};
-
-export const baseURL = axios.create({ baseURL: TEST_URL });
-
-//
-//  BASE REQUEST TEMPLATES
-//
-
-const baseRequestAddAPI = async (route, data) =>
-  baseURL.post(route + ADD, data).then((response) => response.data);
-
-const baseRequestDeleteAPI = async (route, id) =>
-  baseURL
-    .delete(route + DELETE + id)
-    .then((response) => response)
-    .catch((error) => {
-      console.log(error);
-    });
-
-const baseRequestSearchAPI = async (route, query, page = 0, pageSize = 10) =>
-  baseURL.get(route + SEARCH, {
-    params: {
-      q: query,
-      page: page,
-      pageSize: pageSize,
-    },
-  });
-
-const baseRequestImportFileAPI = async (route, formData) =>
-  baseURL
-    .post(route + IMPORT, formData, { headers: FORM_HEADER })
-    .then((response) => {
-      console.log("FINISH REQUEST");
-      console.log(response);
-      return response;
-    })
-    .catch((error) => console.log(error));
-
-export const exportFileAPI = (route, getTemplate = false) => {
-  return TEST_URL + route + "/export?getTemplate=" + getTemplate;
-};
+import { BASE } from "./base";
 
 //
 // APARTMENT REQUESTS
 //
 
-export const fetchApartmentsAPI = async (page, pageSize) =>
+const fetchApartmentsAPI = async (page, pageSize) =>
   baseURL
-    .get(API_ROUTE_APARMENT, {
+    .get(ROUTES.APARTMENT, {
       params: {
         page: page,
         pageSize: pageSize,
@@ -86,22 +31,37 @@ export const fetchApartmentsAPI = async (page, pageSize) =>
     });
 
 export const importApartmentsAPI = async (formData) =>
-  baseRequestImportFileAPI(API_ROUTE_APARMENT, formData);
+  BASE.import(ROUTES.APARTMENT, formData);
 
-export const addAparmentAPI = async (apartmentDTO) =>
-  baseRequestAddAPI(API_ROUTE_APARMENT, apartmentDTO);
+const addAparmentAPI = async (apartmentDTO) =>
+  BASE.add(ROUTES.APARTMENT, apartmentDTO);
 
-  export const updateApartmentAPI = async (apartmentDTO, id) => baseURL.post(API_ROUTE_APARMENT+UPDATE+id,apartmentDTO)
+const updateApartmentsAPI = async (apartmentDTO, id) =>
+  BASE.update(ROUTES.APARTMENT, id, apartmentDTO);
 
-export const deleteApartmentAPI = async (id) =>
-  baseRequestDeleteAPI(API_ROUTE_APARMENT, id);
+const deleteApartmentAPI = async (id) => BASE.delete(ROUTES.APARTMENT, id);
 
 //
 // APARTMENT REQUESTS
 //
+export const importContractsAPI = async (formData) =>
+  BASE.import(ROUTES.CONTRACT, formData);
 
-export const deleteContractAPI = async (id) =>
-  baseRequestDeleteAPI(API_ROUTE_CONTRACT, id);
+export const addContractsAPI = async (apartmentDTO) =>
+  BASE.add(ROUTES.CONTRACT, apartmentDTO);
+
+export const updateContractsAPI = async (apartmentDTO, id) =>
+  BASE.update(ROUTES.CONTRACT, id, apartmentDTO);
+
+export const deleteContractAPI = async (id) => BASE.delete(ROUTES.CONTRACT, id);
 
 export const fetchTestApartment = testApartmentsOnly;
 export const fetchTestContract = testContractsOnly;
+
+export const APARTMENT_API = {
+  import: importApartmentsAPI,
+  fetch: fetchApartmentsAPI,
+  add: addAparmentAPI,
+  update: updateApartmentsAPI,
+  delete: deleteApartmentAPI,
+};
