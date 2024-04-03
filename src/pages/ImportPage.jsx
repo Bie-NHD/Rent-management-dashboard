@@ -25,7 +25,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import { styled } from "@mui/material/styles";
 import { API_ROUTE_APARMENT } from "../utils/constants";
 import { importApartmentsAPI } from "../api";
-import DeleteButton from "../components/DeleteButton";
+import DeleteButton from "../components/buttons/DeleteButton";
 const styles = {
   button: {
     boxShadow: "none",
@@ -58,7 +58,7 @@ const ImportPage = () => {
   let importType = new URL(window.location.href).searchParams.get("type");
   const [files, setFiles] = useState([]);
   const [showProgressBar, setShowProgressBar] = React.useState(false);
-  const [appMessage,setAppMessage] = useState(null)
+  const [appMessage, setAppMessage] = useState(null);
 
   console.log(importType);
 
@@ -93,38 +93,36 @@ const ImportPage = () => {
     switch (importType) {
       case API_ROUTE_APARMENT:
         importApartmentsAPI(fd).then((res) => {
-          console.log(res); 
+          console.log(res);
           console.log("NO");
           // setAppMessage(res.data.message);
           console.log(res.data);
-          setMessage(res.data)
-      
-      
-      });
+          setMessage(res.data);
+        });
         break;
     }
   }
 
-  function setMessage (data){
-  
-
-
-    switch(data.statusCode) {
-
-
-      case 200:
-        {
-
-          let _data = [];
-          _data = data.data.map(item => <><p>{item.File}</p><p>The rows failed: {item["The rows failed"]}</p><p>Number of successful rows: {item["Number of successful rows"]} </p></>)
-          setAppMessage(_data)
-          break;
-        }
-        case 400:
-          {
-console.log("data",data);
-            setAppMessage(data.message)
-          }
+  function setMessage(data) {
+    switch (data.statusCode) {
+      case 200: {
+        let _data = [];
+        _data = data.data.map((item) => (
+          <>
+            <p>{item.File}</p>
+            <p>The rows failed: {item["The rows failed"]}</p>
+            <p>
+              Number of successful rows: {item["Number of successful rows"]}{" "}
+            </p>
+          </>
+        ));
+        setAppMessage(_data);
+        break;
+      }
+      case 400: {
+        console.log("data", data);
+        setAppMessage(data.message);
+      }
     }
   }
 

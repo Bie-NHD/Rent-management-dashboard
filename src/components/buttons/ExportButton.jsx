@@ -10,7 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 
-import { exportFileAPI } from "../api";
+import { exportFileAPI } from "../../api";
 
 const options = ["Export File", "Download Template"];
 

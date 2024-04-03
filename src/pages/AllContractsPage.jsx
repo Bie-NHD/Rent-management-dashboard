@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import PageHeader from "../components/PageHeader";
 import { API_ROUTE_CONTRACT } from "../utils/constants";
-import ExportButton from "../components/ExportButton";
-import ImportButton from "../components/ImportButton";
+import ExportButton from "../components/buttons/ExportButton";
+import ImportButton from "../components/buttons/ImportButton";
 
 const rowHeaders = ["ID", "Period", "Customer", "Apartment"];
 

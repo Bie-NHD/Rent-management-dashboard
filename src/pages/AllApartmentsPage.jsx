@@ -15,20 +15,24 @@ import {
   STATUS_OK,
 } from "../utils/constants";
 import PageHeader from "../components/PageHeader";
-import ImportButton from "../components/ImportButton";
-import ExportButton from "../components/ExportButton";
+import ImportButton from "../components/buttons/ImportButton";
+import ExportButton from "../components/buttons/ExportButton";
 import { formatId } from "../utils/stringHelper";
-import { fetchApartmentsAPI, addAparmentAPI, deleteApartmentAPI, updateApartmentAPI } from "../api";
+import { APARTMENT_API as api } from "../api";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import PlaceHolder from "../components/PlaceHolder";
+import PlaceHolder from "../components/placeholder/PlaceHolder";
 import { Paper, Skeleton } from "@mui/material";
-import SuccessSnackBar from "../components/SuccessSnackBar";
+import SuccessSnackBar from "../components/snackbars/SuccessSnackBar";
 import CustomReusableDialog from "../components/CustomReusableDialog";
-import ErrorPlaceHolder from "../components/ErrorPlaceHolder";
-import DeleteButton from "../components/DeleteButton";
-import FailureSnackBar from "../components/FailureSnackBar";
+import ErrorPlaceHolder from "../components/placeholder/ErrorPlaceHolder";
+import DeleteButton from "../components/buttons/DeleteButton";
+import FailureSnackBar from "../components/snackbars/FailureSnackBar";
+
+// ---------------------------------------------------------------------
+
+
 /*
  * COMPONENT AllApartmentsPage
  */
@@ -47,10 +51,12 @@ const AllApartmentsPage = () => {
     pageSize: PAGE_SIZE_OPTIONS[1],
   });
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [failureSnackBarState, setFailureSnackBarState] = useState({open: false, message: ""});
-  const [itemToUpdate,setItemToUpdate] = useState(null)
-  const [openUpdateDialog, setOpenUpdateDialog] = useState(false)
-  
+  const [failureSnackBarState, setFailureSnackBarState] = useState({
+    open: false,
+    message: "",
+  });
+  const [itemToUpdate, setItemToUpdate] = useState(null);
+  const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -59,7 +65,8 @@ const AllApartmentsPage = () => {
 
   function _loadApartments() {
     setError(null);
-    fetchApartmentsAPI(paginationState.currPage, paginationState.pageSize)
+    api
+      .fetch(paginationState.currPage, paginationState.pageSize)
       .then((data) => {
         const pageInfo = data.page;
         const apartmentsInfo = data.apartments;
@@ -119,11 +126,6 @@ const AllApartmentsPage = () => {
     });
   }
 
-  function _handleCloseFormDialog() {
-    setOpenFormDialog(false);
-    console.log("DIALOG CLOSED");
-  }
-
   function _handleCloseUpdateFormDialog() {
     setOpenUpdateDialog(false);
     console.log("DIALOG CLOSED");
@@ -133,44 +135,38 @@ const AllApartmentsPage = () => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
-    switch (type){
-      case "create":{
-        addAparmentAPI(formJson).then((data) => {
+    switch (type) {
+      case "create": {
+        api.add(formJson).then((data) => {
           console.log(data);
           if (STATUS_OK.indexOf(data.statusCode) !== -1) {
-            _handleOpenSnackBar();
+            setOpenSuccessSnackBar(true);
             _loadApartments();
-          }
-          else {
-            setFailureSnackBarState((prev)=>{return {
-              ...prev,
-              open: true,
-              message: data.message
-            }})
+          } else {
+            setFailureSnackBarState((prev) => {
+              return {
+                ...prev,
+                open: true,
+                message: data.message,
+              };
+            });
           }
         });
         break;
       }
-      case "update":{
-          updateApartmentAPI(formJson,itemToUpdate.id).then((respons)=>{
-            console.log(respons);
-
-            if (STATUS_OK.indexOf(respons.data.statusCode) !== -1) {
-              _handleOpenSnackBar();
-              _loadApartments();
-              setItemToUpdate(null)
-              setOpenUpdateDialog(false)
-            }
-          })
+      case "update": {
+        api.update(formJson, itemToUpdate.id).then((data) => {
+          if (STATUS_OK.indexOf(data.statusCode) !== -1) {
+            setOpenSuccessSnackBar(true);
+            _loadApartments();
+            setItemToUpdate(null);
+            setOpenUpdateDialog(false);
+          }
+        });
       }
     }
 
-
-    _handleCloseFormDialog();
-  }
-
-  function _handleOpenSnackBar() {
-    setOpenSuccessSnackBar(true);
+    setOpenFormDialog(false);
   }
 
   function _handleCloseSnackBar() {
@@ -181,9 +177,9 @@ const AllApartmentsPage = () => {
     //
     // if itemToDelete != null
     //
-    deleteApartmentAPI(itemToDelete.id).then((res) => {
+    api.delete(itemToDelete.id).then((res) => {
       if (STATUS_OK.indexOf(res.status) != -1) {
-        _handleOpenSnackBar();
+        setOpenSuccessSnackBar(true);
         _loadApartments();
         setItemToDelete(null);
       }
@@ -199,7 +195,7 @@ const AllApartmentsPage = () => {
     setItemToDelete(item);
   }
 
-  function _onClickButtonUpdate(item){
+  function _onClickButtonUpdate(item) {
     setItemToUpdate(item);
     setOpenUpdateDialog(true);
   }
@@ -218,8 +214,8 @@ const AllApartmentsPage = () => {
   const NewApartmentFormDialog = () => (
     <CustomReusableDialog
       open={openFormDialog}
-      handleClose={_handleCloseFormDialog}
-      onSubmit={(event) => _handleSubmitForm(event,"create")}
+      handleClose={() => setOpenFormDialog(false)}
+      onSubmit={(event) => _handleSubmitForm(event, "create")}
       dialogContent={<NewApartmentFormContent />}
       title="New Apartment"
       dialogType="form"
@@ -227,11 +223,11 @@ const AllApartmentsPage = () => {
     />
   );
 
-  const UpdateApartmentFormDialog =   () => (
+  const UpdateApartmentFormDialog = () => (
     <CustomReusableDialog
       open={openUpdateDialog}
       handleClose={_handleCloseUpdateFormDialog}
-      onSubmit={(event) => _handleSubmitForm(event,"update")}
+      onSubmit={(event) => _handleSubmitForm(event, "update")}
       dialogContent={<UpdateApartmentFormContent />}
       title="Update Apartment"
       dialogType="form"
@@ -251,7 +247,7 @@ const AllApartmentsPage = () => {
         type="text"
         fullWidth
         variant="outlined"
-        defaultValue={ itemToUpdate !==  null ?  itemToUpdate.address : undefined}
+        defaultValue={itemToUpdate !== null ? itemToUpdate.address : undefined}
       />
       <TextField
         autoFocus
@@ -263,7 +259,9 @@ const AllApartmentsPage = () => {
         type="number"
         fullWidth
         variant="outlined"
-        defaultValue={itemToUpdate !==  null ? parseInt(itemToUpdate.retailPrice )   : undefined}
+        defaultValue={
+          itemToUpdate !== null ? parseInt(itemToUpdate.retailPrice) : undefined
+        }
         inputProps={{
           min: "100000",
           step: "10000",
@@ -279,7 +277,9 @@ const AllApartmentsPage = () => {
         type="number"
         fullWidth
         variant="outlined"
-        defaultValue={itemToUpdate !==  null ? itemToUpdate.numberOfRoom   : undefined}
+        defaultValue={
+          itemToUpdate !== null ? itemToUpdate.numberOfRoom : undefined
+        }
         inputProps={{
           min: "1",
         }}
@@ -317,13 +317,13 @@ const AllApartmentsPage = () => {
   return (
     <>
       <NewApartmentFormDialog />
-      <UpdateApartmentFormDialog/>
+      <UpdateApartmentFormDialog />
       <DeleteWarningDialog />
       <PageHeader>Apartments</PageHeader>
-      <FailureSnackBar 
-              open={failureSnackBarState.open}
-              message={failureSnackBarState.message}
-              setClose={()=>setFailureSnackBarState({open: false, message: ""})}
+      <FailureSnackBar
+        open={failureSnackBarState.open}
+        message={failureSnackBarState.message}
+        setClose={() => setFailureSnackBarState({ open: false, message: "" })}
       />
       <SuccessSnackBar
         open={openSuccessSnackBar}
@@ -353,20 +353,21 @@ const AllApartmentsPage = () => {
       )}
 
       {
-      //
-      //  apartments != null && apartments.length > 0
-      //
-      apartments && apartments.length && !isLoading ? (
-        <MainTable
-          apartments={apartments}
-          handleDelete={_onClickButtonDelete}
-          handleUpdate={_onClickButtonUpdate}
-        />
-      ) : error ? (
-        <ErrorPlaceHolder onClick={_loadApartments} />
-      ) : (
-        <PlaceHolder />
-      )}
+        //
+        //  apartments != null && apartments.length > 0
+        //
+        apartments && apartments.length && !isLoading ? (
+          <MainTable
+            apartments={apartments}
+            handleDelete={_onClickButtonDelete}
+            handleUpdate={_onClickButtonUpdate}
+          />
+        ) : error ? (
+          <ErrorPlaceHolder onClick={_loadApartments} />
+        ) : (
+          <PlaceHolder />
+        )
+      }
 
       <BottomPaginationBar
         // page={currPage + 1}
@@ -430,8 +431,7 @@ const NewApartmentFormContent = () => (
   </>
 );
 
-
-const MainTable = ({ apartments, handleDelete , handleUpdate}) => (
+const MainTable = ({ apartments, handleDelete, handleUpdate }) => (
   <Paper sx={{ overflow: "hidden", marginY: "2rem" }}>
     <TableContainer sx={{ maxHeight: "50%" }}>
       <Table
@@ -461,9 +461,7 @@ const MainTable = ({ apartments, handleDelete , handleUpdate}) => (
               <TableCell>{item.retailPrice}</TableCell>
               <TableCell>{item.numberOfRoom}</TableCell>
               <TableCell>
-                <Button onClick={(e)=> handleUpdate(item)}>
-                  Update
-                </Button >
+                <Button onClick={(e) => handleUpdate(item)}>Update</Button>
                 <DeleteButton handleDelete={(e) => handleDelete(item)} />
               </TableCell>
             </TableRow>
