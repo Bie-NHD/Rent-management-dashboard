@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { fetchApartmentsAPI } from "../api";
+import { APARTMENT_API as api } from "../api";
 import { TableCell } from "@mui/material";
 import { formatId } from "../utils/stringHelper";
+
 
 const AllCustomersPage = () => {
   const [apartments, setApartments] = useState([]);
@@ -9,7 +10,7 @@ const AllCustomersPage = () => {
   const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
-    fetchApartmentsAPI().then((data) => setApartments(data.apartments));
+    api.fetch().then((data) => setApartments(data.apartments));
   }, []);
 
   return (

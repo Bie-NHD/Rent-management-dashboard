@@ -32,9 +32,6 @@ import FailureSnackBar from "../components/snackbars/FailureSnackBar";
 
 // ---------------------------------------------------------------------
 
-import ErrorPlaceHolder from "../components/ErrorPlaceHolder";
-import DeleteButton from "../components/DeleteButton";
-import FailureSnackBar from "../components/FailureSnackBar";
 
 /*
  * COMPONENT AllApartmentsPage

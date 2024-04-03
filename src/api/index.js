@@ -65,3 +65,8 @@ export const APARTMENT_API = {
   update: updateApartmentsAPI,
   delete: deleteApartmentAPI,
 };
+
+export const exportFileAPI = (route, getTemplate = false) => {
+  return TEST_URL + route + "/export?getTemplate=" + getTemplate;
+};
+
