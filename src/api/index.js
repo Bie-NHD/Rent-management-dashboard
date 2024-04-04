@@ -6,10 +6,11 @@ import { TEST_URL, ROUTES } from "../utils/constants";
 
 import { BASE } from "./base";
 
+import { baseURL } from "./base";
+
 //
 // APARTMENT REQUESTS
 //
-
 const fetchApartmentsAPI = async (page, pageSize) =>
   baseURL
     .get(ROUTES.APARTMENT, {
