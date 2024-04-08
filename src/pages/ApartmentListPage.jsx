@@ -16,12 +16,9 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import PlaceHolder from "../components/placeholder/PlaceHolder";
 import { Paper, Skeleton } from "@mui/material";
-import SuccessSnackBar from "../components/snackbars/SuccessSnackBar";
 import CustomReusableDialog from "../components/CustomReusableDialog";
 import ErrorPlaceHolder from "../components/placeholder/ErrorPlaceHolder";
-import FailureSnackBar from "../components/snackbars/FailureSnackBar";
 import ApartmentList from "../sections/apartment-page/ApartmentList";
-import showSuccessSnackBar from "../components/snackbars/showSuccessSnackBar";
 import toast from "react-hot-toast";
 
 // ---------------------------------------------------------------------
