@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import BottomPaginationBar from "../components/BottomPaginationBar";
 import {
-  APARTMENTS_HEADERS,
   API_ROUTE_APARMENT,
   PAGE_SIZE_OPTIONS,
   STATUS_OK,
@@ -17,7 +10,6 @@ import {
 import PageHeader from "../components/PageHeader";
 import ImportButton from "../components/buttons/ImportButton";
 import ExportButton from "../components/buttons/ExportButton";
-import { formatId } from "../utils/stringHelper";
 import { APARTMENT_API as api } from "../api";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Typography from "@mui/material/Typography";
@@ -27,16 +19,63 @@ import { Paper, Skeleton } from "@mui/material";
 import SuccessSnackBar from "../components/snackbars/SuccessSnackBar";
 import CustomReusableDialog from "../components/CustomReusableDialog";
 import ErrorPlaceHolder from "../components/placeholder/ErrorPlaceHolder";
-import DeleteButton from "../components/buttons/DeleteButton";
 import FailureSnackBar from "../components/snackbars/FailureSnackBar";
+import ApartmentList from "../sections/apartment-page/ApartmentList";
 
 // ---------------------------------------------------------------------
 
+// interface Pagination{
+//   page: number,
+//   totalPages: number,
+//   pageSize: number
+// }
+
+//  type Action = {type: "change_page"} || {type: "change_page_size"}
+
+const Actions = {
+  CHANGE_PAGE: "change_page",
+  CHANGE_PAGE_SIZE: "change_page_size",
+  CREATE_ITEM: "create_item",
+  UPDATE_ITEM: "update_item",
+};
+
+const paginationReducer = (state, action) => {
+  switch (action.type) {
+    case Actions.CHANGE_PAGE: {
+      return {
+        ...state,
+        currPage: action.nextPage,
+      };
+    }
+    case Actions.CHANGE_PAGE_SIZE: {
+      return {
+        ...state,
+        // change state to new pageSize
+        pageSize: action.pageSize,
+        currPage: state.currPage >= action.totalPages ? 0 : state.currPage,
+      };
+    }
+  }
+  throw Error("Unknown action: " + action.type);
+};
+
+//
+// fetch data
+//
+
+async function fetchApartments(currPage, pageSize, setApartments = () => {}) {
+  api.fetch(currPage, pageSize).then((data) => {
+    // setApartments here
+    setApartments(data.apartments);
+    // return data so the paginationReducer could use
+    return data;
+  });
+}
 
 /*
  * COMPONENT AllApartmentsPage
  */
-const AllApartmentsPage = () => {
+const ApartmentListPage = () => {
   const [apartments, setApartments] = React.useState([]);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
@@ -357,7 +396,7 @@ const AllApartmentsPage = () => {
         //  apartments != null && apartments.length > 0
         //
         apartments && apartments.length && !isLoading ? (
-          <MainTable
+          <ApartmentList
             apartments={apartments}
             handleDelete={_onClickButtonDelete}
             handleUpdate={_onClickButtonUpdate}
@@ -382,7 +421,7 @@ const AllApartmentsPage = () => {
 };
 
 // EXPORT
-export default AllApartmentsPage;
+export default ApartmentListPage;
 
 const NewApartmentFormContent = () => (
   <>
@@ -429,45 +468,4 @@ const NewApartmentFormContent = () => (
       }}
     />
   </>
-);
-
-const MainTable = ({ apartments, handleDelete, handleUpdate }) => (
-  <Paper sx={{ overflow: "hidden", marginY: "2rem" }}>
-    <TableContainer sx={{ maxHeight: "50%" }}>
-      <Table
-        stickyHeader
-        size="small"
-        aria-label="sticky table"
-        sx={{ minWidth: 650 }}
-      >
-        <TableHead>
-          <TableRow>
-            {APARTMENTS_HEADERS.map((item) => (
-              <TableCell key={item}> {item}</TableCell>
-            ))}
-            <TableCell></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {apartments.map((item) => (
-            <TableRow
-              key={item.id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell>
-                <Typography>{formatId(item.id)}</Typography>
-              </TableCell>
-              <TableCell>{item.address}</TableCell>
-              <TableCell>{item.retailPrice}</TableCell>
-              <TableCell>{item.numberOfRoom}</TableCell>
-              <TableCell>
-                <Button onClick={(e) => handleUpdate(item)}>Update</Button>
-                <DeleteButton handleDelete={(e) => handleDelete(item)} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  </Paper>
 );
