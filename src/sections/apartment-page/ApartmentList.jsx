@@ -31,7 +31,6 @@ const ApartmentList = ({ apartments, handleDelete, handleUpdate }) => (
           </TableRow>
         </TableHead>
         <TableBody>
-          <Suspense></Suspense>
           {apartments.map((item) => (
             <TableRow
               key={item.id}

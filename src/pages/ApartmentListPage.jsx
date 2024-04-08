@@ -21,6 +21,8 @@ import CustomReusableDialog from "../components/CustomReusableDialog";
 import ErrorPlaceHolder from "../components/placeholder/ErrorPlaceHolder";
 import FailureSnackBar from "../components/snackbars/FailureSnackBar";
 import ApartmentList from "../sections/apartment-page/ApartmentList";
+import showSuccessSnackBar from "../components/snackbars/showSuccessSnackBar";
+import toast from "react-hot-toast";
 
 // ---------------------------------------------------------------------
 
@@ -72,6 +74,9 @@ async function fetchApartments(currPage, pageSize, setApartments = () => {}) {
   });
 }
 
+const successToast = () => toast.success("Successfully updated!");
+const errorToast = (message) => toast.error(message);
+
 /*
  * COMPONENT AllApartmentsPage
  */
@@ -81,7 +86,6 @@ const ApartmentListPage = () => {
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [openSuccessSnackBar, setOpenSuccessSnackBar] = useState(false);
   const [alertDialog, setAlertDialog] = useState(null);
   const [dialogContent, setDialogContent] = useState(null);
   const [paginationState, setPaginationState] = useState({
@@ -90,10 +94,6 @@ const ApartmentListPage = () => {
     pageSize: PAGE_SIZE_OPTIONS[1],
   });
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [failureSnackBarState, setFailureSnackBarState] = useState({
-    open: false,
-    message: "",
-  });
   const [itemToUpdate, setItemToUpdate] = useState(null);
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
 
@@ -179,16 +179,10 @@ const ApartmentListPage = () => {
         api.add(formJson).then((data) => {
           console.log(data);
           if (STATUS_OK.indexOf(data.statusCode) !== -1) {
-            setOpenSuccessSnackBar(true);
+            successToast();
             _loadApartments();
           } else {
-            setFailureSnackBarState((prev) => {
-              return {
-                ...prev,
-                open: true,
-                message: data.message,
-              };
-            });
+            errorToast(data.message);
           }
         });
         break;
@@ -196,7 +190,8 @@ const ApartmentListPage = () => {
       case "update": {
         api.update(formJson, itemToUpdate.id).then((data) => {
           if (STATUS_OK.indexOf(data.statusCode) !== -1) {
-            setOpenSuccessSnackBar(true);
+            successToast();
+
             _loadApartments();
             setItemToUpdate(null);
             setOpenUpdateDialog(false);
@@ -209,7 +204,7 @@ const ApartmentListPage = () => {
   }
 
   function _handleCloseSnackBar() {
-    setOpenSuccessSnackBar(false);
+    // setOpenSuccessSnackBar(false);
   }
 
   function _handleDeleteItem() {
@@ -218,7 +213,7 @@ const ApartmentListPage = () => {
     //
     api.delete(itemToDelete.id).then((res) => {
       if (STATUS_OK.indexOf(res.status) != -1) {
-        setOpenSuccessSnackBar(true);
+        // setOpenSuccessSnackBar(true);
         _loadApartments();
         setItemToDelete(null);
       }
@@ -359,16 +354,6 @@ const ApartmentListPage = () => {
       <UpdateApartmentFormDialog />
       <DeleteWarningDialog />
       <PageHeader>Apartments</PageHeader>
-      <FailureSnackBar
-        open={failureSnackBarState.open}
-        message={failureSnackBarState.message}
-        setClose={() => setFailureSnackBarState({ open: false, message: "" })}
-      />
-      <SuccessSnackBar
-        open={openSuccessSnackBar}
-        message="Successfully updated!"
-        setClose={_handleCloseSnackBar}
-      />
       {isLoading ? (
         <Skeleton animation="wave" height={120} />
       ) : (
