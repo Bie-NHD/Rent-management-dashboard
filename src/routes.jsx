@@ -5,15 +5,12 @@ import { OverviewPage } from "./pages/OverviewPage";
 import Layout from "./layout/Layout";
 import ErrorPage from "./pages/ErrorPage";
 import AllCustomersPage from "./pages/AllCustomersPage";
-import AllApartmentsPage from "./pages/AllApartmentsPage";
+import ApartmentListPage from "./pages/ApartmentListPage";
 import AllContractsPage from "./pages/AllContractsPage";
 import ImportPage from "./pages/ImportPage";
+import { ROUTES } from "./utils/constants";
 
-const routes = {
-  apartments: "/apartments",
-  customers: "/customers",
-  contracts: "/contracts",
-};
+// ---------------------------------------------------------
 
 export const router = createBrowserRouter([
   {
@@ -26,19 +23,19 @@ export const router = createBrowserRouter([
         element: <OverviewPage />,
       },
       {
-        path: "apartments",
-        element: <AllApartmentsPage />,
+        path: ROUTES.APARTMENT,
+        element: <ApartmentListPage />,
       },
       {
-        path: "customers",
+        path: ROUTES.CUSTOMER,
         element: <AllCustomersPage />,
       },
       {
-        path: "contracts",
+        path: ROUTES.CONTRACT,
         element: <AllContractsPage />,
       },
       {
-        path: "import",
+        path: ROUTES.IMPORT,
         element: <ImportPage />,
         // loader: importLoader,
       },

@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import BottomPaginationBar from "../components/BottomPaginationBar";
 import {
-  APARTMENTS_HEADERS,
   API_ROUTE_APARMENT,
   PAGE_SIZE_OPTIONS,
   STATUS_OK,
@@ -17,32 +10,79 @@ import {
 import PageHeader from "../components/PageHeader";
 import ImportButton from "../components/buttons/ImportButton";
 import ExportButton from "../components/buttons/ExportButton";
-import { formatId } from "../utils/stringHelper";
 import { APARTMENT_API as api } from "../api";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import PlaceHolder from "../components/placeholder/PlaceHolder";
 import { Paper, Skeleton } from "@mui/material";
-import SuccessSnackBar from "../components/snackbars/SuccessSnackBar";
 import CustomReusableDialog from "../components/CustomReusableDialog";
 import ErrorPlaceHolder from "../components/placeholder/ErrorPlaceHolder";
-import DeleteButton from "../components/buttons/DeleteButton";
-import FailureSnackBar from "../components/snackbars/FailureSnackBar";
+import ApartmentList from "../sections/apartment-page/ApartmentList";
+import toast from "react-hot-toast";
 
 // ---------------------------------------------------------------------
 
+// interface Pagination{
+//   page: number,
+//   totalPages: number,
+//   pageSize: number
+// }
+
+//  type Action = {type: "change_page"} || {type: "change_page_size"}
+
+const Actions = {
+  CHANGE_PAGE: "change_page",
+  CHANGE_PAGE_SIZE: "change_page_size",
+  CREATE_ITEM: "create_item",
+  UPDATE_ITEM: "update_item",
+};
+
+const paginationReducer = (state, action) => {
+  switch (action.type) {
+    case Actions.CHANGE_PAGE: {
+      return {
+        ...state,
+        currPage: action.nextPage,
+      };
+    }
+    case Actions.CHANGE_PAGE_SIZE: {
+      return {
+        ...state,
+        // change state to new pageSize
+        pageSize: action.pageSize,
+        currPage: state.currPage >= action.totalPages ? 0 : state.currPage,
+      };
+    }
+  }
+  throw Error("Unknown action: " + action.type);
+};
+
+//
+// fetch data
+//
+
+async function fetchApartments(currPage, pageSize, setApartments = () => {}) {
+  api.fetch(currPage, pageSize).then((data) => {
+    // setApartments here
+    setApartments(data.apartments);
+    // return data so the paginationReducer could use
+    return data;
+  });
+}
+
+const successToast = () => toast.success("Successfully updated!");
+const errorToast = (message) => toast.error(message);
 
 /*
  * COMPONENT AllApartmentsPage
  */
-const AllApartmentsPage = () => {
+const ApartmentListPage = () => {
   const [apartments, setApartments] = React.useState([]);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [openSuccessSnackBar, setOpenSuccessSnackBar] = useState(false);
   const [alertDialog, setAlertDialog] = useState(null);
   const [dialogContent, setDialogContent] = useState(null);
   const [paginationState, setPaginationState] = useState({
@@ -51,10 +91,6 @@ const AllApartmentsPage = () => {
     pageSize: PAGE_SIZE_OPTIONS[1],
   });
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [failureSnackBarState, setFailureSnackBarState] = useState({
-    open: false,
-    message: "",
-  });
   const [itemToUpdate, setItemToUpdate] = useState(null);
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
 
@@ -140,16 +176,10 @@ const AllApartmentsPage = () => {
         api.add(formJson).then((data) => {
           console.log(data);
           if (STATUS_OK.indexOf(data.statusCode) !== -1) {
-            setOpenSuccessSnackBar(true);
+            successToast();
             _loadApartments();
           } else {
-            setFailureSnackBarState((prev) => {
-              return {
-                ...prev,
-                open: true,
-                message: data.message,
-              };
-            });
+            errorToast(data.message);
           }
         });
         break;
@@ -157,7 +187,8 @@ const AllApartmentsPage = () => {
       case "update": {
         api.update(formJson, itemToUpdate.id).then((data) => {
           if (STATUS_OK.indexOf(data.statusCode) !== -1) {
-            setOpenSuccessSnackBar(true);
+            successToast();
+
             _loadApartments();
             setItemToUpdate(null);
             setOpenUpdateDialog(false);
@@ -170,7 +201,7 @@ const AllApartmentsPage = () => {
   }
 
   function _handleCloseSnackBar() {
-    setOpenSuccessSnackBar(false);
+    // setOpenSuccessSnackBar(false);
   }
 
   function _handleDeleteItem() {
@@ -179,7 +210,7 @@ const AllApartmentsPage = () => {
     //
     api.delete(itemToDelete.id).then((res) => {
       if (STATUS_OK.indexOf(res.status) != -1) {
-        setOpenSuccessSnackBar(true);
+        // setOpenSuccessSnackBar(true);
         _loadApartments();
         setItemToDelete(null);
       }
@@ -320,16 +351,6 @@ const AllApartmentsPage = () => {
       <UpdateApartmentFormDialog />
       <DeleteWarningDialog />
       <PageHeader>Apartments</PageHeader>
-      <FailureSnackBar
-        open={failureSnackBarState.open}
-        message={failureSnackBarState.message}
-        setClose={() => setFailureSnackBarState({ open: false, message: "" })}
-      />
-      <SuccessSnackBar
-        open={openSuccessSnackBar}
-        message="Successfully updated!"
-        setClose={_handleCloseSnackBar}
-      />
       {isLoading ? (
         <Skeleton animation="wave" height={120} />
       ) : (
@@ -357,7 +378,7 @@ const AllApartmentsPage = () => {
         //  apartments != null && apartments.length > 0
         //
         apartments && apartments.length && !isLoading ? (
-          <MainTable
+          <ApartmentList
             apartments={apartments}
             handleDelete={_onClickButtonDelete}
             handleUpdate={_onClickButtonUpdate}
@@ -382,7 +403,7 @@ const AllApartmentsPage = () => {
 };
 
 // EXPORT
-export default AllApartmentsPage;
+export default ApartmentListPage;
 
 const NewApartmentFormContent = () => (
   <>
@@ -429,45 +450,4 @@ const NewApartmentFormContent = () => (
       }}
     />
   </>
-);
-
-const MainTable = ({ apartments, handleDelete, handleUpdate }) => (
-  <Paper sx={{ overflow: "hidden", marginY: "2rem" }}>
-    <TableContainer sx={{ maxHeight: "50%" }}>
-      <Table
-        stickyHeader
-        size="small"
-        aria-label="sticky table"
-        sx={{ minWidth: 650 }}
-      >
-        <TableHead>
-          <TableRow>
-            {APARTMENTS_HEADERS.map((item) => (
-              <TableCell key={item}> {item}</TableCell>
-            ))}
-            <TableCell></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {apartments.map((item) => (
-            <TableRow
-              key={item.id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell>
-                <Typography>{formatId(item.id)}</Typography>
-              </TableCell>
-              <TableCell>{item.address}</TableCell>
-              <TableCell>{item.retailPrice}</TableCell>
-              <TableCell>{item.numberOfRoom}</TableCell>
-              <TableCell>
-                <Button onClick={(e) => handleUpdate(item)}>Update</Button>
-                <DeleteButton handleDelete={(e) => handleDelete(item)} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  </Paper>
 );

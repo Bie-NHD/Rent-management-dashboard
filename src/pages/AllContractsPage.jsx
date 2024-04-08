@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { fetchTestContract } from "../api";
-import { formatDate, formatId } from "../utils/stringHelper";
+import { formatDate, formatId } from "../utils/stringFormats";
 import {
   TableContainer,
   Table,
