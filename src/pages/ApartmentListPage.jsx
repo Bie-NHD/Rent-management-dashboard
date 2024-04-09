@@ -193,6 +193,10 @@ const ApartmentListPage = () => {
             setItemToUpdate(null);
             setOpenUpdateDialog(false);
           }
+
+          else {
+            errorToast(data.message)
+          }
         });
       }
     }
