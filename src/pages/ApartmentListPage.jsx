@@ -213,6 +213,7 @@ const ApartmentListPage = () => {
         // setOpenSuccessSnackBar(true);
         _loadApartments();
         setItemToDelete(null);
+        successToast();
       }
     });
   }

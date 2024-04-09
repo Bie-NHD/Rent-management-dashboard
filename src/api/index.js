@@ -43,16 +43,16 @@ const updateApartmentsAPI = async (apartmentDTO, id) =>
 const deleteApartmentAPI = async (id) => BASE.delete(ROUTES.APARTMENT, id);
 
 //
-// APARTMENT REQUESTS
+// CONTRACTS REQUESTS
 //
 export const importContractsAPI = async (formData) =>
   BASE.import(ROUTES.CONTRACT, formData);
 
-export const addContractsAPI = async (apartmentDTO) =>
-  BASE.add(ROUTES.CONTRACT, apartmentDTO);
+export const addContractsAPI = async (contractDTO) =>
+  BASE.add(ROUTES.CONTRACT, contractDTO);
 
-export const updateContractsAPI = async (apartmentDTO, id) =>
-  BASE.update(ROUTES.CONTRACT, id, apartmentDTO);
+export const updateContractsAPI = async (contractDTO, id) =>
+  BASE.update(ROUTES.CONTRACT, id, contractDTO);
 
 export const deleteContractAPI = async (id) => BASE.delete(ROUTES.CONTRACT, id);
 

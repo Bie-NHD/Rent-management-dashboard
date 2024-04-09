@@ -7,6 +7,7 @@ export const ROUTES = {
   ADD: "/add",
   SEARCH: "/search",
   DELETE: "/delete",
+  UPDATE: "/update"
 };
 export const API_ROUTE_APARMENT = "/apartments";
 export const API_ROUTE_CONTRACT = "/contracts";
