@@ -193,6 +193,10 @@ const ApartmentListPage = () => {
             setItemToUpdate(null);
             setOpenUpdateDialog(false);
           }
+
+          else {
+            errorToast(data.message)
+          }
         });
       }
     }
@@ -213,6 +217,7 @@ const ApartmentListPage = () => {
         // setOpenSuccessSnackBar(true);
         _loadApartments();
         setItemToDelete(null);
+        successToast();
       }
     });
   }
