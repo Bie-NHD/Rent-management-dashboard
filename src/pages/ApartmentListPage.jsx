@@ -20,6 +20,8 @@ import CustomReusableDialog from "../components/CustomReusableDialog";
 import ErrorPlaceHolder from "../components/placeholder/ErrorPlaceHolder";
 import ApartmentList from "../sections/apartment-page/ApartmentList";
 import toast from "react-hot-toast";
+import { useModal } from "@ebay/nice-modal-react";
+import NewApartmentDialog from "../sections/apartment-page/NewApartmentDialog";
 
 // ---------------------------------------------------------------------
 
@@ -73,6 +75,7 @@ async function fetchApartments(currPage, pageSize, setApartments = () => {}) {
 
 const successToast = () => toast.success("Successfully updated!");
 const errorToast = (message) => toast.error(message);
+//
 
 /*
  * COMPONENT AllApartmentsPage
@@ -93,6 +96,8 @@ const ApartmentListPage = () => {
   const [itemToDelete, setItemToDelete] = useState(null);
   const [itemToUpdate, setItemToUpdate] = useState(null);
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
+  //
+  const newApartmentModal = useModal(NewApartmentDialog);
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -192,10 +197,8 @@ const ApartmentListPage = () => {
             _loadApartments();
             setItemToUpdate(null);
             setOpenUpdateDialog(false);
-          }
-
-          else {
-            errorToast(data.message)
+          } else {
+            errorToast(data.message);
           }
         });
       }
@@ -356,27 +359,30 @@ const ApartmentListPage = () => {
       <UpdateApartmentFormDialog />
       <DeleteWarningDialog />
       <PageHeader>Apartments</PageHeader>
-      {isLoading ? (
-        <Skeleton animation="wave" height={120} />
-      ) : (
-        <Container
-          sx={{
-            display: "flex",
-            justifyContent: "end",
-            justifyItems: "flex-end",
-          }}
+      {/* {isLoading ? ( */}
+      {/* <Skeleton animation="wave" height={120} />
+      ) : ( */}
+      <Container
+        sx={{
+          display: "flex",
+          justifyContent: "end",
+          justifyItems: "flex-end",
+        }}
+      >
+        <Button
+          variant="contained"
+          startIcon={<AddCircleIcon />}
+          onClick={
+            // () => setOpenFormDialog(true)
+            () => newApartmentModal.show()
+          }
         >
-          <Button
-            variant="contained"
-            startIcon={<AddCircleIcon />}
-            onClick={() => setOpenFormDialog(true)}
-          >
-            New
-          </Button>
-          <ImportButton importType={API_ROUTE_APARMENT} />
-          <ExportButton exportType={API_ROUTE_APARMENT} />
-        </Container>
-      )}
+          New
+        </Button>
+        <ImportButton importType={API_ROUTE_APARMENT} />
+        <ExportButton exportType={API_ROUTE_APARMENT} />
+      </Container>
+      {/* // )} */}
 
       {
         //

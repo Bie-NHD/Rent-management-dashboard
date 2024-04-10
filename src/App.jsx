@@ -9,13 +9,16 @@ import { Toaster } from "react-hot-toast";
 import Box from "@mui/material/Box";
 import toastOptions from "./constants/toastOptions.js";
 import muiTheme from "./constants/muiTheme.js";
+import NiceModal from "@ebay/nice-modal-react";
 
 function App() {
   return (
     <>
       <ThemeProvider theme={muiTheme}>
-        <RouterProvider router={router} />
-        <Box component={Toaster} toastOptions={toastOptions} />
+        <NiceModal.Provider>
+          <RouterProvider router={router} />
+          <Box component={Toaster} toastOptions={toastOptions} />
+        </NiceModal.Provider>
       </ThemeProvider>
     </>
   );
