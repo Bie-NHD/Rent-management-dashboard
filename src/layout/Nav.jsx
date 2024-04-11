@@ -60,7 +60,7 @@ const drawerItems = (
     {appRoutes.map((item) => (
       <ListItemButton
         key={item.text}
-        components={Link}
+        LinkComponent={Link}
         to={item.link}
         sx={{
           "&:hover": {

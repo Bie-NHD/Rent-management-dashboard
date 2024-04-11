@@ -5,10 +5,16 @@ import { OverviewPage } from "./pages/OverviewPage";
 import Layout from "./layout/Layout";
 import ErrorPage from "./pages/ErrorPage";
 import AllCustomersPage from "./pages/AllCustomersPage";
-import ApartmentListPage from "./pages/ApartmentListPage";
+
 import AllContractsPage from "./pages/AllContractsPage";
-import ImportPage from "./pages/ImportPage";
 import { ROUTES } from "./utils/constants";
+import { lazy } from "react";
+import { Suspense } from "react";
+import Loading from "./components/Loading";
+// ---------------------------------------------------------
+
+const ApartmentListPage = lazy(() => import("./pages/ApartmentListPage"));
+const ImportPage = lazy(() => import("./pages/ImportPage"));
 
 // ---------------------------------------------------------
 
@@ -24,7 +30,11 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.APARTMENT,
-        element: <ApartmentListPage />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ApartmentListPage />
+          </Suspense>
+        ),
       },
       {
         path: ROUTES.CUSTOMER,
@@ -36,7 +46,11 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.IMPORT,
-        element: <ImportPage />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ImportPage />
+          </Suspense>
+        ),
         // loader: importLoader,
       },
     ],
