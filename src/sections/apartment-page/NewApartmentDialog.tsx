@@ -1,5 +1,7 @@
 // https://stackoverflow.com/a/73094676/20423795
 // https://react-hook-form.com/get-started
+//
+// https://stackoverflow.com/questions/65459720/how-to-customize-yup-validation-messages
 
 import React from "react";
 import Dialog from "@mui/material/Dialog";
@@ -15,9 +17,6 @@ import {
   TextFieldProps,
 } from "@mui/material";
 import { APARTMENT_API as api } from "../../api";
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
-import { STATUS_OK } from "../../utils/constants";
-import toast from "react-hot-toast";
 import {
   useForm,
   useController,
@@ -32,15 +31,10 @@ import {
   FieldValues,
   UseFormStateReturn,
 } from "react-hook-form";
-import NiceModal, { useModal, antdModal } from "@ebay/nice-modal-react";
-import { object, string, number, date, InferType } from "yup";
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-interface IApartmentInputs {
-  address: string;
-  numberOfRoom: number;
-  retailPrice: number;
-}
+import IApartment from "../../models/IApartment";
+import ApartmentSchema from "../../models/ApartmentSchema";
 
 // const defaultValue: IApartmentInputs = {
 //   address: "",
@@ -50,28 +44,19 @@ interface IApartmentInputs {
 //
 // define validations for Apartment form
 //
-let ApartmentSchema = object<IApartmentInputs>({
-  address: string().required(),
-  numberOfRoom: number().min(1).required().default(1),
-  retailPrice: number().min(100000).required().default(100000),
-});
-
-type DialogProps = {
-  open: boolean;
-};
 
 interface ApartmentInputProps extends OutlinedTextFieldProps {
   name: string;
   // register: UseFormRegister<IApartmentInputs>;
-  control: Control;
-  // fullWidth: true;
   /**
-   * @default true
+   * to define ```Control``` element created by ```React-Hook-Form```'s ```useForm``` Hook
    */
-  // required: true;
+  control: Control;
+  /**
+   * to define ```step``` HTMLAttribute for ```input["number"]```
+   */
   step?: number;
   type: React.InputHTMLAttributes<unknown>["type"];
-
   // defaultValue?: string;
 }
 
@@ -109,7 +94,6 @@ const onSubmit = (data: any) => {
   console.log(data);
 };
 
-// const NewApartmentDialog = (props: DialogProps) => {
 //   function handleSubmit(event: Event | FormDataEvent) {
 //     event.preventDefault();
 //     const formData = new FormData(event.currentTarget as HTMLFormElement);
@@ -130,39 +114,19 @@ const onSubmit = (data: any) => {
 //     // Close dialog
 //   }
 
-//   return (
-//     <Dialog
-//       open={props.open}
-//       onClose={()}
-//       PaperProps={{
-//         component: "form",
-//         onSubmit: (event) => onSubmit(event),
-//       }}
-//     >
-//       <DialogTitle>New Apartment</DialogTitle>
-//       <DialogContent></DialogContent>
-//       <DialogActions>
-//         <Button onClick={handleClose}>Cancel</Button>
-//         <Button type="submit">Submit</Button>
-//       </DialogActions>
-//     </Dialog>
-//   );
-// };
-
-// export default NewApartmentDialog;
-
 export default NiceModal.create(() => {
-  //
+  /**
+   * Hook provided by Nice-modal-react
+   */
   const modal = useModal();
   //
   const {
     handleSubmit,
     control,
-    register,
     reset,
     formState: { errors },
   } = useForm({
-    // defaultValues: ApartmentSchema.default,
+    defaultValues: ApartmentSchema.getDefault(),
     resolver: yupResolver(ApartmentSchema),
   });
   return (
@@ -174,6 +138,7 @@ export default NiceModal.create(() => {
         onSubmit: handleSubmit(onSubmit),
       }}
     >
+      <DialogTitle>New Apartment</DialogTitle>
       <DialogContent>
         <Input
           variant="outlined"
@@ -181,7 +146,6 @@ export default NiceModal.create(() => {
           label="Address"
           type="text"
           control={control}
-          // {...register("apartment")}
         />
         <Input
           variant="outlined"
