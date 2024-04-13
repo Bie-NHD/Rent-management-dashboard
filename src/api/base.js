@@ -23,8 +23,11 @@ const add = async (route, data) =>
 /**
  *
  * @param {string} route
+ * specify api route
  * @param {string} id
+ * specify item's ```id```
  * @param {Object} data
+ * specify data to be updated
  * @returns {Promise<Object>}
  */
 
