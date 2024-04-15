@@ -2,7 +2,7 @@
 // import viteLogo from "/vite.svg";
 // import './App.css'
 import { RouterProvider } from "react-router-dom";
-import { router } from "./routes.jsx";
+import router from "./routes.jsx";
 import { ThemeProvider } from "@emotion/react";
 import appTheme from "./constants/muiTheme.js";
 import { Toaster } from "react-hot-toast";

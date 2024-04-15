@@ -1,16 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
 import { OverviewPage } from "./pages/OverviewPage";
 // import { loader as importLoader } from "./pages/ImportPage";
-
 import Layout from "./layout/Layout";
 import ErrorPage from "./pages/ErrorPage";
 import AllCustomersPage from "./pages/AllCustomersPage";
-
 import AllContractsPage from "./pages/AllContractsPage";
 import { ROUTES } from "./utils/constants";
 import { lazy } from "react";
 import { Suspense } from "react";
-import Loading from "./components/Loading";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
 // ---------------------------------------------------------
 
 const ApartmentListPage = lazy(() => import("./pages/ApartmentListPage"));
@@ -18,7 +18,24 @@ const ImportPage = lazy(() => import("./pages/ImportPage"));
 
 // ---------------------------------------------------------
 
-export const router = createBrowserRouter([
+const Loading = () => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <CircularProgress sx={{ alignSelf: "center" }} />
+    </Box>
+  );
+};
+
+// ---------------------------------------------------------
+
+const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
@@ -57,4 +74,4 @@ export const router = createBrowserRouter([
   },
 ]);
 
-// export default routes;
+export default router;
