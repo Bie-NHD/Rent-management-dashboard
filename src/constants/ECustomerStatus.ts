@@ -1,0 +1,3 @@
+enum ECustomerStatus {
+  NORMAL = "Normal",
+}
