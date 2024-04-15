@@ -33,8 +33,9 @@ import {
 } from "react-hook-form";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import IApartment from "../../models/IApartment";
-import ApartmentSchema from "../../models/ApartmentSchema";
+import IApartmentFormInputs from "../../models/IApartment";
+import ApartmentFormInputSchema from "../../models/ApartmentSchema";
+import TApartment from "../../models/TApartment";
 
 // const defaultValue: IApartmentInputs = {
 //   address: "",
@@ -46,12 +47,15 @@ import ApartmentSchema from "../../models/ApartmentSchema";
 //
 
 interface ApartmentInputProps extends OutlinedTextFieldProps {
-  name: string;
+  /**
+   * should match the name of keys of ```IApartmentFormInputs```
+   */
+  name: "address" | "numberOfRoom" | "retailPrice";
   // register: UseFormRegister<IApartmentInputs>;
   /**
    * to define ```Control``` element created by ```React-Hook-Form```'s ```useForm``` Hook
    */
-  control: Control;
+  control: Control<IApartmentFormInputs, any>;
   /**
    * to define ```step``` HTMLAttribute for ```input["number"]```
    */
@@ -90,7 +94,7 @@ ApartmentInputProps) => {
   );
 };
 
-const onSubmit = (data: any) => {
+const onSubmit = (data: IApartmentFormInputs) => {
   console.log(data);
 };
 
@@ -125,9 +129,9 @@ export default NiceModal.create(() => {
     control,
     reset,
     formState: { errors },
-  } = useForm({
-    defaultValues: ApartmentSchema.getDefault(),
-    resolver: yupResolver(ApartmentSchema),
+  } = useForm<IApartmentFormInputs, any>({
+    defaultValues: ApartmentFormInputSchema.getDefault(),
+    resolver: yupResolver<IApartmentFormInputs>(ApartmentFormInputSchema),
   });
   return (
     <Dialog

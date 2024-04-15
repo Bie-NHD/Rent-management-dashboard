@@ -1,7 +1,7 @@
-import IApartment from "./IApartment";
+import IApartmentFormInputs from "./IApartment";
 
 type TApartmentProps = {
   id: string;
-} & IApartment;
+} & IApartmentFormInputs;
 
 export default TApartmentProps;

@@ -1,8 +1,14 @@
-import { object, string, number, date, InferType } from "yup";
-import IApartment from "./IApartment";
+import { object, string, number, date, InferType, ObjectSchema } from "yup";
+import IApartmentFormInputs from "./IApartment";
+import TApartment from "./TApartment";
 
-let ApartmentSchema = object<IApartment>({
-  address: string().label("Address").required().default(""),
+// TODO: add RegEx for sanitizign inputs
+
+const ApartmentFormInputSchema: ObjectSchema<IApartmentFormInputs> = object({
+  address: string()
+    .label("Address")
+    .required("Address is required")
+    .default(""),
   numberOfRoom: number().label("Number of Rooms").min(1).required().default(1),
   retailPrice: number()
     .label("Retail Price")
@@ -11,4 +17,4 @@ let ApartmentSchema = object<IApartment>({
     .default(100000),
 });
 
-export default ApartmentSchema;
+export default ApartmentFormInputSchema;

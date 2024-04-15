@@ -1,5 +1,5 @@
-export default interface IApartment {
-    address: string;
-    numberOfRoom: number;
-    retailPrice: number;
-  }
+export default interface IApartmentFormInputs {
+  address: string;
+  numberOfRoom: number;
+  retailPrice: number;
+}

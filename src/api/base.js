@@ -2,7 +2,8 @@ import axios from "axios";
 
 import { testApartmentsOnly, testContractsOnly } from "./test";
 
-import { TEST_URL, ROUTES } from "../utils/constants";
+import { ROUTES } from "../utils/constants";
+import { TEST_URL } from "../constants/ApiRoutes";
 
 // ----------------------------------------------------
 
