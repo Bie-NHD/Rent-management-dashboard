@@ -1,10 +1,17 @@
-import TApartment from "../models/TApartment";
-import TContract from "../models/TContract";
-
 type ApiExportParams = {
-  getTemplate: false;
+  getTemplate?: false;
 };
 type ApiUpdateParams = {
   id: string;
   data: TApartment | TCustomer | TContract;
 };
+
+type ApiFetchParams = {
+  page?: 0;
+  pageSize?: 10;
+  sortBy?: string;
+};
+/**
+ * @param {q} string query
+ */
+type ApiSearchParams = ApiFetchParams & { q: string };

@@ -1,20 +1,20 @@
 import { object, string, number, date, InferType, ObjectSchema } from "yup";
-import IApartmentFormInputs from "./IApartment";
-import TApartment from "./TApartment";
 
 // TODO: add RegEx for sanitizign inputs
-
-const ApartmentFormInputSchema: ObjectSchema<IApartmentFormInputs> = object({
+/**
+ * Yup-powered validation schema
+ */
+const ApartmentSchema: ObjectSchema<TApartmentDTO> = object({
   address: string()
     .label("Address")
     .required("Address is required")
     .default(""),
-  numberOfRoom: number().label("Number of Rooms").min(1).required().default(1),
+  numberOfRoom: number().label("Number of Rooms").required().min(1).default(1),
   retailPrice: number()
     .label("Retail Price")
-    .min(100000)
     .required()
+    .min(100000)
     .default(100000),
 });
 
-export default ApartmentFormInputSchema;
+export default ApartmentSchema;

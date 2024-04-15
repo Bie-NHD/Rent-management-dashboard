@@ -1,6 +1,3 @@
-import { defaultBaseSortFn } from "match-sorter";
-import TApartment from "./TApartment";
-
 // type ArrayDate = {
 //   date: [number, number, number];
 //   getDay: () => ArrayDate.date
@@ -14,4 +11,9 @@ type TContract = {
   apartment: TApartment;
 };
 
-export default TContract;
+type TContractDTO = {
+  apartmentId: string;
+  customerId: string;
+  endDate: string;
+  startDate: string;
+};

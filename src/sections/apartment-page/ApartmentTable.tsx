@@ -1,16 +1,13 @@
 import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
 
-import React from 'react'
-import TApartment from "../../models/TApartment";
+import React from "react";
 
 type Props = {
-    data:Array<TApartment>;
-}
+  data: Array<TApartment>;
+};
 
-const ApartmentTable = (props:Props) => {
-  return (
-    <div>ApartmentTable</div>
-  );
-}
+const ApartmentTable = (props: Props) => {
+  return <div>ApartmentTable</div>;
+};
 
-export default ApartmentTable
+export default ApartmentTable;
