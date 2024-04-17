@@ -8,6 +8,17 @@ export default defineConfig({
     port: 5174,
   },
   optimizeDeps: {
-    include: ["@emotion/react", "@emotion/styled", "@mui/material"],
+    include: [
+      "@emotion/react",
+      "@emotion/styled",
+      "@mui/material",
+      "@mui/material/Tooltip",
+      // FUCKING BIG BUG
+      // https://github.com/vitejs/vite/issues/12423
+      // https://github.com/mui/material-ui/issues/32727
+    ],
   },
+  // esbuild: {
+  //   jsxInject: `import React from 'react'`,
+  // },
 });
