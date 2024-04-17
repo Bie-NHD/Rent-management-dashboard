@@ -1,4 +1,4 @@
-type PaginationApiResponse = {
+export type TPagination = {
   pageNumber: number;
   pageSize: number;
   offset: number;

@@ -1,9 +1,6 @@
-type TCustomer = TCustomerDTO & {
+export type Customer = {
   id: string;
   status: ECustomerStatus;
-};
-
-type TCustomerDTO = {
   firstName: string;
   lastName: string;
   address: string;

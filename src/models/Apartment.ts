@@ -1,9 +1,8 @@
-type TApartmentDTO = {
+type Apartment = {
+  id: string;
   address: string;
   numberOfRoom: number;
   retailPrice: number;
 };
 
-type TApartment = {
-  id: string;
-} & TApartmentDTO;
+export default Apartment;

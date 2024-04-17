@@ -10,7 +10,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { OutlinedTextFieldProps, TextField } from "@mui/material";
-import { APARTMENT_API } from "../../api";
+import { APARTMENT_API } from "../../api/apartment";
 import {
   useForm,
   useController,
@@ -23,6 +23,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import ApartmentSchema from "../../models/ApartmentSchema";
 import toast from "react-hot-toast";
 import { STATUS_OK } from "../../utils/constants";
+import { Apartment } from "../../models";
 
 interface ApartmentInputProps extends OutlinedTextFieldProps {
   /**
@@ -32,7 +33,7 @@ interface ApartmentInputProps extends OutlinedTextFieldProps {
   /**
    * to define ```Control``` element created by ```React-Hook-Form```'s ```useForm``` Hook
    */
-  control: Control<TApartmentDTO, any>;
+  control: Control<Omit<Apartment, "id">, any>;
   /**
    * to define ```step``` HTMLAttribute for ```input["number"]```
    */
@@ -82,12 +83,12 @@ export default NiceModal.create(() => {
     control,
     reset,
     formState: { errors },
-  } = useForm<TApartmentDTO, any>({
+  } = useForm<Omit<Apartment, "id">, any>({
     defaultValues: ApartmentSchema.getDefault(),
-    resolver: yupResolver<TApartmentDTO>(ApartmentSchema),
+    resolver: yupResolver<Omit<Apartment, "id">>(ApartmentSchema),
   });
 
-  const onSubmit: SubmitHandler<TApartmentDTO> = (
+  const onSubmit: SubmitHandler<Omit<Apartment, "id">> = (
     data, //TFieldValues
     event
   ) => {

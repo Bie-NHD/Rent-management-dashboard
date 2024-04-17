@@ -18,7 +18,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import { styled } from "@mui/material/styles";
 import { API_ROUTE_APARMENT } from "../utils/constants";
-import { importApartmentsAPI } from "../api";
+import { importApartmentsAPI } from "../api/apartment";
 import DeleteButton from "../components/buttons/DeleteButton";
 const styles = {
   button: {

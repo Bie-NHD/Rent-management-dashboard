@@ -1,10 +1,11 @@
-import { object, string, number, date, InferType, ObjectSchema } from "yup";
+import { object, string, number, ObjectSchema } from "yup";
+import Apartment from "./Apartment";
 
 // TODO: add RegEx for sanitizign inputs
 /**
  * Yup-powered validation schema
  */
-const ApartmentSchema: ObjectSchema<TApartmentDTO> = object({
+const ApartmentSchema: ObjectSchema<Omit<Apartment, "id">> = object({
   address: string()
     .label("Address")
     .required("Address is required")

@@ -10,7 +10,7 @@ import {
 import PageHeader from "../components/PageHeader";
 import ImportButton from "../components/buttons/ImportButton";
 import ExportButton from "../components/buttons/ExportButton";
-import { APARTMENT_API as api } from "../api";
+import { APARTMENT_API as api } from "../api/apartment";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";

@@ -7,8 +7,8 @@ type TContract = {
   id: string;
   startDate: [number, number, number];
   endDate: [number, number, number];
-  customer: TCustomer;
-  apartment: TApartment;
+  customer: Customer;
+  apartment: Apartment;
 };
 
 type TContractDTO = {
