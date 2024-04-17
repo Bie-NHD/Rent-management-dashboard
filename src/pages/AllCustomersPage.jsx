@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { APARTMENT_API as api } from "../api";
+import { APARTMENT_API as api } from "../api/apartment";
 import { TableCell } from "@mui/material";
 import { formatId } from "../utils/stringFormats";
 

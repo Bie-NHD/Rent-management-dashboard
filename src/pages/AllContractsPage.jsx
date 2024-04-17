@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { fetchTestContract } from "../api";
+import { fetchTestContract } from "../api/apartment";
 import { formatDate, formatId } from "../utils/stringFormats";
 import {
   TableContainer,
