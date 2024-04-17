@@ -197,7 +197,6 @@ const ApartmentListPage = () => {
 
   return (
     <>
-      <NewApartmentFormDialog />
       <UpdateApartmentFormDialog />
       <DeleteWarningDialog />
       <PageHeader>Apartments</PageHeader>

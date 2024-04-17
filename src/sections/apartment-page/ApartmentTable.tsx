@@ -11,6 +11,7 @@ import { useApartments } from "../../hooks";
 import Apartment from "../../models/Apartment";
 import { IconButton, Tooltip } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import ErrorPlaceHolder from "../../components/placeholder/ErrorPlaceHolder";
 
 // ------------------------------------
 
@@ -120,7 +121,10 @@ const ApartmentTable = () => {
   // Show loading
   if (isLoading) return <Loading />;
   // Show, throw Error
-  if (isError) throw error || new Error("Error with ApartmentTable");
+  if (isError) {
+    console.log(error || new Error("Error with ApartmentTable"));
+    return <ErrorPlaceHolder onClick={undefined} />;
+  }
 
   // -------------------------------------------------------
 
