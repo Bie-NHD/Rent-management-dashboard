@@ -2,11 +2,9 @@ import axios from "axios";
 
 import { testApartmentsOnly, testContractsOnly } from "./test";
 
-import { TEST_URL, ROUTES } from "../utils/constants";
+import { ROUTES } from "../utils/constants";
 
-import { BASE } from "./base";
-
-import { baseURL } from "./base";
+import { BASE } from "./_base.js";
 
 //
 // APARTMENT REQUESTS
@@ -70,4 +68,3 @@ export const APARTMENT_API = {
 export const exportFileAPI = (route, getTemplate = false) => {
   return TEST_URL + route + "/export?getTemplate=" + getTemplate;
 };
-

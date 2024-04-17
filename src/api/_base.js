@@ -3,7 +3,6 @@ import axios from "axios";
 import { testApartmentsOnly, testContractsOnly } from "./test";
 
 import { ROUTES } from "../utils/constants";
-import { TEST_URL } from "../constants/ApiRoutes";
 
 // ----------------------------------------------------
 
@@ -11,6 +10,8 @@ const DELETE = "/delete/";
 const FORM_HEADER = {
   "Content-Type": "multipart/form-data",
 };
+
+const TEST_URL = "http://localhost:9090";
 
 export const baseURL = axios.create({ baseURL: TEST_URL });
 

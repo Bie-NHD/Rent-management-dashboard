@@ -1,11 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
-import { OverviewPage } from "./pages/OverviewPage";
+// import { OverviewPage } from "./pages/OverviewPage";
+import { OverviewPage } from "../pages/OverviewPage";
 // import { loader as importLoader } from "./pages/ImportPage";
-import Layout from "./layout/Layout";
-import ErrorPage from "./pages/ErrorPage";
-import AllCustomersPage from "./pages/AllCustomersPage";
-import AllContractsPage from "./pages/AllContractsPage";
-import { ROUTES } from "./utils/constants";
+import Layout from "../layout/Layout";
+import ErrorPage from "../pages/ErrorPage";
+import AllCustomersPage from "../pages/AllCustomersPage";
+import AllContractsPage from "../pages/AllContractsPage";
+import { ROUTES } from "../utils/constants";
 import { lazy } from "react";
 import { Suspense } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -13,8 +14,8 @@ import Box from "@mui/material/Box";
 
 // ---------------------------------------------------------
 
-const ApartmentListPage = lazy(() => import("./pages/ApartmentListPage"));
-const ImportPage = lazy(() => import("./pages/ImportPage"));
+const ApartmentListPage = lazy(() => import("../pages/ApartmentListPage"));
+const ImportPage = lazy(() => import("../pages/ImportPage"));
 
 // ---------------------------------------------------------
 
