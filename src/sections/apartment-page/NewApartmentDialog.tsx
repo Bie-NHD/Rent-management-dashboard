@@ -10,7 +10,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { OutlinedTextFieldProps, TextField } from "@mui/material";
-import { APARTMENT_API } from "../../api/apartment";
 import {
   useForm,
   useController,
@@ -19,11 +18,13 @@ import {
 } from "react-hook-form";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { yupResolver } from "@hookform/resolvers/yup";
-// import TApartmentInputs from "../../models/TApartmentFormInputs";
 import ApartmentSchema from "../../models/ApartmentSchema";
 import toast from "react-hot-toast";
-import { STATUS_OK } from "../../utils/constants";
 import { Apartment } from "../../models";
+import { useCreateApartment } from "../../hooks";
+import queryClient from "../../configs/queryClient";
+import { useQueryClient } from "@tanstack/react-query";
+import { QK_APARTMENTS } from "../../constants";
 
 interface ApartmentInputProps extends OutlinedTextFieldProps {
   /**
@@ -77,6 +78,14 @@ export default NiceModal.create(() => {
    * Hook provided by Nice-modal-react
    */
   const modal = useModal();
+  const client = useQueryClient(queryClient);
+  const { mutate } = useCreateApartment({
+    onSuccess(data) {
+      client.invalidateQueries({ queryKey: [QK_APARTMENTS] }); // refetch data
+      toast.success(`${data.message} updated`);
+      modal.remove();
+    },
+  });
 
   const {
     handleSubmit,
@@ -93,18 +102,7 @@ export default NiceModal.create(() => {
     event
   ) => {
     event?.preventDefault();
-
-    APARTMENT_API.add(data).then((data: any) => {
-      console.log(data);
-      if (STATUS_OK.indexOf(data.statusCode) !== -1) {
-        // notify success
-        toast.success(`${data.message} updated`);
-        modal.remove();
-      } else {
-        // Notify error from server
-        toast.error(data.message);
-      }
-    });
+    mutate(data);
   };
 
   return (
