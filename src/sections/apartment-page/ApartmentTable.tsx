@@ -123,7 +123,7 @@ const ApartmentTable = () => {
   // Show, throw Error
   if (isError) {
     console.log(error || new Error("Error with ApartmentTable"));
-    return <ErrorPlaceHolder onClick={undefined} />;
+    return <ErrorPlaceHolder onClick={()=>refetch()} />;
   }
 
   // -------------------------------------------------------
