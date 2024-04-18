@@ -9,4 +9,4 @@
 | [@ebay/nice-modal-react](https://github.com/ebay/nice-modal-react) | Modal manager layer      |
 | Material-UI (MUI)                                                  |                          |
 | TanStack Query                                                     | Data state manager       |
-| React-query-kit                                                    | Query hook builder       |
+| [React-query-kit](https://github.com/HuolalaTech/react-query-kit)  | Query hook builder       |
