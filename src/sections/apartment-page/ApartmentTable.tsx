@@ -14,7 +14,7 @@ import ErrorPlaceHolder from "../../components/placeholder/ErrorPlaceHolder";
 import NiceModal from "@ebay/nice-modal-react";
 import toast from "react-hot-toast";
 import {
-  ApiActions,
+  ApiRoutes,
   QK_APARTMENTS,
   NM_APARTMENT,
   NM_WARNING,
@@ -152,14 +152,17 @@ const ApartmentTable = () => {
       <MenuItem
         key="edit"
         onClick={() =>
-          NiceModal.show(NM_APARTMENT, { apartment: data[row.index] })
-            // TODO: This is not type-safe
-            .then((data) =>
-              mutate({
-                data: data as ApiUpdateParams<Omit<Apartment, "id">>,
-                action: ApiActions.Update,
-              })
-            )
+          NiceModal.show(NM_APARTMENT, { apartment: data[row.index] }).then(
+            (data) => {
+              mutate(
+                // TODO: This is not type-safe
+                {
+                  data: data as ApiUpdateParams<Omit<Apartment, "id">>,
+                  action: ApiRoutes.Update,
+                }
+              );
+            }
+          )
         }
       >
         Edit
@@ -175,7 +178,7 @@ const ApartmentTable = () => {
               // TODO: This is not type-safe
               mutate({
                 data: { id: id, data: others },
-                action: ApiActions.Delete,
+                action: ApiRoutes.Delete,
               });
             }
           })
