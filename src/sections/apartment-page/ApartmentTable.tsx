@@ -9,19 +9,24 @@ import {
 } from "material-react-table";
 import { useState } from "react";
 import { Stack, Skeleton, MenuItem } from "@mui/material";
-import { useApartments, useCreateApartment } from "../../hooks";
 import Apartment from "../../models/Apartment";
-import { IconButton, Tooltip } from "@mui/material";
-import RefreshIcon from "@mui/icons-material/Refresh";
 import ErrorPlaceHolder from "../../components/placeholder/ErrorPlaceHolder";
 import NiceModal from "@ebay/nice-modal-react";
-import { NM_APARTMENT } from "../../constants/niceModalId";
-import { useUpdateApartment } from "../../hooks/useEditApartment";
 import toast from "react-hot-toast";
-import { ApiActions, QK_APARTMENTS } from "../../constants";
+import {
+  ApiActions,
+  QK_APARTMENTS,
+  NM_APARTMENT,
+  NM_WARNING,
+} from "../../constants";
 import { useQueryClient } from "@tanstack/react-query";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { Edit } from "@mui/icons-material";
+import { IconButton, Tooltip } from "@mui/material";
 import { ApiUpdateParams } from "../../models";
+// Hooks ------------------------------
+import { useApartments } from "../../hooks";
+import { useUpdateApartment } from "../../hooks/useEditApartment";
 
 // ------------------------------------
 
@@ -82,7 +87,7 @@ const ApartmentTable = () => {
   const [globalFilter, setGlobalFilter] = useState(""); // search filter
   const client = useQueryClient();
 
-  const mutationUpdate = useUpdateApartment({
+  const { mutate } = useUpdateApartment({
     onSuccess(data, variables, context) {
       toast.success(data.message);
       client.invalidateQueries({ queryKey: [QK_APARTMENTS] });
@@ -147,22 +152,35 @@ const ApartmentTable = () => {
       <MenuItem
         key="edit"
         onClick={() =>
-          NiceModal.show(NM_APARTMENT, { apartment: data[row.index] }).then(
-            (data) => {
-              mutationUpdate.mutate(
-                // TODO: This is not type-safe
-                {
-                  data: data as ApiUpdateParams<Omit<Apartment, "id">>,
-                  action: ApiActions.Update,
-                }
-              );
-            }
-          )
+          NiceModal.show(NM_APARTMENT, { apartment: data[row.index] })
+            // TODO: This is not type-safe
+            .then((data) =>
+              mutate({
+                data: data as ApiUpdateParams<Omit<Apartment, "id">>,
+                action: ApiActions.Update,
+              })
+            )
         }
       >
         Edit
       </MenuItem>,
-      <MenuItem key="delete" onClick={() => console.info("Delete")}>
+      <MenuItem
+        key="delete"
+        onClick={() =>
+          NiceModal.show(NM_WARNING, {
+            title: "Confirm Delete Apartment",
+          }).then((res) => {
+            if (res === true) {
+              const { id, ...others } = data[row.index];
+              // TODO: This is not type-safe
+              mutate({
+                data: { id: id, data: others },
+                action: ApiActions.Delete,
+              });
+            }
+          })
+        }
+      >
         Delete
       </MenuItem>,
     ],

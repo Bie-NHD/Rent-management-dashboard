@@ -21,14 +21,7 @@ import {
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ApartmentSchema from "../../models/ApartmentSchema";
-import toast from "react-hot-toast";
 import { Apartment } from "../../models";
-import { useCreateApartment } from "../../hooks";
-import queryClient from "../../configs/queryClient";
-import { useQueryClient } from "@tanstack/react-query";
-import { QK_APARTMENTS } from "../../constants";
-import { NM_APARTMENT } from "../../constants/niceModalId";
-import { useUpdateApartment } from "../../hooks/useEditApartment";
 
 interface ApartmentInputProps extends OutlinedTextFieldProps {
   /**

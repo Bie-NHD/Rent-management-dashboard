@@ -8,10 +8,9 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import toast from "react-hot-toast";
 import NiceModal from "@ebay/nice-modal-react";
 import ApartmentTable from "../sections/apartment-page/ApartmentTable";
-import { NM_APARTMENT } from "../constants/niceModalId";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateApartment } from "../hooks";
-import { QK_APARTMENTS } from "../constants";
+import { QK_APARTMENTS, NM_APARTMENT } from "../constants";
 
 // ---------------------------------------------------------------------
 
