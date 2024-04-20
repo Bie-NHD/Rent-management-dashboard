@@ -33,7 +33,7 @@ const UpdateApi = async (url: string, params: ApiUpdateParams) =>
   );
 
 const DeleteApi = async (url: string, params: ApiUpdateParams) =>
-  AxiosInstance.post<TApiResponse>(url + "/" + params.id).then(
+  AxiosInstance.delete<TApiResponse>(url + "/" + params.id).then(
     (response) => response.data
   );
 
