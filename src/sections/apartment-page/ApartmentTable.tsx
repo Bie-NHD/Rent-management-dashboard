@@ -18,7 +18,7 @@ import NiceModal from "@ebay/nice-modal-react";
 import { NM_APARTMENT } from "../../constants/niceModalId";
 import { useUpdateApartment } from "../../hooks/useEditApartment";
 import toast from "react-hot-toast";
-import { ApiActions, QK_APARTMENTS } from "../../constants";
+import { ApiRoutes, QK_APARTMENTS } from "../../constants";
 import { useQueryClient } from "@tanstack/react-query";
 import { Edit } from "@mui/icons-material";
 import { ApiUpdateParams } from "../../models";
@@ -153,7 +153,7 @@ const ApartmentTable = () => {
                 // TODO: This is not type-safe
                 {
                   data: data as ApiUpdateParams<Omit<Apartment, "id">>,
-                  action: ApiActions.Update,
+                  action: ApiRoutes.Update,
                 }
               );
             }
