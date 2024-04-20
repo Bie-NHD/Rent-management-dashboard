@@ -11,9 +11,9 @@ export type TApiRequestDTO =
   | Omit<Customer, "id" | "status">;
 
 // For UPDATE, DELTE
-export type ApiUpdateParams = {
+export type ApiUpdateParams<TData = TApiRequestDTO> = {
   id: string;
-  data: TApiRequestDTO;
+  data: TData;
 };
 
 export type ApiFetchParams = {

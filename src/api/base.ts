@@ -32,6 +32,11 @@ const UpdateApi = async (url: string, params: ApiUpdateParams) =>
     (response) => response.data
   );
 
+const DeleteApi = async (url: string, params: ApiUpdateParams) =>
+  AxiosInstance.post<TApiResponse>(url + "/" + params.id).then(
+    (response) => response.data
+  );
+
 const ImportApi = async (url: string, formData: FormData) =>
   AxiosInstance.post<TApiResponse>(url, formData, ImportConfig).then(
     (response) => response.data
@@ -48,6 +53,7 @@ export const Api = Object.freeze({
   export: ExportApi,
   import: ImportApi,
   create: CreateApi,
+  delete: DeleteApi,
   // apartments
   // getApartments: (params: ApiFetchParams) =>
   //   Api.fetch(ApartmentURLs.GetAll, params),
