@@ -18,7 +18,7 @@ export default defineConfig({
       // https://github.com/mui/material-ui/issues/32727
     ],
   },
-  // esbuild: {
-  //   jsxInject: `import React from 'react'`,
-  // },
+  esbuild: {
+    jsxInject: `import React from 'react'`,
+  },
 });
