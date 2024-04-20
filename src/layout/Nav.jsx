@@ -22,6 +22,7 @@ import HolidayVillageIcon from "@mui/icons-material/HolidayVillage";
 import PeopleIcon from "@mui/icons-material/People";
 
 import { Link } from "react-router-dom";
+import { ApiRoutes } from "../constants";
 
 const appRoutes = [
   {
@@ -32,17 +33,17 @@ const appRoutes = [
   {
     icon: <PeopleIcon />,
     text: "Customers",
-    link: "/customers",
+    link: ApiRoutes.Customer,
   },
   {
     icon: <HolidayVillageIcon />,
     text: "Apartments",
-    link: "/apartments",
+    link: ApiRoutes.Apartment,
   },
   {
     icon: <ReceiptLongIcon />,
     text: "Contracts",
-    link: "/contracts",
+    link: ApiRoutes.Contract,
   },
 ];
 

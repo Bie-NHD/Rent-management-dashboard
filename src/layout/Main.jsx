@@ -2,7 +2,7 @@ import Container from "@mui/material/Container";
 import { styled } from "@mui/material/styles";
 import { W_DRAWER } from "../constants/dimensions";
 
-const Main = styled(Container, {
+const Main = styled("main", {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   flexGrow: 1,
@@ -15,7 +15,7 @@ const Main = styled(Container, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `${W_DRAWER / 2}px`,
+  marginLeft: `-${W_DRAWER}px`,
   ...(open && {
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
