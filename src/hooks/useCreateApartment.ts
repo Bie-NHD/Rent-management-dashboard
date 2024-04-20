@@ -1,5 +1,5 @@
 import { createMutation } from "react-query-kit";
-import Apartment from "../models/Apartment";
+import Apartment from "../types/Apartment";
 import { Api } from "../api";
 import { ApartmentURLs } from "../constants";
 import toast from "react-hot-toast";

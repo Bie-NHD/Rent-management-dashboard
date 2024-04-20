@@ -5,7 +5,7 @@ import {
   ApiUpdateParams,
   TApiRequestDTO,
   TApiResponse,
-} from "../models";
+} from "../types";
 
 const TEST_URL = "http://localhost:9090" as const;
 
