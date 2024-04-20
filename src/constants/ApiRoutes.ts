@@ -1,7 +1,7 @@
 /**
  * define actions for each object
  */
-const ApiActions = Object.freeze({
+export const ApiActions = Object.freeze({
   Import: "/import",
   Add: "/add",
   Search: "/search",

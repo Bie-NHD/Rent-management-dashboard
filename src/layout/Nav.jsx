@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
-import { drawerWidth } from "../utils/constants";
+import { W_DRAWER } from "../constants/dimensions";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 
@@ -85,11 +85,11 @@ const drawerItems = (
 const Nav = ({ open, theme, handleClose }) => (
   <Drawer
     sx={{
-      width: drawerWidth,
+      width: W_DRAWER,
       flexShrink: 0,
 
       "& .MuiDrawer-paper": {
-        width: drawerWidth,
+        width: W_DRAWER,
         boxSizing: "border-box",
         border: "1px solid",
         borderColor: theme.palette.primary.main,

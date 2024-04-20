@@ -1,6 +1,6 @@
 import Container from "@mui/material/Container";
 import { styled } from "@mui/material/styles";
-import { drawerWidth } from "../utils/constants";
+import { W_DRAWER } from "../constants/dimensions";
 
 const Main = styled(Container, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -15,7 +15,7 @@ const Main = styled(Container, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-${drawerWidth}px`,
+  marginLeft: `${W_DRAWER / 2}px`,
   ...(open && {
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
