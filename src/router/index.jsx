@@ -10,12 +10,13 @@ import { lazy } from "react";
 import { Suspense } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-import { ApiRoutes } from "../constants";
+import { Routes } from "../constants";
 
 // ---------------------------------------------------------
 
 const ApartmentListPage = lazy(() => import("../pages/ApartmentListPage"));
 const ImportPage = lazy(() => import("../pages/ImportPage"));
+const LoginPage = lazy(() => import("../pages/LoginPage"));
 
 // ---------------------------------------------------------
 
@@ -47,7 +48,7 @@ const router = createBrowserRouter([
         element: <OverviewPage />,
       },
       {
-        path: ApiRoutes.Apartment,
+        path: Routes.Apartment,
         element: (
           <Suspense fallback={<Loading />}>
             <ApartmentListPage />
@@ -55,15 +56,15 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: ApiRoutes.Customer,
+        path: Routes.Customer,
         element: <AllCustomersPage />,
       },
       {
-        path: ApiRoutes.Contract,
+        path: Routes.Contract,
         element: <AllContractsPage />,
       },
       {
-        path: ApiRoutes.Import,
+        path: Routes.Import,
         element: (
           <Suspense fallback={<Loading />}>
             <ImportPage />
@@ -72,6 +73,14 @@ const router = createBrowserRouter([
         // loader: importLoader,
       },
     ],
+  },
+  {
+    path: Routes.Login,
+    element: (
+      <Suspense fallback={<Loading />}>
+        <LoginPage />
+      </Suspense>
+    ),
   },
 ]);
 

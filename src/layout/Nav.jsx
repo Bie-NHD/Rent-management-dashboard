@@ -1,10 +1,6 @@
-import { Container } from "@mui/material";
-import { Outlet } from "react-router-dom";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
 import { W_DRAWER } from "../constants/dimensions";
-import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 
 import Divider from "@mui/material/Divider";
@@ -22,7 +18,7 @@ import HolidayVillageIcon from "@mui/icons-material/HolidayVillage";
 import PeopleIcon from "@mui/icons-material/People";
 
 import { Link } from "react-router-dom";
-import { ApiRoutes } from "../constants";
+import { Routes } from "../constants";
 
 const appRoutes = [
   {
@@ -33,17 +29,17 @@ const appRoutes = [
   {
     icon: <PeopleIcon />,
     text: "Customers",
-    link: ApiRoutes.Customer,
+    link: Routes.Customer,
   },
   {
     icon: <HolidayVillageIcon />,
     text: "Apartments",
-    link: ApiRoutes.Apartment,
+    link: Routes.Apartment,
   },
   {
     icon: <ReceiptLongIcon />,
     text: "Contracts",
-    link: ApiRoutes.Contract,
+    link: Routes.Contract,
   },
 ];
 
