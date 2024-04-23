@@ -14,7 +14,7 @@ import ErrorPlaceHolder from "../../components/placeholder/ErrorPlaceHolder";
 import NiceModal from "@ebay/nice-modal-react";
 import toast from "react-hot-toast";
 import {
-  Routes,
+  AppRoutes,
   QK_APARTMENTS,
   NM_APARTMENT,
   NM_WARNING,
@@ -158,7 +158,7 @@ const ApartmentTable = () => {
                 // TODO: This is not type-safe
                 {
                   data: data as ApiUpdateParams<Omit<Apartment, "id">>,
-                  action: Routes.Update,
+                  action: AppRoutes.Update,
                 }
               );
             }
@@ -178,7 +178,7 @@ const ApartmentTable = () => {
               // TODO: This is not type-safe
               mutate({
                 data: { id: id, data: others },
-                action: Routes.Delete,
+                action: AppRoutes.Delete,
               });
             }
           })

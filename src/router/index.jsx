@@ -1,22 +1,23 @@
 import { createBrowserRouter } from "react-router-dom";
-// import { OverviewPage } from "./pages/OverviewPage";
-import { OverviewPage } from "../pages/OverviewPage";
+import { StatisticPage } from "../features/Statistic/StatisticPage";
 // import { loader as importLoader } from "./pages/ImportPage";
-import Layout from "../layout/Layout";
-import ErrorPage from "../pages/ErrorPage";
-import AllCustomersPage from "../pages/AllCustomersPage";
-import AllContractsPage from "../pages/AllContractsPage";
+import Layout from "../App/Layout";
+import ErrorPage from "../features/error-page/ErrorPage";
+import AllCustomersPage from "../features/Customer/AllCustomersPage";
+import AllContractsPage from "../features/Contract/AllContractsPage";
 import { lazy } from "react";
 import { Suspense } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-import { Routes } from "../constants";
+import { AppRoutes } from "../constants";
 
 // ---------------------------------------------------------
 
-const ApartmentListPage = lazy(() => import("../pages/ApartmentListPage"));
-const ImportPage = lazy(() => import("../pages/ImportPage"));
-const LoginPage = lazy(() => import("../pages/LoginPage"));
+const ApartmentListPage = lazy(() =>
+  import("../features/Apartment/ApartmentListPage")
+);
+const ImportPage = lazy(() => import("../features/Import/ImportPage"));
+const LoginPage = lazy(() => import("../features/Login/LoginPage"));
 
 // ---------------------------------------------------------
 
@@ -45,10 +46,10 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <OverviewPage />,
+        element: <StatisticPage />,
       },
       {
-        path: Routes.Apartment,
+        path: AppRoutes.Apartment,
         element: (
           <Suspense fallback={<Loading />}>
             <ApartmentListPage />
@@ -56,15 +57,15 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: Routes.Customer,
+        path: AppRoutes.Customer,
         element: <AllCustomersPage />,
       },
       {
-        path: Routes.Contract,
+        path: AppRoutes.Contract,
         element: <AllContractsPage />,
       },
       {
-        path: Routes.Import,
+        path: AppRoutes.Import,
         element: (
           <Suspense fallback={<Loading />}>
             <ImportPage />
@@ -75,7 +76,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: Routes.Login,
+    path: AppRoutes.Login,
     element: (
       <Suspense fallback={<Loading />}>
         <LoginPage />

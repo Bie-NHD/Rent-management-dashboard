@@ -17,9 +17,9 @@ import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import { styled } from "@mui/material/styles";
-import { API_ROUTE_APARMENT } from "../utils/constants";
-import { importApartmentsAPI } from "../api/apartment";
-import DeleteButton from "../components/buttons/DeleteButton";
+import { importApartmentsAPI } from "../../api/apartment";
+import DeleteButton from "../../components/buttons/DeleteButton";
+import { AppRoutes } from "../../constants";
 const styles = {
   button: {
     boxShadow: "none",
@@ -85,7 +85,7 @@ const ImportPage = () => {
     });
 
     switch (importType) {
-      case API_ROUTE_APARMENT:
+      case AppRoutes.Apartment:
         importApartmentsAPI(fd).then((res) => {
           console.log(res);
           console.log("NO");

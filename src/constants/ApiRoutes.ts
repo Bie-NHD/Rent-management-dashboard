@@ -1,7 +1,7 @@
 /**
  * define actions for each object
  */
-export  const  Routes = Object.freeze({
+export const AppRoutes = Object.freeze({
   Import: "/import",
   Add: "/add",
   Search: "/search",
@@ -12,26 +12,26 @@ export  const  Routes = Object.freeze({
   Contract: "/contracts",
   Customer: "/users",
   Login: "/login",
-  User: "/user"
+  User: "/user",
 } as const);
 /**
  * provide URL for each api action
  */
 
 export const ApartmentURLs = Object.freeze({
-  GetAll: Routes.Apartment,
-  Add: Routes.Apartment + Routes.Add,
-  Update: Routes.Apartment + Routes.Update,
-  Delete: Routes.Apartment + Routes.Delete,
-  Import: Routes.Apartment + Routes.Import,
-  Export: Routes.Apartment + Routes.Export,
+  GetAll: AppRoutes.Apartment,
+  Add: AppRoutes.Apartment + AppRoutes.Add,
+  Update: AppRoutes.Apartment + AppRoutes.Update,
+  Delete: AppRoutes.Apartment + AppRoutes.Delete,
+  Import: AppRoutes.Apartment + AppRoutes.Import,
+  Export: AppRoutes.Apartment + AppRoutes.Export,
 } as const);
 
 export const ContractURLs = Object.freeze({
-  GetAll: Routes.Contract,
-  Add: Routes.Contract + Routes.Add,
-  Update: Routes.Contract + Routes.Update,
-  Delete: Routes.Contract + Routes.Delete,
-  Import: Routes.Contract + Routes.Import,
-  Export: Routes.Contract + Routes.Export,
+  GetAll: AppRoutes.Contract,
+  Add: AppRoutes.Contract + AppRoutes.Add,
+  Update: AppRoutes.Contract + AppRoutes.Update,
+  Delete: AppRoutes.Contract + AppRoutes.Delete,
+  Import: AppRoutes.Contract + AppRoutes.Import,
+  Export: AppRoutes.Contract + AppRoutes.Export,
 } as const);

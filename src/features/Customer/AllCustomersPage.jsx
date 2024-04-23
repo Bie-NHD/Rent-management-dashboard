@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { APARTMENT_API as api } from "../api/apartment";
+import { APARTMENT_API as api } from "../../api/apartment";
 import { TableCell } from "@mui/material";
-import { formatId } from "../utils/stringFormats";
+import { formatId } from "../../utils/stringFormats";
 
 const AllCustomersPage = () => {
   const [apartments, setApartments] = useState([]);

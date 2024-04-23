@@ -1,7 +1,7 @@
 import { createMutation } from "react-query-kit";
 import Apartment from "../types/Apartment";
 import { Api } from "../api";
-import { ApartmentURLs, Routes } from "../constants";
+import { ApartmentURLs, AppRoutes } from "../constants";
 import toast from "react-hot-toast";
 import { ApiUpdateParams } from "../types";
 
@@ -15,7 +15,7 @@ export const useUpdateApartment = createMutation({
     data: ApiUpdateParams<Omit<Apartment, "id">>;
     action: string;
   }) =>
-    variables.action === Routes.Update
+    variables.action === AppRoutes.Update
       ? Api.update(ApartmentURLs.Update, variables.data)
       : Api.delete(ApartmentURLs.Delete, variables.data),
   onError(error, variables, context) {

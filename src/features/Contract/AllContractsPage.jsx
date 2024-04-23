@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { fetchTestContract } from "../api/apartment";
-import { formatDate, formatId } from "../utils/stringFormats";
+import { fetchTestContract } from "../../api/apartment";
+import { formatDate, formatId } from "../../utils/stringFormats";
 import {
   TableContainer,
   Table,
@@ -10,10 +10,10 @@ import {
   TableCell,
   Container,
 } from "@mui/material";
-import PageHeader from "../components/PageHeader";
-import { API_ROUTE_CONTRACT } from "../utils/constants";
-import ExportButton from "../components/buttons/ExportButton";
-import ImportButton from "../components/buttons/ImportButton";
+import PageHeader from "../../components/PageHeader";
+import { API_ROUTE_CONTRACT } from "../../utils/constants";
+import ExportButton from "../../components/buttons/ExportButton";
+import ImportButton from "../../components/buttons/ImportButton";
 
 const rowHeaders = ["ID", "Period", "Customer", "Apartment"];
 
