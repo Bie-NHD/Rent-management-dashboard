@@ -11,9 +11,10 @@ import {
   Container,
 } from "@mui/material";
 import PageHeader from "../../components/PageHeader";
-import { API_ROUTE_CONTRACT } from "../../utils/constants";
+
 import ExportButton from "../../components/buttons/ExportButton";
 import ImportButton from "../../components/buttons/ImportButton";
+import { AppRoutes } from "../../constants";
 
 const rowHeaders = ["ID", "Period", "Customer", "Apartment"];
 
@@ -36,8 +37,8 @@ const AllContractsPage = () => {
           justifyItems: "flex-end",
         }}
       >
-        <ExportButton exportType={API_ROUTE_CONTRACT} />
-        <ImportButton importType={API_ROUTE_CONTRACT} />
+        <ExportButton exportType={AppRoutes.Contract} />
+        <ImportButton importType={AppRoutes.Contract} />
       </Container>
       <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">

@@ -1,5 +1,4 @@
 import { object, string, number, ObjectSchema } from "yup";
-import Apartment from "./Apartment";
 
 // TODO: add RegEx for sanitizign inputs
 /**

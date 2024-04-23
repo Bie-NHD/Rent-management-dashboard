@@ -1,9 +1,7 @@
 import { createMutation } from "react-query-kit";
-import Apartment from "../types/Apartment";
 import { Api } from "../api";
 import { ApartmentURLs, AppRoutes } from "../constants";
 import toast from "react-hot-toast";
-import { ApiUpdateParams } from "../types";
 
 /**
  * To ```edit``` & ```delete``` Apartments

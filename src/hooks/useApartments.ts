@@ -1,8 +1,7 @@
 import { createQuery } from "react-query-kit";
 import { ApartmentURLs, QK_APARTMENTS } from "../constants";
 import { keepPreviousData } from "@tanstack/react-query";
-import { Api } from "../api/base";
-import { Apartment, ApiFetchParams, TApartmentApiResponse } from "../types";
+import { Api } from "../api";
 
 type Data = {
   data: Apartment[];

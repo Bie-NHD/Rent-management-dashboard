@@ -1,22 +1,20 @@
-import { Apartment, Customer, TPagination } from ".";
-
-export type ApiExportParams = {
+type ApiExportParams = {
   getTemplate: false;
 };
 
 // For CREATE
-export type TApiRequestDTO =
+type TApiRequestDTO =
   | Omit<Apartment, "id">
   | TContractDTO
   | Omit<Customer, "id" | "status">;
 
 // For UPDATE, DELTE
-export type ApiUpdateParams<TData = TApiRequestDTO> = {
+type ApiUpdateParams<TData = TApiRequestDTO> = {
   id: string;
   data: TData;
 };
 
-export type ApiFetchParams = {
+type ApiFetchParams = {
   page: 0 | number;
   pageSize: 10 | number;
   sortBy?: string;
@@ -24,30 +22,37 @@ export type ApiFetchParams = {
 /**
  * @param {q} string query
  */
-export type ApiSearchParams = ApiFetchParams & { q: string };
+type ApiSearchParams = Omit<ApiFetchParams, "sortBy"> & { q: string };
 
-export type TApartmentApiResponse = {
+type TApartmentApiResponse = {
   apartments: Apartment[];
   page: TPagination;
 };
 
-export type TContractApiResponse = {
+type TContractApiResponse = {
   page: TPagination;
   contracts: TContract[];
 };
 
-export type TCustomerApiResponse = {
+type TCustomerApiResponse = {
   page: TPagination;
   customers: Customer[];
 };
 
-export type TApiResponseData =
-  | TApartmentApiResponse
-  | TContractApiResponse
-  | TCustomerApiResponse;
+type TImportResponse = {
+  "The rows failed": string;
+  "Number of successful rows": number;
+  File: string; // file name
+}[];
 
-export type TApiResponse = {
-  data: TApiResponseData;
+type TApiResponse<
+  TData =
+    | TApartmentApiResponse
+    | TContractApiResponse
+    | TCustomerApiResponse
+    | TImportResponse
+> = {
+  data: TData;
   message: string;
   statusCode: number;
 };

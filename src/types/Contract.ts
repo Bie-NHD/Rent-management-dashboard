@@ -3,9 +3,6 @@
 //   getDay: () => ArrayDate.date
 // };
 
-import Apartment from "./Apartment";
-import { Customer } from "./Customer";
-
 type TContract = {
   id: string;
   startDate: [number, number, number];

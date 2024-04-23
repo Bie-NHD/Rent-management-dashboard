@@ -1,4 +1,4 @@
-export type TPagination = {
+type TPagination = {
   pageNumber: number;
   pageSize: number;
   offset: number;
