@@ -25,7 +25,7 @@ import { Edit } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 
 // Hooks ------------------------------
-import { useApartments } from "../../hooks";
+import { useGetApartments } from "../../hooks";
 import { useUpdateApartment } from "../../hooks/useEditApartment";
 
 // ------------------------------------
@@ -104,7 +104,7 @@ const ApartmentTable = () => {
     data: { data = [], meta } = {},
     error,
     refetch,
-  } = useApartments({
+  } = useGetApartments({
     variables: {
       page: pagination.pageIndex, //refetch when pagination.pageIndex changes
       pageSize: pagination.pageSize, //refetch when pagination.pageSize changes

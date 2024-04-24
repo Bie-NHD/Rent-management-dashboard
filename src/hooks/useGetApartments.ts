@@ -8,7 +8,7 @@ type Data = {
   meta: { totalRowCount: number };
 };
 
-export const useApartments = createQuery<Data, ApiFetchParams>({
+export const useGetApartments = createQuery<Data, ApiFetchParams>({
   queryKey: [QK_APARTMENTS],
   fetcher: (variables: ApiFetchParams): Promise<Data> =>
     Api.fetch(ApartmentURLs.GetAll, variables)
