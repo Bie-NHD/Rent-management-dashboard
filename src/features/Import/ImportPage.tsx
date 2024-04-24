@@ -22,6 +22,7 @@ import DeleteButton from "../../components/buttons/DeleteButton";
 import { ApartmentURLs, AppRoutes } from "../../constants";
 import { Api } from "../../api";
 import { useQueryClient } from "@tanstack/react-query";
+import useImportFile from "../../hooks/useImport";
 // -----------------------------------------------------------------
 
 const styles = {
@@ -62,7 +63,7 @@ type FileState = {
 //   action: A
 // ): FileState[] => {};
 
-function getImportMessages(response: TApiResponse<TImportResponse>) {
+function getImportMessages(response: TApiResponse<ImportResponse>) {
   switch (response.statusCode) {
     case 200: {
       console.log(response.data);
@@ -85,7 +86,6 @@ function getImportMessages(response: TApiResponse<TImportResponse>) {
 }
 
 const ImportPage = () => {
-  let importType = new URL(window.location.href).searchParams.get("type");
   const [fileStates, setFileStates] = useState<FileState[]>([]);
   // const [fileStates,dispatchFileStates] = useReducer(fileStatesReducer,[])
   const [showProgressBar, setShowProgressBar] = React.useState(false);
@@ -93,12 +93,16 @@ const ImportPage = () => {
 
   // const client = useQueryClient();
 
-  const location = useMemo(
-    () => "/" + window.location.href.split("/").at(-2),
-    []
-  );
+  const { mutate } = useImportFile()({
+    onSettled(response, variables, context) {
+      console.log("SUCCESS");
 
-  console.log(location);
+      const message = getImportMessages(response!);
+      setAppMessage(message);
+    },
+  });
+
+  const pathName = useMemo(() => window.location.pathname, []);
 
   function updateFiles(fileList: FileList | null) {
     if (!fileList) return;
@@ -115,24 +119,17 @@ const ImportPage = () => {
     console.log(fileList);
   }
   // FORM SUBMIT
-  function handleSubmit() {
+
+  async function handleSubmit() {
     const fd = new FormData();
     fileStates.forEach((file) => {
       fd.append("file", file.file);
     });
 
-    switch (location) {
-      case AppRoutes.Apartment:
-        Api.import(ApartmentURLs.Import, fd).then((response) => {
-          const message = getImportMessages(response);
-          setAppMessage(message);
-        });
-        break;
-      case AppRoutes.Contract:
-        break;
-      case AppRoutes.Customer:
-        break;
-    }
+    mutate({
+      url: pathName,
+      formData: fd,
+    });
   }
 
   //

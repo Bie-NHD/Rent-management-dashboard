@@ -39,18 +39,20 @@ type TCustomerApiResponse = {
   customers: Customer[];
 };
 
-type TImportResponse = {
+type ImportResponseData = {
   "The rows failed": string;
   "Number of successful rows": number;
   File: string; // file name
-}[];
+};
+
+type ImportResponse = ImportResponseData[];
 
 type TApiResponse<
   TData =
     | TApartmentApiResponse
     | TContractApiResponse
     | TCustomerApiResponse
-    | TImportResponse
+    | ImportResponse
 > = {
   data: TData;
   message: string;

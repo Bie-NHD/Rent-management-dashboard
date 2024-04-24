@@ -9,7 +9,7 @@ import {
 } from "material-react-table";
 import { useState } from "react";
 import { Stack, Skeleton, MenuItem } from "@mui/material";
-import Apartment from "../../types/Apartment";
+
 import ErrorPlaceHolder from "../../components/placeholder/ErrorPlaceHolder";
 import NiceModal from "@ebay/nice-modal-react";
 import toast from "react-hot-toast";
@@ -23,7 +23,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { Edit } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
-import { ApiUpdateParams } from "../../types";
+
 // Hooks ------------------------------
 import { useApartments } from "../../hooks";
 import { useUpdateApartment } from "../../hooks/useEditApartment";

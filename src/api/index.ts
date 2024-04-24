@@ -31,7 +31,7 @@ const DeleteApi = async (url: string, params: ApiUpdateParams) =>
   );
 
 const ImportApi = async (url: string, formData: FormData) =>
-  AxiosInstance.post<TApiResponse<TImportResponse>>(
+  AxiosInstance.post<TApiResponse<ImportResponse>>(
     url,
     formData,
     ImportConfig
