@@ -1,6 +1,6 @@
 type ArrayDate = [number, number, number];
 
-type TContract = {
+type Contract = {
   id: string;
   startDate: ArrayDate;
   endDate: ArrayDate;
@@ -8,7 +8,7 @@ type TContract = {
   apartment: Apartment;
 };
 
-type TContractDTO = {
+type ContractDTO = {
   apartmentId: string;
   customerId: string;
   endDate: string;

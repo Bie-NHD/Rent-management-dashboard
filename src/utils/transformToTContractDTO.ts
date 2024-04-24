@@ -1,6 +1,6 @@
 import { transformArrayDateToString } from "./stringFormats";
 
-function transformToTContractDTO(contract: TContract): TContractDTO {
+function transformToTContractDTO(contract: Contract): ContractDTO {
   return {
     apartmentId: contract.apartment.id,
     customerId: contract.customer.id,

@@ -5,7 +5,7 @@ type ApiExportParams = {
 // For CREATE
 type TApiRequestDTO =
   | Omit<Apartment, "id">
-  | TContractDTO
+  | ContractDTO
   | Omit<Customer, "id" | "status">;
 
 // For UPDATE, DELTE
@@ -31,7 +31,7 @@ type TApartmentApiResponse = {
 
 type TContractApiResponse = {
   page: TPagination;
-  contracts: TContract[];
+  contracts: Contract[];
 };
 
 type TCustomerApiResponse = {

@@ -4,7 +4,7 @@ import { keepPreviousData } from "@tanstack/react-query";
 import { Api } from "../api";
 
 type Data = {
-  data: TContract[];
+  data: Contract[];
   meta: { totalRowCount: number };
 };
 
