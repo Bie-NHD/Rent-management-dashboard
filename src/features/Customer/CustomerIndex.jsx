@@ -3,7 +3,7 @@ import { APARTMENT_API as api } from "../../api/apartment";
 import { TableCell } from "@mui/material";
 import { formatId } from "../../utils/stringFormats";
 
-const AllCustomersPage = () => {
+const CustomerIndex = () => {
   const [apartments, setApartments] = useState([]);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -28,4 +28,4 @@ const AllCustomersPage = () => {
     </ul>
   );
 };
-export default AllCustomersPage;
+export default CustomerIndex;

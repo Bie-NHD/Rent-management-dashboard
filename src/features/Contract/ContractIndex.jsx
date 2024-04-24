@@ -18,7 +18,7 @@ import { AppRoutes } from "../../constants";
 
 const rowHeaders = ["ID", "Period", "Customer", "Apartment"];
 
-const AllContractsPage = () => {
+const ContractIndex = () => {
   const [contracts, setContracts] = useState([]);
 
   React.useEffect(() => {
@@ -82,4 +82,4 @@ const AllContractsPage = () => {
   );
 };
 
-export default AllContractsPage;
+export default ContractIndex;
