@@ -4,16 +4,15 @@ import PageHeader from "../../components/PageHeader";
 import ImportButton from "../../components/buttons/ImportButton";
 import ExportButton from "../../components/buttons/ExportButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import toast from "react-hot-toast";
 import NiceModal from "@ebay/nice-modal-react";
-import ApartmentTable from "./ApartmentTable";
+import ApartmentList from "./ApartmentList";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateApartment } from "../../hooks";
 import { NM_APARTMENT, AppRoutes } from "../../constants";
 
 // ---------------------------------------------------------------------
 
-const ApartmentListPage = () => {
+const ApartmentIndex = () => {
   const client = useQueryClient();
 
   const { mutate } = useCreateApartment(client)();
@@ -40,9 +39,9 @@ const ApartmentListPage = () => {
         <ImportButton importType={AppRoutes.Apartment} />
         <ExportButton exportType={AppRoutes.Apartment} />
       </Container>
-      <ApartmentTable />
+      <ApartmentList />
     </>
   );
 };
 
-export default ApartmentListPage;
+export default ApartmentIndex;

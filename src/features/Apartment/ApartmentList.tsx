@@ -78,7 +78,7 @@ const columnDefs: MRT_ColumnDef<Apartment>[] = [
 
 // ------------------------------------
 
-const ApartmentTable = () => {
+const ApartmentList = () => {
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -204,4 +204,4 @@ const ApartmentTable = () => {
   return <MaterialReactTable table={table} />;
 };
 
-export default ApartmentTable;
+export default ApartmentList;

@@ -10,12 +10,10 @@ import { Suspense } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { AppRoutes } from "../constants";
+import ApartmentIndex from "../features/Apartment/ApartmentIndex";
 
 // ---------------------------------------------------------
 
-const ApartmentListPage = lazy(
-  () => import("../features/Apartment/ApartmentListPage")
-);
 const ImportPage = lazy(() => import("../features/Import/ImportPage"));
 const LoginPage = lazy(() => import("../features/Login/LoginPage"));
 
@@ -67,11 +65,7 @@ const router = createBrowserRouter([
       },
       {
         path: AppRoutes.Apartment,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <ApartmentListPage />
-          </Suspense>
-        ),
+        element: <ApartmentIndex />,
       },
       {
         path: AppRoutes.Customer,
