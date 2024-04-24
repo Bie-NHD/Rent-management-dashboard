@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useReducer, useState } from "react";
 import {
   Button,
   FormControl,
@@ -17,9 +17,14 @@ import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import { styled } from "@mui/material/styles";
-import { API_ROUTE_APARMENT } from "../utils/constants";
-import { importApartmentsAPI } from "../api/apartment";
-import DeleteButton from "../components/buttons/DeleteButton";
+import { importApartmentsAPI } from "../../api/apartment";
+import DeleteButton from "../../components/buttons/DeleteButton";
+import { ApartmentURLs, AppRoutes } from "../../constants";
+import { Api } from "../../api";
+import { useQueryClient } from "@tanstack/react-query";
+import useImportFile from "../../hooks/useImport";
+// -----------------------------------------------------------------
+
 const styles = {
   button: {
     boxShadow: "none",
@@ -48,84 +53,91 @@ const icons = {
   finish: <CheckCircleIcon color="success" />,
 };
 
+type FileState = {
+  file: File;
+  message: string;
+};
+
+// const fileStatesReducer = (
+//   prevState: FileState[],
+//   action: A
+// ): FileState[] => {};
+
+function getImportMessages(response: TApiResponse<ImportResponse>) {
+  switch (response.statusCode) {
+    case 200: {
+      console.log(response.data);
+
+      let _data = [];
+      _data = response.data.map((item) => (
+        <>
+          <p>{item.File}</p>
+          <p>The rows failed: {item["The rows failed"]}</p>
+          <p>Number of successful rows: {item["Number of successful rows"]} </p>
+        </>
+      ));
+      return _data;
+    }
+    case 400: {
+      console.log("data", response);
+      return [<>{response.message}</>];
+    }
+  }
+}
+
 const ImportPage = () => {
-  let importType = new URL(window.location.href).searchParams.get("type");
-  const [files, setFiles] = useState([]);
+  const [fileStates, setFileStates] = useState<FileState[]>([]);
+  // const [fileStates,dispatchFileStates] = useReducer(fileStatesReducer,[])
   const [showProgressBar, setShowProgressBar] = React.useState(false);
-  const [appMessage, setAppMessage] = useState(null);
+  const [appMessage, setAppMessage] = useState<JSX.Element[] | undefined>();
 
-  console.log(importType);
+  // const client = useQueryClient();
 
-  function updateFiles(fileList) {
-    let newFiles = [...files];
+  const { mutate } = useImportFile()({
+    onSettled(response, variables, context) {
+      console.log("SUCCESS");
+
+      const message = getImportMessages(response!);
+      setAppMessage(message);
+    },
+  });
+
+  const pathName = useMemo(() => window.location.pathname, []);
+
+  function updateFiles(fileList: FileList | null) {
+    if (!fileList) return;
+    let newFiles = [...fileStates];
     for (const file of fileList)
       newFiles = [
         ...newFiles,
         {
-          value: file,
-          filename: file.name,
+          file: file,
           message: "",
         },
       ];
-    setFiles(newFiles);
-    console.log(files);
+    setFileStates(newFiles);
+    console.log(fileList);
   }
   // FORM SUBMIT
-  function handleSubmit() {
-    console.log("SUBMIT: ");
-    console.log(files);
 
+  async function handleSubmit() {
     const fd = new FormData();
-
-    files.forEach((file) => {
-      console.log("APPEND ");
-      fd.append("file", file.value);
-      console.log(file.value);
-      console.log(fd);
+    fileStates.forEach((file) => {
+      fd.append("file", file.file);
     });
 
-    switch (importType) {
-      case API_ROUTE_APARMENT:
-        importApartmentsAPI(fd).then((res) => {
-          console.log(res);
-          console.log("NO");
-          // setAppMessage(res.data.message);
-          console.log(res.data);
-          setMessage(res.data);
-        });
-        break;
-    }
-  }
-
-  function setMessage(data) {
-    switch (data.statusCode) {
-      case 200: {
-        let _data = [];
-        _data = data.data.map((item) => (
-          <>
-            <p>{item.File}</p>
-            <p>The rows failed: {item["The rows failed"]}</p>
-            <p>
-              Number of successful rows: {item["Number of successful rows"]}{" "}
-            </p>
-          </>
-        ));
-        setAppMessage(_data);
-        break;
-      }
-      case 400: {
-        console.log("data", data);
-        setAppMessage(data.message);
-      }
-    }
+    mutate({
+      url: pathName,
+      formData: fd,
+    });
   }
 
   //
   // HANDLE DELETE
   //
-  const handleDelete = (item) => {
-    const newFiles = files.filter((file) => file != item);
-    setFiles(newFiles);
+  const handleDelete = (item: FileState) => {
+    const newFileStates = fileStates.filter((file) => file != item);
+    setFileStates(newFileStates);
   };
 
   return (
@@ -150,6 +162,7 @@ const ImportPage = () => {
             <VisuallyHiddenInput
               type="file"
               accept=".csv"
+              multiple
               onChange={(e) => updateFiles(e.target.files)}
             />
           </Button>
@@ -165,25 +178,23 @@ const ImportPage = () => {
         </Stack>
       </FormControl>
       <Box sx={{ display: "block", margin: ".5rem" }}></Box>
+      <Box>{appMessage}</Box>
       {
         //
         //  apartments != null && apartments.length > 0
         //
-        files && files.length ? (
+        fileStates && fileStates.length ? (
           <Paper sx={{ padding: "2rem" }}>
             <Container>File name</Container>
-            {appMessage}
-            {showProgressBar ? (
-              <LinearProgress variant="indetermediate" />
-            ) : null}
+            {showProgressBar ? <LinearProgress /> : null}
             <List>
-              {files.map((item) => (
+              {fileStates.map((item) => (
                 <ListItem
-                  key={item.filename}
-                  components={Container}
+                  key={item.file.name}
+                  // components={Container}
                   sx={styles.fileItem}
                 >
-                  <Typography>{item.filename}</Typography>
+                  <Typography>{item.file.name}</Typography>
                   <Box>
                     <span>{item.message}</span>
                     <DeleteButton handleDelete={() => handleDelete(item)} />

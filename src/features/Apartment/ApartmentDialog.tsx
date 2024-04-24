@@ -21,7 +21,6 @@ import {
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ApartmentSchema from "../../types/ApartmentSchema";
-import { Apartment } from "../../types";
 
 interface ApartmentInputProps extends OutlinedTextFieldProps {
   /**

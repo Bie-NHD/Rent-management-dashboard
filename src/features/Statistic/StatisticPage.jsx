@@ -1,5 +1,5 @@
 import React from "react";
 
-export const OverviewPage = () => {
+export const StatisticPage = () => {
   return <div>Nhóm 2</div>;
 };

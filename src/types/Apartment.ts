@@ -4,5 +4,3 @@ type Apartment = {
   numberOfRoom: number;
   retailPrice: number;
 };
-
-export default Apartment;

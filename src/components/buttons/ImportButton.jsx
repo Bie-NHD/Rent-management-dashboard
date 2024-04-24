@@ -14,7 +14,7 @@ const ImportButton = ({ importType }) => {
       startIcon={<CloudUploadIcon />}
       variant="outlined"
       component={Link}
-      to={`/import?type=${importType}`}
+      to={`./import`}
       sx={{
         boxShadow: "none",
         alignSelf: "flex-end",
