@@ -7,9 +7,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { useState } from "react";
-import { Stack, Skeleton, MenuItem } from "@mui/material";
-
+import MenuItem from "@mui/material/MenuItem";
 import ErrorPlaceHolder from "../../components/placeholder/ErrorPlaceHolder";
 import NiceModal from "@ebay/nice-modal-react";
 import toast from "react-hot-toast";
@@ -19,45 +17,16 @@ import {
   NM_APARTMENT,
   NM_WARNING,
 } from "../../constants";
-import { useQueryClient } from "@tanstack/react-query";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { Edit } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
+import TableLoading from "../../components/placeholder/TableLoading";
 
 // Hooks ------------------------------
+import { useQueryClient } from "@tanstack/react-query";
 import { useGetApartments } from "../../hooks";
 import { useUpdateApartment } from "../../hooks/useEditApartment";
-
-// ------------------------------------
-
-const Loading = () => (
-  <Stack spacing={2} sx={{ minHeight: "100", height: "40%", marginY: "2rem" }}>
-    <Skeleton
-      variant="rectangular"
-      animation="wave"
-      height={"20%"}
-      sx={{ minHeight: 30 }}
-    />
-    <Skeleton
-      variant="rectangular"
-      animation="wave"
-      height={"70%"}
-      sx={{ minHeight: 150 }}
-    />
-    <Skeleton
-      variant="rectangular"
-      animation="wave"
-      height={"70%"}
-      sx={{ minHeight: 150 }}
-    />
-    <Skeleton
-      variant="rectangular"
-      animation="wave"
-      height={"70%"}
-      sx={{ minHeight: 150 }}
-    />
-  </Stack>
-);
+import { useState } from "react";
 
 // ------------------------------------
 
@@ -192,7 +161,7 @@ const ApartmentList = () => {
   // -------------------------------------------------------
 
   // Show loading
-  if (isLoading) return <Loading />;
+  if (isLoading) return <TableLoading />;
   // Show, throw Error
   if (isError) {
     console.log(error || new Error("Error with ApartmentTable"));
