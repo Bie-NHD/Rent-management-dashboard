@@ -1,20 +1,14 @@
-// type ArrayDate = {
-//   date: [number, number, number];
-//   getDay: () => ArrayDate.date
-// };
+type ArrayDate = [number, number, number];
 
-import Apartment from "./Apartment";
-import { Customer } from "./Customer";
-
-type TContract = {
+type Contract = {
   id: string;
-  startDate: [number, number, number];
-  endDate: [number, number, number];
+  startDate: ArrayDate;
+  endDate: ArrayDate;
   customer: Customer;
   apartment: Apartment;
 };
 
-type TContractDTO = {
+type ContractDTO = {
   apartmentId: string;
   customerId: string;
   endDate: string;

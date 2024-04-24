@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { fetchTestContract } from "../api/apartment";
-import { formatDate, formatId } from "../utils/stringFormats";
+import { fetchTestContract } from "../../api/apartment";
+import { formatDate, formatId } from "../../utils/stringFormats";
 import {
   TableContainer,
   Table,
@@ -10,14 +10,15 @@ import {
   TableCell,
   Container,
 } from "@mui/material";
-import PageHeader from "../components/PageHeader";
-import { API_ROUTE_CONTRACT } from "../utils/constants";
-import ExportButton from "../components/buttons/ExportButton";
-import ImportButton from "../components/buttons/ImportButton";
+import PageHeader from "../../components/PageHeader";
+
+import ExportButton from "../../components/buttons/ExportButton";
+import ImportButton from "../../components/buttons/ImportButton";
+import { AppRoutes } from "../../constants";
 
 const rowHeaders = ["ID", "Period", "Customer", "Apartment"];
 
-const AllContractsPage = () => {
+const ContractIndex = () => {
   const [contracts, setContracts] = useState([]);
 
   React.useEffect(() => {
@@ -36,8 +37,8 @@ const AllContractsPage = () => {
           justifyItems: "flex-end",
         }}
       >
-        <ExportButton exportType={API_ROUTE_CONTRACT} />
-        <ImportButton importType={API_ROUTE_CONTRACT} />
+        <ExportButton exportType={AppRoutes.Contract} />
+        <ImportButton importType={AppRoutes.Contract} />
       </Container>
       <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -81,4 +82,4 @@ const AllContractsPage = () => {
   );
 };
 
-export default AllContractsPage;
+export default ContractIndex;

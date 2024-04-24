@@ -25,3 +25,7 @@ export function sanitize(input: string) {
 
   return input.replace(reg, (match) => map[match]);
 }
+
+export function transformArrayDateToString(arrayDate: ArrayDate): string {
+  return arrayDate.join("-");
+}

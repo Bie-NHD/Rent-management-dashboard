@@ -1,28 +1,21 @@
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import { API_ROUTE_APARMENT } from "../utils/constants";
-import PageHeader from "../components/PageHeader";
-import ImportButton from "../components/buttons/ImportButton";
-import ExportButton from "../components/buttons/ExportButton";
+import PageHeader from "../../components/PageHeader";
+import ImportButton from "../../components/buttons/ImportButton";
+import ExportButton from "../../components/buttons/ExportButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import toast from "react-hot-toast";
 import NiceModal from "@ebay/nice-modal-react";
-import ApartmentTable from "../sections/apartment/ApartmentTable";
+import ApartmentList from "./ApartmentList";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCreateApartment } from "../hooks";
-import { QK_APARTMENTS, NM_APARTMENT } from "../constants";
+import { useCreateApartment } from "../../hooks";
+import { NM_APARTMENT, AppRoutes } from "../../constants";
 
 // ---------------------------------------------------------------------
 
-const ApartmentListPage = () => {
+const ApartmentIndex = () => {
   const client = useQueryClient();
 
-  const { mutate } = useCreateApartment({
-    onSuccess(data, variables, context) {
-      toast.success(data.message);
-      client.invalidateQueries([QK_APARTMENTS]);
-    },
-  });
+  const { mutate } = useCreateApartment(client)();
 
   return (
     <>
@@ -43,12 +36,12 @@ const ApartmentListPage = () => {
         >
           New
         </Button>
-        <ImportButton importType={API_ROUTE_APARMENT} />
-        <ExportButton exportType={API_ROUTE_APARMENT} />
+        <ImportButton importType={AppRoutes.Apartment} />
+        <ExportButton exportType={AppRoutes.Apartment} />
       </Container>
-      <ApartmentTable />
+      <ApartmentList />
     </>
   );
 };
 
-export default ApartmentListPage;
+export default ApartmentIndex;

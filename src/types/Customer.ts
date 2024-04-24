@@ -1,4 +1,4 @@
-export type Customer = {
+type Customer = {
   id: string;
   status: ECustomerStatus;
   firstName: string;
