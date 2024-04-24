@@ -3,8 +3,8 @@ import { StatisticPage } from "../features/Statistic/StatisticPage";
 // import { loader as importLoader } from "./pages/ImportPage";
 import Layout from "../App/Layout";
 import ErrorPage from "../features/error-page/ErrorPage";
-import AllCustomersPage from "../features/Customer/AllCustomersPage";
-import AllContractsPage from "../features/Contract/AllContractsPage";
+import CustomerIndex from "../features/Customer/CustomerIndex";
+import ContractIndex from "../features/Contract/ContractIndex";
 import { lazy } from "react";
 import { Suspense } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -69,11 +69,11 @@ const router = createBrowserRouter([
       },
       {
         path: AppRoutes.Customer,
-        element: <AllCustomersPage />,
+        element: <CustomerIndex />,
       },
       {
         path: AppRoutes.Contract,
-        element: <AllContractsPage />,
+        element: <ContractIndex />,
       },
       {
         path: AppRoutes.Import,
