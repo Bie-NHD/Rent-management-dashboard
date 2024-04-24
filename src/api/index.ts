@@ -12,10 +12,10 @@ const AxiosInstance = axios.create({ baseURL: TEST_URL });
 
 // --------------------------------------------------
 
-const FetchApi = async (url: string, params: ApiFetchParams) =>
-  AxiosInstance.get<TApiResponse>(url, { params: params })
+const FetchApi = async <TData>(url: string, params: ApiFetchParams) =>
+  AxiosInstance.get<TApiResponse<TData>>(url, { params: params })
     .then((response) => response.data) // AxiosResponse = {data: <T = TApiResponse>, ...others}
-    .then((response: TApiResponse) => response.data);
+    .then((response) => response.data);
 
 const CreateApi = async (url: string, data: TApiRequestDTO) =>
   AxiosInstance.post<TApiResponse>(url, data).then((response) => response.data);
@@ -52,10 +52,4 @@ export const Api = Object.freeze({
   import: ImportApi,
   create: CreateApi,
   delete: DeleteApi,
-  // apartments
-  // getApartments: (params: ApiFetchParams) =>
-  //   Api.fetch(ApartmentURLs.GetAll, params),
-  // contracts
-
-  // customers
 } as const);

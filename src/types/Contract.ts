@@ -1,12 +1,9 @@
-// type ArrayDate = {
-//   date: [number, number, number];
-//   getDay: () => ArrayDate.date
-// };
+type ArrayDate = [number, number, number];
 
 type TContract = {
   id: string;
-  startDate: [number, number, number];
-  endDate: [number, number, number];
+  startDate: ArrayDate;
+  endDate: ArrayDate;
   customer: Customer;
   apartment: Apartment;
 };

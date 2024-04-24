@@ -14,7 +14,7 @@ type Data = { url: string; formData: FormData };
 const importData = (variables: Data) =>
   Api.import(variables.url, variables.formData);
 
-function useImportFile() {
+export function useImportFile() {
   const client = useQueryClient();
   return createMutation({
     mutationFn: importData,
@@ -27,4 +27,3 @@ function useImportFile() {
     },
   });
 }
-export default useImportFile;
