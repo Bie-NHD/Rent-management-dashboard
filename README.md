@@ -10,3 +10,11 @@
 | Material-UI (MUI)                                                  |                          |
 | TanStack Query                                                     | Data state manager       |
 | [React-query-kit](https://github.com/HuolalaTech/react-query-kit)  | Query hook builder       |
+
+## TODO
+
+- Province input: https://vnprovinces.pythonanywhere.com/en/
+- Input sanitization:
+  - https://benhoyt.com/writings/dont-sanitize-do-escape/
+  - https://linguinecode.com/post/validate-sanitize-user-input-javascript
+  - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
