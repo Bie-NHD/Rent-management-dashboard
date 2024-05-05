@@ -1,19 +1,19 @@
 import { createQuery } from "react-query-kit";
-import { ApartmentURLs, QK_APARTMENTS } from "../constants";
+import { ContractURLs, QK_CONTRACTS } from "../constants";
 import { keepPreviousData } from "@tanstack/react-query";
 import { Api } from "../api";
 
 type Data = {
-  data: Apartment[];
+  data: Contract[];
   meta: { totalRowCount: number };
 };
 
-export const useGetApartments = createQuery<Data, ApiFetchParams>({
-  queryKey: [QK_APARTMENTS],
+export const useGetContracts = createQuery<Data, ApiFetchParams>({
+  queryKey: [QK_CONTRACTS],
   fetcher: (variables: ApiFetchParams): Promise<Data> =>
-    Api.fetch<TApartmentApiResponse>(ApartmentURLs.GetAll, variables).then(
+    Api.fetch<TContractApiResponse>(ContractURLs.GetAll, variables).then(
       (value) => ({
-        data: value.apartments,
+        data: value.contracts,
         meta: {
           totalRowCount: value.page.totalElements,
         },
