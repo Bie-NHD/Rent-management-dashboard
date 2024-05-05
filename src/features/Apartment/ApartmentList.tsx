@@ -24,8 +24,8 @@ import TableLoading from "../../components/placeholder/TableLoading";
 
 // Hooks ------------------------------
 import { useQueryClient } from "@tanstack/react-query";
-import { useGetApartments } from "../../hooks";
-import { useUpdateApartment } from "../../hooks/useEditApartment";
+import { useGetApartments, useUpdateApartment } from "../../hooks";
+
 import { useState } from "react";
 
 // ------------------------------------

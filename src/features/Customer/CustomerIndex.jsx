@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { APARTMENT_API as api } from "../../api/apartment";
+
 import { TableCell } from "@mui/material";
 import { formatId } from "../../utils/stringFormats";
 
@@ -8,13 +8,13 @@ const CustomerIndex = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
-  useEffect(() => {
-    api.fetch().then((data) => setApartments(data.apartments));
-  }, []);
+  // useEffect(() => {
+  //   api.fetch().then((data) => setApartments(data.apartments));
+  // }, []);
 
   return (
     <ul>
-      {apartments.map((item) => (
+      {/* {apartments.map((item) => (
         <li
           key={item.id}
           sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -24,7 +24,7 @@ const CustomerIndex = () => {
           <p>{item.retailPrice}</p>
           <p>{item.numberOfRoom}</p>
         </li>
-      ))}
+      ))} */}
     </ul>
   );
 };

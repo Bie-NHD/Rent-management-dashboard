@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useReducer, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   FormControl,
@@ -17,13 +17,12 @@ import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import { styled } from "@mui/material/styles";
-import { importApartmentsAPI } from "../../api/apartment";
+
 import DeleteButton from "../../components/buttons/DeleteButton";
-import { ApartmentURLs, AppRoutes } from "../../constants";
-import { Api } from "../../api";
-import { useQueryClient } from "@tanstack/react-query";
-import useImportFile from "../../hooks/useImport";
+import { useImportFile } from "../../hooks/useImport";
 // -----------------------------------------------------------------
+
+const pathName = window.location.pathname;
 
 const styles = {
   button: {
@@ -91,18 +90,12 @@ const ImportPage = () => {
   const [showProgressBar, setShowProgressBar] = React.useState(false);
   const [appMessage, setAppMessage] = useState<JSX.Element[] | undefined>();
 
-  // const client = useQueryClient();
-
   const { mutate } = useImportFile()({
     onSettled(response, variables, context) {
-      console.log("SUCCESS");
-
       const message = getImportMessages(response!);
       setAppMessage(message);
     },
   });
-
-  const pathName = useMemo(() => window.location.pathname, []);
 
   function updateFiles(fileList: FileList | null) {
     if (!fileList) return;
