@@ -2,7 +2,10 @@
 
 import { createContext, useContext, useMemo, useState } from "react";
 
-const AuthContext = createContext({});
+const AuthContext = createContext({
+  token: "",
+  setToken: () => any,
+});
 
 export const AuthProvider = ({ children }) => {
   // State to hold the authentication token
