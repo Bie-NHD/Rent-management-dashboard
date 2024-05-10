@@ -14,7 +14,7 @@ import Main from "./Main";
 import AppBar from "./AppBar";
 import Nav from "./Nav";
 
-const Layout = () => {
+const Layout = ({ children }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
@@ -49,7 +49,7 @@ const Layout = () => {
 
       <Main open={open}>
         <Toolbar />
-        <Outlet />
+        {children}
       </Main>
     </Container>
   );
