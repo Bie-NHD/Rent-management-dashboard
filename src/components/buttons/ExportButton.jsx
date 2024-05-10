@@ -10,7 +10,8 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 
-import { exportFileAPI } from "../../api/apartment";
+import { Api } from "../../api";
+import { AppRoutes } from "../../constants";
 
 const options = ["Export File", "Download Template"];
 
@@ -21,7 +22,8 @@ const ExportButton = ({ exportType: exportFileType }) => {
 
   const handleClick = () => {
     const link = document.createElement("a");
-    link.href = exportFileAPI(exportFileType, selectedIndex === 1);
+    const params = { getTemplate: selectedIndex === 1 };
+    link.href = Api.export(exportFileType + AppRoutes.Export, params);
     link.click();
   };
 
