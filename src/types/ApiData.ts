@@ -24,6 +24,12 @@ type ApiFetchParams = {
  */
 type ApiSearchParams = Omit<ApiFetchParams, "sortBy"> & { q: string };
 
+// LOGIN
+type ApiLoginParams = {
+  username: string;
+  password: string;
+};
+
 type TApartmentApiResponse = {
   apartments: Apartment[];
   page: TPagination;
@@ -47,12 +53,18 @@ type ImportResponseData = {
 
 type ImportResponse = ImportResponseData[];
 
+type TLoginApiResponse = {
+  access_token: string;
+  refresh_token: string;
+};
+
 type TApiResponse<
   TData =
     | TApartmentApiResponse
     | TContractApiResponse
     | TCustomerApiResponse
     | ImportResponse
+    | TLoginApiResponse
 > = {
   data: TData;
   message: string;

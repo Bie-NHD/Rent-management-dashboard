@@ -11,6 +11,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { AppRoutes } from "../constants";
 import ApartmentIndex from "../features/Apartment/ApartmentIndex";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 // ---------------------------------------------------------
 
@@ -56,7 +57,7 @@ const importRoutes: RouteObject[] = [
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: <ProtectedRoute />,
     errorElement: <ErrorPage />,
     children: [
       {
