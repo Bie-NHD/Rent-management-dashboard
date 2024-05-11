@@ -10,6 +10,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { createTheme } from "@mui/material";
 import queryClient from "../configs/queryClient";
 import registerNiceModals from "../configs/registerNiceModal";
+import { AuthProvider } from "../context/AuthProvider";
 // -----------------------------------------------------
 
 registerNiceModals();
@@ -56,12 +57,14 @@ const ToastOptions = {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <NiceModal.Provider>
-          <RouterProvider router={router} />
-          <Toaster toastOptions={ToastOptions} />
-        </NiceModal.Provider>
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider theme={theme}>
+          <NiceModal.Provider>
+            <RouterProvider router={router} />
+            <Toaster toastOptions={ToastOptions} />
+          </NiceModal.Provider>
+        </ThemeProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

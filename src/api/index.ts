@@ -116,26 +116,25 @@ const ExportApi = (url: string, params: ApiExportParams) =>
 const SearchApi = async (url: string, params: ApiSearchParams) =>
   AxiosInstance.get(url, { params: params }).then((response) => response.data);
 
-const LoginApi = (params: ApiLoginParams) =>
-  AxiosInstance.post<TApiResponse<TLoginApiResponse>>("/login", params)
+const LoginApi = async (params: ApiLoginParams) =>
+  await AxiosInstance.post<TApiResponse<TLoginApiResponse>>("/login", params, {
+    withCredentials: true,
+  })
     .then((response) => response.data)
-    .then((data) => console.log(data));
+    .then((apiResponse) => apiResponse.data);
 
 /**
  *
  * @returns {string} access_token
  */
-const RefreshTokenApi = () => {
-  const refresh_token = window.localStorage.getItem("refresh_token");
-
-  const access_token = AxiosInstance.post<TApiResponse<TLoginApiResponse>>(
+const RefreshTokenApi = (refresh_token: string | null) => {
+  return AxiosInstance.post<TApiResponse<TLoginApiResponse>>(
     "/auth/refreshToken",
-    refresh_token
+    refresh_token,
+    { withCredentials: true }
   )
     .then((response) => response.data)
-    .then((apiResponse) => apiResponse.data.access_token);
-
-  return access_token;
+    .then((apiResponse) => apiResponse.data);
 };
 
 // ---------------------------------------------------
@@ -148,4 +147,5 @@ export const Api = Object.freeze({
   create: CreateApi,
   delete: DeleteApi,
   login: LoginApi,
+  refreshToken: RefreshTokenApi,
 } as const);
