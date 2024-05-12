@@ -1,6 +1,17 @@
 /**
  * define actions for each object
  */
+
+const IMPORT = "/import";
+const ADD = "/add";
+const SEARCH = "/search";
+const DELETE = "/delete";
+const UPDATE = "/update";
+const EXPORT = "/export";
+const APARTMENT = "/apartments";
+const CONTRACT = "/contracts";
+const CUSTOMER = "/customers";
+const USER = "/user";
 export const AppRoutes = Object.freeze({
   Import: "/import",
   Add: "/add",
@@ -8,12 +19,13 @@ export const AppRoutes = Object.freeze({
   Delete: "/delete",
   Update: "/update",
   Export: "/export",
-  Apartment: "/apartments",
-  Contract: "/contracts",
-  Customer: "/users",
+  Apartment: APARTMENT,
+  Contract: CONTRACT,
+  Customer: CUSTOMER,
   Login: "/login",
-  User: "/user",
+  User: USER,
 } as const);
+
 /**
  * provide URL for each api action
  */
@@ -34,4 +46,19 @@ export const ContractURLs = Object.freeze({
   Delete: AppRoutes.Contract + AppRoutes.Delete,
   Import: AppRoutes.Contract + AppRoutes.Import,
   Export: AppRoutes.Contract + AppRoutes.Export,
+} as const);
+
+const AuthRoutes = Object.freeze({
+  login: "/auth/login",
+  refreshToken: "/auth/refreshToken",
+} as const);
+
+/**
+ * Api routes for server requests
+ */
+
+export const ApiRoutes = Object.freeze({
+  apartment: ApartmentURLs,
+  contract: ContractURLs,
+  auth: AuthRoutes,
 } as const);

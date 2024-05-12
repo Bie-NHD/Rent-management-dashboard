@@ -2,41 +2,46 @@
 
 import { createContext, useContext, useMemo, useState } from "react";
 import { Api } from "../api";
+import WebStorageService from "../api/webStorage";
 
-const AuthContext = createContext({
-  token: "",
-  setToken,
-});
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   // State to hold the authentication token
-  const [access_token, setAccessToken] = useState();
+  const [access_token, setAccessToken] = useState(
+    WebStorageService.getAccessToken()
+  );
 
   // Function to set the authentication token
   const setToken = (newToken) => {
+    WebStorageService.setAccessToken(newToken);
     setAccessToken(newToken);
   };
 
   // Login
 
   const login = async (params) => {
-    const { access_token, refresh_token } = await Api.login(params);
+    const access_token = await Api.login(params);
 
-    setAccessToken(access_token);
+    if (access_token) {
+      setAccessToken(access_token);
+    } else {
+      setAccessToken(null);
+    }
   };
 
   // Logout
 
-  const logout = async () => {};
+  const logout = async () => {
+    WebStorageService.removeAllTokens();
+    setAccessToken("");
+  };
 
   // Refresh Token
 
   const refresh = async () => {
-    const refresh_token = localStorage.getItem("refresh_token");
-
-    const access_token = await Api.refreshToken(refresh_token);
-
-    setAccessToken(access_token);
+    const response = await Api.refreshToken();
+    setToken(response.access_token);
   };
 
   // Memoized value of the authentication context

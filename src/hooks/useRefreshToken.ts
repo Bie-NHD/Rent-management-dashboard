@@ -1,16 +1,13 @@
 import { useEffect } from "react";
 import useAuth from "./useAuth";
 import { Api } from "../api";
+import WebStorageService from "../api/webStorage";
 
 const useRefreshToken = () => {
   const { setToken } = useAuth();
 
   const refresh = async () => {
-    const refresh_token = localStorage.getItem("refresh_token");
-
-    const access_token = await Api.refreshToken(refresh_token);
-
-    console.log(access_token);
+    const access_token = await Api.refreshToken();
 
     setToken(access_token);
 

@@ -22,7 +22,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string, ObjectSchema } from "yup";
 import { Api } from "../../api";
 import useAuth from "../../hooks/useAuth";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const LoginSchema: ObjectSchema<ApiLoginParams> = object({
   username: string().label("Username").required().default(""),
@@ -54,16 +54,22 @@ const LoginInput = ({
 const LoginPage = () => {
   const location = useLocation();
   const from = location?.state?.from || "/";
+  const navigate = useNavigate();
 
   const { handleSubmit, control, reset } = useForm({
     resolver: yupResolver(LoginSchema),
   });
 
-  const { setToken } = useAuth();
+  const { login, setToken } = useAuth();
 
-  const onSubmit: SubmitHandler<ApiLoginParams> = (data) => {
+  const onSubmit: SubmitHandler<ApiLoginParams> = async (data) => {
     console.log(data);
-    Api.login(data);
+    const access_token = await Api.login(data);
+
+    if (access_token) {
+      setToken(access_token);
+      navigate("/", { replace: true });
+    }
   };
 
   return (

@@ -6,7 +6,7 @@ export const ProtectedRoute = () => {
   const location = useLocation();
 
   // Check if the user is authenticated
-  if (!token) {
+  if (!token || token === "") {
     // If not authenticated, redirect to the login page
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
