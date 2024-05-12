@@ -2,26 +2,27 @@
 
 import { createContext, useContext, useMemo, useState } from "react";
 import { Api } from "../api";
-import WebStorageService from "../api/webStorage";
+import AuthStorageService from "../api/webStorage";
+import AuthApi from "../api/auth";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   // State to hold the authentication token
   const [access_token, setAccessToken] = useState(
-    WebStorageService.getAccessToken()
+    AuthStorageService.getAccessToken()
   );
 
   // Function to set the authentication token
   const setToken = (newToken) => {
-    WebStorageService.setAccessToken(newToken);
+    AuthStorageService.setAccessToken(newToken);
     setAccessToken(newToken);
   };
 
   // Login
 
   const login = async (params) => {
-    const access_token = await Api.login(params);
+    const access_token = await AuthApi.login(params);
 
     if (access_token) {
       setAccessToken(access_token);
@@ -33,14 +34,14 @@ export const AuthProvider = ({ children }) => {
   // Logout
 
   const logout = async () => {
-    WebStorageService.removeAllTokens();
+    AuthApi.logout();
     setAccessToken("");
   };
 
   // Refresh Token
 
   const refresh = async () => {
-    const response = await Api.refreshToken();
+    const response = await AuthApi.refreshToken();
     setToken(response.access_token);
   };
 

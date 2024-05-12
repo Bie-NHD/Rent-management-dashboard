@@ -11,12 +11,17 @@ const removeAllTokens = () => {
   localStorage.removeItem(ACCESS_TOKEN);
   localStorage.removeItem(REFRESH_TOKEN);
 };
+const refreshTokens = (tokens: TLoginApiResponse) => {
+  setAccessToken(tokens.access_token);
+  setRefreshToken(tokens.refresh_token);
+};
 
-const WebStorageService = Object.freeze({
+const AuthStorageService = Object.freeze({
   getAccessToken: getAccessToken,
   getRefreshToken: getRefreshToken,
   setAccessToken: setAccessToken,
   setRefreshToken: setRefreshToken,
   removeAllTokens: removeAllTokens,
+  refreshTokens: refreshTokens,
 });
-export default WebStorageService;
+export default AuthStorageService;

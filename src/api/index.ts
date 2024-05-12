@@ -1,7 +1,8 @@
 import axios from "axios";
 import { ApiRoutes } from "../constants";
 import privateInstance from "./privateInstance";
-import WebStorageService from "./webStorage";
+import AuthStorageService from "./webStorage";
+import AuthApi from "./auth";
 ("./webStorage");
 
 const TEST_URL = "http://localhost:9090" as const;
@@ -51,39 +52,6 @@ const SearchApi = async (url: string, params: ApiSearchParams) =>
     .get(url, { params: params })
     .then((response) => response.data);
 
-const LoginApi = async (params: ApiLoginParams) =>
-  await authInstance
-    .post<TApiResponse<TLoginApiResponse>>(ApiRoutes.auth.login, params)
-    .then((response) => response.data)
-    .then((authResponse) => {
-      if (authResponse.statusCode === 200) {
-        const { access_token, refresh_token } = authResponse.data;
-        WebStorageService.setAccessToken(access_token);
-        WebStorageService.setRefreshToken(refresh_token);
-
-        return access_token;
-      }
-    });
-
-/**
- *
- * @returns {string} access_token
- */
-const RefreshTokenApi = () => {
-  const refresh_token = WebStorageService.getRefreshToken();
-  return authInstance
-    .post<TApiResponse<TLoginApiResponse>>(
-      ApiRoutes.auth.refreshToken,
-      refresh_token,
-      { withCredentials: true }
-    )
-    .then((response) => {
-      const { access_token, refresh_token } = response.data.data;
-      WebStorageService.setRefreshToken(refresh_token);
-      return access_token;
-    });
-};
-
 // ---------------------------------------------------
 
 export const Api = Object.freeze({
@@ -93,6 +61,7 @@ export const Api = Object.freeze({
   import: ImportApi,
   create: CreateApi,
   delete: DeleteApi,
-  login: LoginApi,
-  refreshToken: RefreshTokenApi,
+  login: AuthApi.login,
+  refreshToken: AuthApi.refreshToken,
+  logout: AuthApi.logout,
 } as const);

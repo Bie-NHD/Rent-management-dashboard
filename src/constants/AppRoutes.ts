@@ -51,6 +51,7 @@ export const ContractURLs = Object.freeze({
 const AuthRoutes = Object.freeze({
   login: "/auth/login",
   refreshToken: "/auth/refreshToken",
+  logout: "/auth/logout",
 } as const);
 
 /**
