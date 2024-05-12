@@ -17,7 +17,7 @@ import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import HolidayVillageIcon from "@mui/icons-material/HolidayVillage";
 import PeopleIcon from "@mui/icons-material/People";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AppRoutes } from "../constants";
 
 const appRoutes = [
@@ -50,34 +50,43 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
+  boxShadow: "none",
 }));
 
-const drawerItems = (
-  <List sx={{ paddingRight: "2rem" }}>
-    {appRoutes.map((item) => (
-      <ListItemButton
-        key={item.text}
-        LinkComponent={Link}
-        to={item.link}
-        sx={{
-          "&:hover": {
-            // backgroundColor: "primary.light",
-          },
-          padding: "20px",
-        }}
-      >
-        <ListItemIcon
+const NavItems = () => {
+  const location = useLocation().pathname;
+
+  return (
+    <List sx={{ paddingRight: "2rem" }}>
+      {appRoutes.map((item) => (
+        <ListItemButton
+          key={item.text}
+          LinkComponent={Link}
+          to={item.link}
           sx={{
-            color: "inherit",
+            padding: "20px",
+            borderTopRightRadius: "50px",
+            borderBottomRightRadius: "50px",
+            marginY: "10px",
+            ...(location == item.link && {
+              backgroundColor: "primary.main",
+              color: "white",
+            }),
           }}
         >
-          {item.icon}
-        </ListItemIcon>
-        <ListItemText>{item.text}</ListItemText>
-      </ListItemButton>
-    ))}
-  </List>
-);
+          <ListItemIcon
+            sx={{
+              color: "inherit",
+            }}
+          >
+            {item.icon}
+          </ListItemIcon>
+          <ListItemText>{item.text}</ListItemText>
+        </ListItemButton>
+      ))}
+    </List>
+  );
+};
 
 const Nav = ({ open, theme, handleClose }) => (
   <Drawer
@@ -102,7 +111,7 @@ const Nav = ({ open, theme, handleClose }) => (
       </IconButton>
     </DrawerHeader>
     <Divider />
-    {drawerItems}
+    <NavItems />
   </Drawer>
 );
 

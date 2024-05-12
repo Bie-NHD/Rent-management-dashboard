@@ -9,18 +9,18 @@ const Main = styled("main", {
   minHeight: "5rem",
   height: "100%",
   padding: theme.spacing(3),
-  marginTop: theme.spacing(10),
+
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-${W_DRAWER}px`,
+  marginLeft: `0px`,
   ...(open && {
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginLeft: 0,
+    marginLeft: W_DRAWER,
   }),
 }));
 

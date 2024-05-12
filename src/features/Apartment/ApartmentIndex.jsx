@@ -9,6 +9,7 @@ import ApartmentList from "./ApartmentList";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateApartment } from "../../hooks";
 import { NM_APARTMENT, AppRoutes } from "../../constants";
+import IndexToolBar from "../../components/IndexToolBar";
 
 // ---------------------------------------------------------------------
 
@@ -17,28 +18,13 @@ const ApartmentIndex = () => {
 
   const { mutate } = useCreateApartment(client)();
 
+  const handleNewApartment = () =>
+    NiceModal.show(NM_APARTMENT).then((data) => mutate(data));
+
   return (
     <>
-      <PageHeader>Apartments</PageHeader>
-      <Container
-        sx={{
-          display: "flex",
-          justifyContent: "end",
-          justifyItems: "flex-end",
-        }}
-      >
-        <Button
-          variant="contained"
-          startIcon={<AddCircleIcon />}
-          onClick={() =>
-            NiceModal.show(NM_APARTMENT).then((data) => mutate(data))
-          }
-        >
-          New
-        </Button>
-        <ImportButton importType={AppRoutes.Apartment} />
-        <ExportButton exportType={AppRoutes.Apartment} />
-      </Container>
+      <PageHeader />
+      <IndexToolBar handleNewItem={handleNewApartment} />
       <ApartmentList />
     </>
   );

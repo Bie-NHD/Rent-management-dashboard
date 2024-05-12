@@ -8,7 +8,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
  * @param {string} importType
  * @returns
  */
-const ImportButton = ({ importType }) => {
+const ImportButton = () => {
   return (
     <Button
       startIcon={<CloudUploadIcon />}

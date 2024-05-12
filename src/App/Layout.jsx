@@ -27,9 +27,9 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <Container sx={{ display: "flex" }}>
+    <>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar color="transparent" position="fixed" open={open}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -51,7 +51,7 @@ const Layout = ({ children }) => {
         <Toolbar />
         {children}
       </Main>
-    </Container>
+    </>
   );
 };
 export default Layout;
