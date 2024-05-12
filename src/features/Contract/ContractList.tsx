@@ -13,12 +13,6 @@ import { MenuItem } from "@mui/material";
 import ErrorPlaceHolder from "../../components/placeholder/ErrorPlaceHolder";
 import NiceModal from "@ebay/nice-modal-react";
 import toast from "react-hot-toast";
-import {
-  AppRoutes,
-  QK_APARTMENTS,
-  NM_APARTMENT,
-  NM_WARNING,
-} from "../../constants";
 import { useQueryClient } from "@tanstack/react-query";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { Edit } from "@mui/icons-material";
@@ -26,24 +20,25 @@ import { IconButton, Tooltip } from "@mui/material";
 
 // Hooks ------------------------------
 import { useGetApartments } from "../../hooks";
-import { useUpdateApartment } from "../../hooks/useEditApartment";
+
 import TableLoading from "../../components/placeholder/TableLoading";
-import { useGetContracts } from "../../hooks/useGetContracts";
+import { useGetContracts } from "../../hooks";
+import { transformToContractVM } from "../../utils/transform";
 
 // ------------------------------------
 
-const columnDefs: MRT_ColumnDef<Contract>[] = [
+const columnDefs: MRT_ColumnDef<ContractVM>[] = [
   {
-    accessorKey: "address",
-    header: "Address",
+    accessorKey: "id",
+    header: "Id",
   },
   {
-    accessorKey: "numberOfRoom",
-    header: "Number Of Room",
+    accessorKey: "customerName",
+    header: "Customer Name",
   },
   {
-    accessorKey: "retailPrice",
-    header: "Retail Price",
+    accessorKey: "apartmentAddress",
+    header: "Apartment",
   },
 ];
 
@@ -58,13 +53,6 @@ const ContractList = () => {
   const [globalFilter, setGlobalFilter] = useState(""); // search filter
   const client = useQueryClient();
 
-  //   const { mutate } = useUpdateApartment({
-  //     onSuccess(data, variables, context) {
-  //       toast.success(data.message);
-  //       client.invalidateQueries({ queryKey: [QK_APARTMENTS] });
-  //     },
-  //   });
-
   /**
    *  Data fetching
    */
@@ -72,7 +60,7 @@ const ContractList = () => {
     isLoading,
     isError,
     isRefetching,
-    data: { data = [], meta } = {},
+    data: { contracts = [], meta } = {},
     error,
     refetch,
   } = useGetContracts({
@@ -81,6 +69,10 @@ const ContractList = () => {
       pageSize: pagination.pageSize, //refetch when pagination.pageSize changes
       sortBy: sorting?.map((value) => value.id).toString(), //refetch when sorting changes
     },
+    select: (data) => ({
+      ...data,
+      contracts: data.contracts.map((item) => transformToContractVM(item)),
+    }),
   });
 
   // Define columns ---------------------------------------
@@ -88,9 +80,9 @@ const ContractList = () => {
 
   // Define table -----------------------------------------
 
-  const table = useMaterialReactTable({
+  const table = useMaterialReactTable<ContractVM>({
     columns: columnDefs,
-    data: data,
+    data: contracts,
     rowCount: meta?.totalRowCount ?? 0,
     manualPagination: true, //turn off built-in client-side pagination
     manualSorting: true, //turn off built-in client-side sorting
@@ -115,7 +107,6 @@ const ContractList = () => {
         {/* built-in buttons (must pass in table prop for them to work!) */}
         <MRT_ToggleGlobalFilterButton table={table} />
         <MRT_ShowHideColumnsButton table={table} />
-        {/* <MRT_ToggleDensePaddingButton table={table} /> */}
       </>
     ),
     enableRowActions: true,
