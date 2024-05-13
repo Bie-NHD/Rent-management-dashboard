@@ -6,7 +6,8 @@ This project aims to fulfill core requirements and data operations on client's s
 - ✅ Validation (input)
 - Santitization (input)
 - Testing?
-- Authentication (Login) / Authorization
+- ✅ Authentication (Login)
+- Authorization
 - i18n
 
 ## Demonstration video
