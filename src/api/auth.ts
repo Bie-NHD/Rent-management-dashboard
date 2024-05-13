@@ -56,10 +56,12 @@ const _logout = () => {
 
   console.log("LOGGED OUT");
 };
+const _forgotPassword= (params:{email:string})=> authInstance.post(ApiRoutes.auth.forgotPassword,{})
 
 const AuthApi = Object.freeze({
   login: _login,
   refreshToken: _refreshToken,
   logout: _logout,
+  forgotPassword:_forgotPassword
 } as const);
 export default AuthApi;

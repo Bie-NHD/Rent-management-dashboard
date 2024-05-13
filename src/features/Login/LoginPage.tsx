@@ -8,6 +8,7 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   FormControl,
   FormHelperText,
   IconButton,
@@ -89,12 +90,12 @@ const LoginPage = () => {
         <Box component={"center"} bgcolor={"primary"}>
           <Typography variant="h2">Login</Typography>
           <Paper
-            sx={{ padding: "3rem" }}
+            sx={{ padding: "3rem", maxWidth: "20rem" }}
             elevation={0}
             component={"form"}
             onSubmit={handleSubmit(onSubmit)}
           >
-            <Stack spacing={2} maxWidth={"20rem"}>
+            <Stack spacing={2}>
               <Controller
                 name="username"
                 control={control}
@@ -111,12 +112,17 @@ const LoginPage = () => {
                 )}
               />
               <FormControl variant="outlined">
-                <InputLabel htmlFor={`txt-password`}>Password</InputLabel>
                 <Controller
                   name={"password"}
                   control={control}
                   render={({ field, fieldState }) => (
                     <>
+                      <InputLabel
+                        htmlFor={`txt-password`}
+                        error={!!fieldState.error}
+                      >
+                        Password
+                      </InputLabel>
                       <OutlinedInput
                         {...field}
                         id={`txt-${field.name}`}
@@ -141,25 +147,29 @@ const LoginPage = () => {
                           </InputAdornment>
                         }
                       />
-                      <FormHelperText>
-                        {fieldState.error ? fieldState.error.message : null}
+                      <FormHelperText error={!!fieldState.error}>
+                        {!!fieldState.error && fieldState.error.message}
                       </FormHelperText>
                     </>
                   )}
                 />
               </FormControl>
+              <Link component={RouterLink} href={AppRoutes.ForgotPassword} to={AppRoutes.ForgotPassword}>
+                Forgot password?
+              </Link>
               <Button type="submit" variant="contained">
                 Login
               </Button>
+              <Divider />
+              or
+              <Button
+                LinkComponent={RouterLink}
+                href={AppRoutes.Register}
+                variant="outlined"
+              >
+                Create new account
+              </Button>
             </Stack>
-            <Link
-              component={RouterLink}
-              to={AppRoutes.ForgotPassword}
-              replace
-              alignSelf={"start"}
-            >
-              Forgot password?
-            </Link>
             {/* <LinearProgress
               variant="indeterminate"
               sx={{ color: "primary.light" }}

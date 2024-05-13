@@ -6,7 +6,24 @@ import AuthApi from "../api/auth";
 import UserApi from "../api/user";
 import { useNavigate } from "react-router-dom";
 
-const AuthContext = createContext<IUseAuthHookResult | null>(null);
+const defaultValue:IUseAuthHookResult = {
+  token: null,
+  setToken: function (token: string) {
+    throw new Error("Function not implemented.");
+  },
+  login: function (params: ApiLoginParams) {
+    throw new Error("Function not implemented.");
+  },
+  logout: function () {
+    throw new Error("Function not implemented.");
+  },
+  refresh: function () {
+    throw new Error("Function not implemented.");
+  },
+  user: undefined
+}
+
+const AuthContext = createContext<IUseAuthHookResult >(defaultValue);
 
 export const AuthProvider = ({ children }: { children: any[] }) => {
   // State to hold the authentication token

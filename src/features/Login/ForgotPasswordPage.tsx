@@ -35,12 +35,12 @@ const ForgotPasswordPage = () => {
       <Box component={"center"}>
         <Typography variant="h3">Account Recovery</Typography>
         <Paper
-          sx={{ padding: "3rem" }}
+          sx={{ padding: "3rem", maxWidth: "20rem" }}
           elevation={0}
           component={"form"}
           onSubmit={handleSubmit(onSubmit)}
         >
-          <Stack spacing={2} maxWidth={"20rem"}>
+          <Stack spacing={2}>
             <Controller
               name="email"
               control={control}
