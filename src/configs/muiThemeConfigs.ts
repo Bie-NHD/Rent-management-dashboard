@@ -1,4 +1,5 @@
 import createTheme from "@mui/material/styles/createTheme";
+import shadows from "@mui/material/styles/shadows";
 
 // Create MUI theme
 const muiThemeConfigs = createTheme({
@@ -14,6 +15,20 @@ const muiThemeConfigs = createTheme({
     background: {
       default: "#F1F1F1",
       paper: "#ffffff",
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        disableElevation: true,
+      },
+    },
+    MuiAppBar: {
+      styleOverrides: {},
+    },
+    MuiPaper: {
+      defaultProps: {},
+      styleOverrides: {},
     },
   },
 });

@@ -63,15 +63,20 @@ const NavItems = () => {
           key={item.text}
           LinkComponent={Link}
           to={item.link}
+          selected={location == item.link}
           sx={{
             padding: "20px",
             borderTopRightRadius: "50px",
             borderBottomRightRadius: "50px",
             marginY: "10px",
-            ...(location == item.link && {
-              backgroundColor: "primary.main",
+
+            "&.Mui-selected": {
+              bgcolor: "primary.main",
               color: "white",
-            }),
+            },
+            ":hover": {
+              color: "primary.light",
+            },
           }}
         >
           <ListItemIcon
@@ -97,8 +102,7 @@ const Nav = ({ open, theme, handleClose }) => (
       "& .MuiDrawer-paper": {
         width: W_DRAWER,
         boxSizing: "border-box",
-        border: "1px solid",
-        borderColor: theme.palette.primary.main,
+        bgcolor: theme.palette.background.default,
       },
     }}
     variant="persistent"

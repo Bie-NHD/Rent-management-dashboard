@@ -8,7 +8,7 @@ const PageHeader = () => {
     return location.at(0)?.toUpperCase() + location.substring(1).toLowerCase();
   })();
   return (
-    <Typography variant="h2" gutterBottom marginTop={0.2}>
+    <Typography variant="h2" gutterBottom>
       {pageHeader}
     </Typography>
   );

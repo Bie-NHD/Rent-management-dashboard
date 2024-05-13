@@ -7,7 +7,7 @@ const useRefreshToken = () => {
   const { setToken } = useAuth();
 
   const refresh = async () => {
-    const access_token = await Api.refreshToken();
+    const { access_token } = await Api.refreshToken();
 
     setToken(access_token);
 

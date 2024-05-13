@@ -50,7 +50,6 @@ const ExportButton = ({ exportType: exportFileType }) => {
         variant="outlined"
         ref={anchorRef}
         aria-label="Button group with a nested menu"
-        sx={{ boxShadow: "none" }}
       >
         <Button startIcon={<CloudDownloadIcon />} onClick={handleClick}>
           {options[selectedIndex]}

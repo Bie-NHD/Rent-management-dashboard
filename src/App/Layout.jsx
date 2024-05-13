@@ -47,10 +47,7 @@ const Layout = ({ children }) => {
       </AppBar>
       <Nav open={open} theme={theme} handleClose={handleDrawerClose} />
 
-      <Main open={open}>
-        <Toolbar />
-        {children}
-      </Main>
+      <Main open={open}>{children}</Main>
     </>
   );
 };

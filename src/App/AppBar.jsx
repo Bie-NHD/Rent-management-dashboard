@@ -9,6 +9,7 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  boxShadow: "none",
   ...(open && {
     width: `calc(100% - ${W_DRAWER}px)`,
     marginLeft: `${W_DRAWER}px`,
