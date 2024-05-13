@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ApiRoutes } from "../constants";
-import AuthStorageService from "./webStorage";
+import AuthStorageService from "./authStorage";
 import { Api } from ".";
 
 const TEST_URL = "http://localhost:9090" as const;
@@ -39,8 +39,6 @@ privateInstance.interceptors.response.use(
   // Do something with response data
   (response) => response,
   async (error) => {
-    console.log("HELLO");
-
     const prevReqConfig = error.config;
 
     // If the error status is 401 and there is no originalRequest._retry flag,
@@ -61,7 +59,7 @@ privateInstance.interceptors.response.use(
         return privateInstance(prevReqConfig);
       } catch (error) {
         // Handle refresh token error or redirect to login
-        console.log("ERROR");
+        console.log("ERROR while refresh token");
         console.log(error);
       }
     }

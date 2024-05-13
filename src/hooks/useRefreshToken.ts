@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import useAuth from "./useAuth";
 import { Api } from "../api";
-import WebStorageService from "../api/webStorage";
+import AuthStorageService from "../api/authStorage";
 
 const useRefreshToken = () => {
   const { setToken } = useAuth();

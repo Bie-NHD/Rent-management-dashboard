@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ApiRoutes } from "../constants";
-import AuthStorageService from "./webStorage";
+import AuthStorageService from "./authStorage";
 
 const TEST_URL = "http://localhost:9090" as const;
 

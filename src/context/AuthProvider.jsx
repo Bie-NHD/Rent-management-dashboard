@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useMemo, useState } from "react";
 import { Api } from "../api";
-import AuthStorageService from "../api/webStorage";
+import AuthStorageService from "../api/authStorage";
 import AuthApi from "../api/auth";
 
 const AuthContext = createContext();

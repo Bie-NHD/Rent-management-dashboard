@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ApiRoutes } from "../constants";
 import privateInstance from "./privateInstance";
-import AuthStorageService from "./webStorage";
+import AuthStorageService from "./authStorage";
 import AuthApi from "./auth";
 ("./webStorage");
 
