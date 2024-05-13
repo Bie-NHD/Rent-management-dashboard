@@ -23,6 +23,7 @@ export const AppRoutes = Object.freeze({
   Contract: CONTRACT,
   Customer: CUSTOMER,
   Login: "/login",
+  ForgotPassword: "/forgotPassword",
   User: USER,
 } as const);
 
@@ -54,6 +55,10 @@ const AuthRoutes = Object.freeze({
   logout: "/auth/logout",
 } as const);
 
+export const UserRoutes = Object.freeze({
+  details: "/users/details",
+} as const);
+
 /**
  * Api routes for server requests
  */
@@ -62,4 +67,5 @@ export const ApiRoutes = Object.freeze({
   apartment: ApartmentURLs,
   contract: ContractURLs,
   auth: AuthRoutes,
+  user: UserRoutes,
 } as const);

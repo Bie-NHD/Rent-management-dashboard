@@ -12,6 +12,7 @@ import Box from "@mui/material/Box";
 import { AppRoutes } from "../constants";
 import ApartmentIndex from "../features/Apartment/ApartmentIndex";
 import { ProtectedRoute } from "./ProtectedRoute";
+import ForgotPasswordPage from "../features/Login/ForgotPasswordPage";
 
 // ---------------------------------------------------------
 
@@ -96,6 +97,7 @@ const router = createBrowserRouter([
       </Suspense>
     ),
   },
+  { path: AppRoutes.ForgotPassword, element: <ForgotPasswordPage /> },
 ]);
 
 export default router;

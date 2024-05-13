@@ -65,6 +65,7 @@ type TApiResponse<
     | TCustomerApiResponse
     | ImportResponse
     | TLoginApiResponse
+    | IUser
 > = {
   data: TData;
   message: string;

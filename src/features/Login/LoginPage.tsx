@@ -13,6 +13,7 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
+  Link,
   OutlinedInput,
   Paper,
   Stack,
@@ -26,6 +27,8 @@ import useAuth from "../../hooks/useAuth";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
+import { Link as RouterLink } from "react-micro-router";
+import { AppRoutes } from "../../constants";
 
 const LoginSchema: ObjectSchema<ApiLoginParams> = object({
   username: string().label("Username").required("Username is required"),
@@ -33,8 +36,9 @@ const LoginSchema: ObjectSchema<ApiLoginParams> = object({
 });
 
 const LoginPage = () => {
-  const location = useLocation();
-  const from = location?.state?.from || "/";
+  // const location = useLocation();
+  // const from = location?.state?.from || "/";
+
   const navigate = useNavigate();
 
   const { handleSubmit, control, reset } = useForm({
@@ -47,6 +51,7 @@ const LoginPage = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  // If logged in => dashboard
   if (token) return <Navigate to={"/"} replace />;
 
   // Func
@@ -54,13 +59,11 @@ const LoginPage = () => {
   const onSubmit: SubmitHandler<ApiLoginParams> = async (data) => {
     setIsLoading(true);
     console.log(data);
-    const access_token = await Api.login(data);
-
-    if (access_token) {
-      setToken(access_token);
-      setIsLoading(false);
-      navigate("/", { replace: true });
-    }
+    const result: boolean = await login(data);
+    // if login fails
+    if (!result) {
+      reset();
+    } else navigate("/", { replace: true });
   };
 
   const handleMouseDownPassword = (
@@ -146,9 +149,17 @@ const LoginPage = () => {
                 />
               </FormControl>
               <Button type="submit" variant="contained">
-                Login{" "}
+                Login
               </Button>
             </Stack>
+            <Link
+              component={RouterLink}
+              to={AppRoutes.ForgotPassword}
+              replace
+              alignSelf={"start"}
+            >
+              Forgot password?
+            </Link>
             {/* <LinearProgress
               variant="indeterminate"
               sx={{ color: "primary.light" }}

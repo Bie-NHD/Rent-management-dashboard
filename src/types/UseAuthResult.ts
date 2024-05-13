@@ -1,7 +1,8 @@
-interface UseAuthHookResult {
-  token: string | undefined;
-  setToken: (token: string) => void;
-  login: (params: ApiLoginParams) => void;
-  logout: () => void;
-  refresh: () => void;
+interface IUseAuthHookResult {
+  token: string | null;
+  setToken: (token: string) => any;
+  login: (params: ApiLoginParams) => any;
+  logout: () => any;
+  refresh: () => any;
+  user: IUser | null | undefined;
 }
