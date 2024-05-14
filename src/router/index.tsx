@@ -127,7 +127,7 @@ const publicRoutes: RouteObject[] = [
       </Suspense>
     ),
   },
-  { path: AppRoutes.Register, element: <RegisterPage /> },
+  // { path: AppRoutes.Register, element: <RegisterPage /> },
 ];
 
 // ---------------------------------------------------------

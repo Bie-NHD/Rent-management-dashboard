@@ -57,7 +57,7 @@ const _logout = () => {
 };
 const _forgotPassword = (data: { email: string }): Promise<ApiQueryStatus> =>
   authInstance
-    .post<TApiResponse>(ApiRoutes.auth.resetPassword, null, { params: data })
+    .post<ApiQueryStatus>(ApiRoutes.auth.resetPassword, null, { params: data })
     .then((res) => res.data)
     .then((apiRes) => ({
       message: apiRes.message,

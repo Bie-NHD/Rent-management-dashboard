@@ -7,10 +7,13 @@ import { AppRoutes } from "../../constants";
 import AuthApi from "../../api/auth";
 
 import LoginLayout from "../../components/LoginLayout";
+import { useNavigate } from "react-router-dom";
 
 const schema = object({
   email: string().email().required().default(""),
 });
+
+const initialState = { message: "", error: false };
 
 const ForgotPasswordPage = () => {
   const { control, handleSubmit, setError } = useForm({
@@ -18,21 +21,24 @@ const ForgotPasswordPage = () => {
     defaultValues: schema.getDefault(),
   });
 
+  const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(false);
 
-  const [result, setResult] = useState<ApiQueryStatus>();
+  const [result, setResult] = useState(initialState);
 
   const onSubmit: SubmitHandler<{ email: string }> = async (data) => {
     setIsLoading(true);
     const _result = await AuthApi.forgotPassword(data);
-    setResult(_result);
+    setResult(() => ({ error: _result.statusCode !== 200, message: _result.message }));
     setIsLoading(false);
+    if (_result.statusCode === 200) navigate("/login", { replace: true });
   };
 
   return (
     <LoginLayout title={"Account Recovery"}>
       <Stack spacing={2} component={"form"} onSubmit={handleSubmit(onSubmit)}>
-        {!!result && <Box>{result.message}</Box>}
+        {!!result && <Box sx={{ color: result.error ? "red" : "initial" }}>{result.message}</Box>}
         <Controller
           name="email"
           control={control}
@@ -47,6 +53,7 @@ const ForgotPasswordPage = () => {
                 (fieldState.error && fieldState.error.message) || formState.errors.email?.message
               }
               error={!!fieldState.error}
+              onFocus={() => setResult(() => initialState)}
             />
           )}
         />
