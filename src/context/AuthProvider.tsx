@@ -64,22 +64,22 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
   // Login
 
   const login = async (params: ApiLoginParams) => {
-    const access_token = await AuthApi.login(params);
-    console.log("LOGIN SUCCESS");
-    console.log(`access_token ${access_token}`);
+    const _loginResp = await AuthApi.login(params);
 
-    if (access_token) {
-      setAccessToken(access_token);
+    const { data, message, statusCode } = _loginResp;
 
+    // console.log("LOGIN SUCCESS");
+    // console.log(`access_token ${data.access_token}`);
+
+    if (statusCode === 200) {
+      setAccessToken(data.access_token);
       console.log("ACCESS TOKEN IS HERE");
 
       // await fetchUser();
-
-      return Promise.resolve(true);
     } else {
       setAccessToken(null);
-      return Promise.resolve(false);
     }
+    return { message, statusCode };
   };
 
   // Logout

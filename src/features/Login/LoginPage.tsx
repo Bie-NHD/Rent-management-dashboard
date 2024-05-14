@@ -3,19 +3,39 @@
 // https://react-hook-form.com/get-started
 //
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { Button, Divider, Link, Stack, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  LinearProgress,
+  Link,
+  Stack,
+  SxProps,
+  TextField,
+} from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string, ObjectSchema } from "yup";
 import useAuth from "../../hooks/useAuth";
 import { Navigate, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AppRoutes } from "../../constants";
 import LoginLayout from "../../components/LoginLayout";
 import ToggleablePasswordTextField from "../../components/ToggleablePasswordTextField";
 
-const LoginSchema: ObjectSchema<ApiLoginParams> = object({
-  username: string().label("Username").required("Username is required"),
-  password: string().label("Password").required("Password is required"),
+const styles = {
+  Notif: {
+    borderColor: "red",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    color: "red",
+    padding: "1rem",
+  },
+};
+
+const schema: ObjectSchema<ApiLoginParams> = object({
+  username: string().label("Username").required("Username is required").default(""),
+  password: string().label("Password").required("Password is required").default(""),
 });
 
 const LoginPage = () => {
@@ -25,15 +45,14 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const { handleSubmit, control, reset } = useForm({
-    resolver: yupResolver(LoginSchema),
+    resolver: yupResolver(schema),
     defaultValues: {},
   });
 
   const { login, setToken, token } = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
-
-  console.log(`token ${token}`);
+  const [notif, setNotif] = useState<React.ReactNode[] | React.ReactNode>(null);
 
   // If logged in => dashboard
   if (token) return <Navigate to={"/"} replace />;
@@ -41,18 +60,24 @@ const LoginPage = () => {
   // Func
 
   const onSubmit: SubmitHandler<ApiLoginParams> = async (data) => {
+    setNotif(null);
     setIsLoading(true);
     console.log(data);
-    const result: boolean = await login(data);
+    const { message, statusCode } = await login(data);
+    setIsLoading(false);
+
     // if login fails
-    if (!result) {
-      reset();
+    if (statusCode !== 200) {
+      setNotif(message);
     } else navigate("/", { replace: true });
   };
+
+  const Notif = () => <>{!!notif && <Box sx={styles.Notif}>{notif}</Box>}</>;
 
   return (
     <LoginLayout title={"Login"}>
       <Stack spacing={2} component={"form"} onSubmit={handleSubmit(onSubmit)}>
+        <Notif />
         <Controller
           name="username"
           control={control}
@@ -81,9 +106,14 @@ const LoginPage = () => {
           )}
         />
         <Link href={AppRoutes.ForgotPassword}>Forgot password?</Link>
-        <Button type="submit" variant="contained">
-          Login
-        </Button>
+        <>
+          <Button type="submit" variant="contained">
+            Login
+          </Button>
+          {isLoading ? (
+            <LinearProgress variant="indeterminate" sx={{ color: "primary.light" }} />
+          ) : null}
+        </>
         <Divider />
         or
         <Button LinkComponent={Link} href={AppRoutes.Register} variant="outlined">

@@ -112,21 +112,24 @@ type ImportResponseData = {
 
 type ImportResponse = ImportResponseData[];
 
-type TLoginApiResponse = {
+type TAuthTokens = {
   access_token: string;
   refresh_token: string;
 };
 
-type TApiResponse<
-  TData =
-    | TApartmentApiResponse
-    | TContractApiResponse
-    | TCustomerApiResponse
-    | ImportResponse
-    | TLoginApiResponse
-    | TUserApiResponse
-> = {
-  data: TData;
+type ApiQueryStatus = {
   message: string;
   statusCode: number;
+};
+
+type TApiResponseData =
+  | TApartmentApiResponse
+  | TContractApiResponse
+  | TCustomerApiResponse
+  | ImportResponse
+  | TAuthTokens
+  | TUserApiResponse;
+
+type TApiResponse<TData = TApiResponseData> = ApiQueryStatus & {
+  data: TData;
 };

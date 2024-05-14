@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Button, Divider, Link, Stack, TextField } from "@mui/material";
+import { Box, Button, Divider, LinearProgress, Link, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { object, string } from "yup";
@@ -9,23 +9,24 @@ import AuthApi from "../../api/auth";
 import LoginLayout from "../../components/LoginLayout";
 
 const schema = object({
-  email: string().email().required(),
+  email: string().email().required().default(""),
 });
 
 const ForgotPasswordPage = () => {
   const { control, handleSubmit, setError } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {},
+    defaultValues: schema.getDefault(),
   });
 
-  const [result, setResult] = useState<{
-    statusCode: number;
-    message: string;
-  }>();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [result, setResult] = useState<ApiQueryStatus>();
 
   const onSubmit: SubmitHandler<{ email: string }> = async (data) => {
+    setIsLoading(true);
     const _result = await AuthApi.forgotPassword(data);
     setResult(_result);
+    setIsLoading(false);
   };
 
   return (
@@ -49,9 +50,14 @@ const ForgotPasswordPage = () => {
             />
           )}
         />
-        <Button type="submit" variant="contained">
-          Sent
-        </Button>
+        <>
+          <Button type="submit" variant="contained">
+            Sent
+          </Button>
+          {isLoading ? (
+            <LinearProgress variant="indeterminate" sx={{ color: "primary.light" }} />
+          ) : null}
+        </>
         <Divider />
         or
         <Button LinkComponent={Link} href={AppRoutes.Login} variant="outlined">

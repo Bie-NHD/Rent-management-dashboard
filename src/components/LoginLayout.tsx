@@ -1,13 +1,7 @@
 import { Box, Container, Paper, Stack, Typography } from "@mui/material";
 import React from "react";
 
-const LoginLayout = ({
-  children,
-  title,
-}: {
-  children?: React.ReactNode;
-  title: string | null;
-}) => {
+const LoginLayout = ({ children, title }: { children?: React.ReactNode; title: string | null }) => {
   return (
     <Container
       sx={{
@@ -19,14 +13,9 @@ const LoginLayout = ({
         justifyContent: "center",
       }}
     >
-      <Box
-        component={"center"}
-        bgcolor={"primary"}
-        marginY={"2rem"}
-        alignSelf={"center"}
-      >
+      <Box component={"center"} bgcolor={"primary"} marginY={"2rem"} alignSelf={"center"}>
         <Typography variant="h2">{title}</Typography>
-        <Paper sx={{ padding: "3rem", maxWidth: "20rem" }} elevation={0}>
+        <Paper sx={{ padding: "3rem", maxWidth: "30rem" }} elevation={0}>
           {children}
         </Paper>
       </Box>

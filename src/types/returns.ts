@@ -6,7 +6,7 @@ interface IUseUserContextHookReturns {
 interface IUseAuthHookResult {
   token: string | null;
   setToken: (token: string) => any;
-  login: (params: ApiLoginParams) => any;
+  login: (params: ApiLoginParams) => Promise<ApiQueryStatus> | ApiQueryStatus;
   logout: () => any;
   refresh: () => any;
   // user: IUser | undefined;
