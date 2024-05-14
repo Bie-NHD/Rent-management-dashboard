@@ -2,15 +2,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Box,
   Button,
-  Container,
-  Paper,
+  Divider,
+  Link,
   Stack,
   TextField,
-  Typography,
 } from "@mui/material";
-import React from "react";
+import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { object, string } from "yup";
+import { AppRoutes } from "../../constants";
+import AuthApi from "../../api/auth";
+
+import LoginLayout from "../../components/LoginLayout";
 
 const schema = object({
   email: string().email().required(),
@@ -21,51 +24,49 @@ const ForgotPasswordPage = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<{ email: string }> = (data) => {};
+  const [result, setResult] = useState<{
+    statusCode: number;
+    message: string;
+  }>();
+
+  const onSubmit: SubmitHandler<{ email: string }> = async (data) => {
+    const _result = await AuthApi.forgotPassword(data);
+    setResult(_result);
+  };
 
   return (
-    <Container
-      sx={{
-        height: "100vh",
-        paddingX: "3rem",
-        paddingY: "3rem",
-        bgcolor: "primary",
-      }}
-    >
-      <Box component={"center"}>
-        <Typography variant="h3">Account Recovery</Typography>
-        <Paper
-          sx={{ padding: "3rem", maxWidth: "20rem" }}
-          elevation={0}
-          component={"form"}
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <Stack spacing={2}>
-            <Controller
-              name="email"
-              control={control}
-              render={({ field, fieldState, formState }) => (
-                <TextField
-                  {...field}
-                  id={`txt-${field.name}`}
-                  label="Your Recovery Email"
-                  variant={"outlined"}
-                  fullWidth
-                  helperText={
-                    (fieldState.error && fieldState.error.message) ||
-                    formState.errors.email?.message
-                  }
-                  error={!!fieldState.error}
-                />
-              )}
+    <LoginLayout title={"Account Recovery"}>
+      <Stack spacing={2} component={"form"} onSubmit={handleSubmit(onSubmit)}>
+        {!!result && <Box>{result.message}</Box>}
+        <Controller
+          name="email"
+          control={control}
+          render={({ field, fieldState, formState }) => (
+            <TextField
+              {...field}
+              type="email"
+              id={`txt-${field.name}`}
+              label="Your Recovery Email"
+              variant={"outlined"}
+              fullWidth
+              helperText={
+                (fieldState.error && fieldState.error.message) ||
+                formState.errors.email?.message
+              }
+              error={!!fieldState.error}
             />
-            <Button type="submit" variant="contained">
-              Login
-            </Button>
-          </Stack>
-        </Paper>
-      </Box>
-    </Container>
+          )}
+        />
+        <Button type="submit" variant="contained" color="info">
+          Sent
+        </Button>
+        <Divider />
+        or
+        <Button LinkComponent={Link} href={AppRoutes.Login} variant="outlined">
+          Login
+        </Button>
+      </Stack>
+    </LoginLayout>
   );
 };
 

@@ -56,12 +56,19 @@ const _logout = () => {
 
   console.log("LOGGED OUT");
 };
-const _forgotPassword= (params:{email:string})=> authInstance.post(ApiRoutes.auth.forgotPassword,{})
+const _forgotPassword = (data: { email: string }) =>
+  authInstance
+    .post<TApiResponse>(ApiRoutes.auth.resetPassword, null, { params: data })
+    .then((res) => res.data)
+    .then((apiRes) => ({
+      message: apiRes.message,
+      statusCode: apiRes.statusCode,
+    }));
 
 const AuthApi = Object.freeze({
   login: _login,
   refreshToken: _refreshToken,
   logout: _logout,
-  forgotPassword:_forgotPassword
+  forgotPassword: _forgotPassword,
 } as const);
 export default AuthApi;

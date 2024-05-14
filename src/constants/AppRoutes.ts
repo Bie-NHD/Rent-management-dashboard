@@ -25,7 +25,7 @@ export const AppRoutes = Object.freeze({
   Login: "/login",
   ForgotPassword: "/forgotPassword",
   User: USER,
-  Register:"/register"
+  Register: "/register",
 } as const);
 
 /**
@@ -54,7 +54,7 @@ const AuthRoutes = Object.freeze({
   login: "/auth/login",
   refreshToken: "/auth/refreshToken",
   logout: "/auth/logout",
-  forgotPassword:"/auth/forgotPassword"
+  resetPassword: "/auth/resetPassword",
 } as const);
 
 export const UserRoutes = Object.freeze({
