@@ -45,6 +45,11 @@ type TCustomerApiResponse = {
   customers: Customer[];
 };
 
+type TUserApiResponse = {
+  page: TPagination;
+  users: IUser[];
+};
+
 type ImportResponseData = {
   "The rows failed": string;
   "Number of successful rows": number;
@@ -65,7 +70,7 @@ type TApiResponse<
     | TCustomerApiResponse
     | ImportResponse
     | TLoginApiResponse
-    | IUser
+    | TUserApiResponse
 > = {
   data: TData;
   message: string;

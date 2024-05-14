@@ -4,7 +4,8 @@ import privateInstance from "./privateInstance";
 const getUserDetails = () =>
   privateInstance
     .get<TApiResponse<IUser>>(UserRoutes.details)
-    .then((res) => res.data.data);
+    .then((res) => res.data)
+    .then((_) => _.data);
 
 const UserApi = Object.freeze({
   details: getUserDetails,

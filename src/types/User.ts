@@ -1,9 +1,9 @@
 interface IUser {
   id: string;
   email: string;
-  username: "duyenBie";
-  fullName: null;
-  createDate: "2024-05-05";
+  username: string;
+  fullName: string | null;
+  createDate: string;
   active: boolean;
   role: string;
 }

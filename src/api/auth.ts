@@ -12,8 +12,14 @@ const authInstance = axios.create({
 const _login = async (params: ApiLoginParams) =>
   await authInstance
     .post<TApiResponse<TLoginApiResponse>>(ApiRoutes.auth.login, params)
-    .then((response) => response.data)
+    .then((response) => {
+      console.log(response.data);
+
+      return response.data;
+    })
     .then((authResponse) => {
+      console.log(authResponse);
+
       if (authResponse.statusCode === 200) {
         const { access_token, refresh_token } = authResponse.data;
         AuthStorageService.setAccessToken(access_token);
@@ -40,7 +46,7 @@ const _refreshToken = () => {
       //   WebStorageService.setRefreshToken(data.data.refresh_token);
       if (data.statusCode === 200) {
         AuthStorageService.refreshTokens(data.data);
-        console.log("REFRESH TOKEN CHANGED");
+        console.log("REFRESH TOKEN CHANGED in Api.refreshToken");
         return data.data;
       } else {
         console.log(data);

@@ -4,5 +4,7 @@ interface IUseAuthHookResult {
   login: (params: ApiLoginParams) => any;
   logout: () => any;
   refresh: () => any;
-  user: IUser | null | undefined;
+  user: IUser | undefined;
+  isAdmin: false | boolean;
+  setUser: React.Dispatch<React.SetStateAction<IUser | undefined>>;
 }
