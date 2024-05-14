@@ -10,7 +10,7 @@ const RequireSignedIn = () => {
 
   useEffect(() => {
     refresh;
-  }, []);
+  }, [token]);
 
   // Check if the user is authenticated
   if (!token || token === "") {
