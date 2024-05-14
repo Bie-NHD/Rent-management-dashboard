@@ -4,10 +4,25 @@ import useAuth from "../../hooks/useAuth";
 import useUser from "../../hooks/useUser";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import EditIcon from "@mui/icons-material/Edit";
+import NiceModal from "@ebay/nice-modal-react";
+import UserUpdateDialog from "./UserUpdateDialog";
 
 const UserNavPanel = () => {
   const { logout } = useAuth();
   const { user } = useUser();
+
+  const handleOnClickEdit = () => {
+    NiceModal.show(UserUpdateDialog, {
+      user: {
+        username: user?.username!,
+        email: user?.email!,
+        role: user?.role!,
+        active: user?.active!,
+        id: user?.id!,
+        createDate: user?.createDate!,
+      },
+    });
+  };
 
   return user ? (
     <Container
@@ -20,7 +35,7 @@ const UserNavPanel = () => {
       <Typography align="center">{user.fullName}</Typography>
       <Typography align="center">{`@${user.username}`}</Typography>
       <Typography align="center">{user?.role}</Typography>
-      <Button LinkComponent={Link} startIcon={<EditIcon />}>
+      <Button startIcon={<EditIcon />} onClick={() => handleOnClickEdit()}>
         Edit
       </Button>
       <Button variant="outlined" startIcon={<ExitToAppIcon />} onClick={() => logout()}>
