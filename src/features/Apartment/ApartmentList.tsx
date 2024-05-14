@@ -11,23 +11,13 @@ import MenuItem from "@mui/material/MenuItem";
 import ErrorPlaceHolder from "../../components/placeholder/ErrorPlaceHolder";
 import NiceModal from "@ebay/nice-modal-react";
 import toast from "react-hot-toast";
-import {
-  AppRoutes,
-  QK_APARTMENTS,
-  NM_APARTMENT,
-  NM_WARNING,
-} from "../../constants";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import { Edit } from "@mui/icons-material";
-import { IconButton, Tooltip } from "@mui/material";
-import TableLoading from "../../components/placeholder/TableLoading";
-
-// Hooks ------------------------------
+import { AppRoutes, QK_APARTMENTS, NM_APARTMENT, NM_WARNING } from "../../constants";
+import TableLoading from "../../components/placeholder/TableLoading"; // Hooks ------------------------------
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetApartments, useUpdateApartment } from "../../hooks";
-
-import { useState } from "react";
-
+import { useMemo, useState } from "react";
+import MRTTableRowActions from "../../components/MRTRowAction";
+import MRTRefreshButton from "../../components/MRTRefreshButton";
 // ------------------------------------
 
 const columnDefs: MRT_ColumnDef<Apartment>[] = [
@@ -81,6 +71,32 @@ const ApartmentList = () => {
     },
   });
 
+  const handleDeleteItem = (index: number) => {
+    NiceModal.show(NM_WARNING, {
+      title: "Confirm Delete Apartment",
+    }).then((res) => {
+      if (res === true) {
+        const { id, ...others } = data[index];
+        // TODO: This is not type-safe
+        mutate({
+          data: { id: id, data: others },
+          action: AppRoutes.Delete,
+        });
+      }
+    });
+  };
+
+  const handleEditITem = (index: number) =>
+    NiceModal.show(NM_APARTMENT, { apartment: data[index] }).then((data) => {
+      mutate(
+        // TODO: This is not type-safe
+        {
+          data: data as ApiUpdateParams<Omit<Apartment, "id">>,
+          action: AppRoutes.Update,
+        }
+      );
+    });
+
   // Define columns ---------------------------------------
   // const columns = useMemo<MRT_ColumnDef<Apartment>[]>(() => columnDefs, []);
 
@@ -101,13 +117,14 @@ const ApartmentList = () => {
       showProgressBars: isLoading || isRefetching,
       sorting,
     },
-    renderTopToolbarCustomActions: () => (
-      <Tooltip arrow title="Refresh Data">
-        <IconButton onClick={() => refetch()}>
-          <RefreshIcon />
-        </IconButton>
-      </Tooltip>
+    enableRowActions: true,
+    renderRowActions: ({ row }) => (
+      <MRTTableRowActions
+        onDeleteItem={() => handleDeleteItem(row.index)}
+        onEditItem={() => handleEditITem(row.index)}
+      />
     ),
+    renderTopToolbarCustomActions: () => <MRTRefreshButton onClick={() => refetch()} />,
     renderToolbarInternalActions: ({ table }) => (
       <>
         {/* built-in buttons (must pass in table prop for them to work!) */}
@@ -116,46 +133,6 @@ const ApartmentList = () => {
         {/* <MRT_ToggleDensePaddingButton table={table} /> */}
       </>
     ),
-    enableRowActions: true,
-    renderRowActionMenuItems: ({ row }) => [
-      <MenuItem
-        key="edit"
-        onClick={() =>
-          NiceModal.show(NM_APARTMENT, { apartment: data[row.index] }).then(
-            (data) => {
-              mutate(
-                // TODO: This is not type-safe
-                {
-                  data: data as ApiUpdateParams<Omit<Apartment, "id">>,
-                  action: AppRoutes.Update,
-                }
-              );
-            }
-          )
-        }
-      >
-        Edit
-      </MenuItem>,
-      <MenuItem
-        key="delete"
-        onClick={() =>
-          NiceModal.show(NM_WARNING, {
-            title: "Confirm Delete Apartment",
-          }).then((res) => {
-            if (res === true) {
-              const { id, ...others } = data[row.index];
-              // TODO: This is not type-safe
-              mutate({
-                data: { id: id, data: others },
-                action: AppRoutes.Delete,
-              });
-            }
-          })
-        }
-      >
-        Delete
-      </MenuItem>,
-    ],
   });
 
   // -------------------------------------------------------
