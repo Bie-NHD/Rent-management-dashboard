@@ -5,7 +5,7 @@ import { QK_USERS, ApiRoutes, QK_USER } from "../constants";
 import UserApi from "../api/user";
 
 type UseGetUserHookReturns = {
-  data: IUser[];
+  users: IUser[];
   meta: { totalRowCount: number };
 };
 
@@ -13,7 +13,7 @@ export const useGetUsers = createQuery<UseGetUserHookReturns, ApiFetchParams>({
   queryKey: [QK_USERS],
   fetcher: (variables: ApiFetchParams): Promise<UseGetUserHookReturns> =>
     Api.fetch<TUserApiResponse>(ApiRoutes.user.index, variables).then((value) => ({
-      data: value.users,
+      users: value.users,
       meta: {
         totalRowCount: value.page.totalElements,
       },

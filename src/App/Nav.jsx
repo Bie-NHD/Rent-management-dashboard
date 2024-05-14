@@ -89,6 +89,18 @@ const NavItems = () => {
 
   return (
     <List sx={{ paddingRight: "2rem" }}>
+      {appRoutes.map((item) => (
+        <ListItemButton
+          key={item.text}
+          LinkComponent={Link}
+          to={item.link}
+          selected={location == item.link}
+          sx={styles.ListItemButton}
+        >
+          <ListItemIcon sx={styles.ListItemIcon}>{item.icon}</ListItemIcon>
+          <ListItemText>{item.text}</ListItemText>
+        </ListItemButton>
+      ))}
       {isAdmin ? (
         <ListItemButton
           key={USER_TEXT}
@@ -103,18 +115,6 @@ const NavItems = () => {
           <ListItemText>{USER_TEXT}</ListItemText>
         </ListItemButton>
       ) : null}
-      {appRoutes.map((item) => (
-        <ListItemButton
-          key={item.text}
-          LinkComponent={Link}
-          to={item.link}
-          selected={location == item.link}
-          sx={styles.ListItemButton}
-        >
-          <ListItemIcon sx={styles.ListItemIcon}>{item.icon}</ListItemIcon>
-          <ListItemText>{item.text}</ListItemText>
-        </ListItemButton>
-      ))}
     </List>
   );
 };

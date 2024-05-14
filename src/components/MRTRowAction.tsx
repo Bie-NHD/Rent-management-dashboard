@@ -42,7 +42,7 @@ const MRTTableRowActions = ({
   onEditItem,
 }: {
   onEditItem: MouseEventHandler<HTMLButtonElement> | undefined;
-  onDeleteItem: MouseEventHandler<HTMLButtonElement> | undefined;
+  onDeleteItem?: MouseEventHandler<HTMLButtonElement> | undefined;
 }) => {
   const { isAdmin } = useUser();
 
@@ -54,7 +54,7 @@ const MRTTableRowActions = ({
         </IconButton>
       </Tooltip>
       {/* only Admin can delete item */}
-      {isAdmin ? (
+      {isAdmin && !!onDeleteItem ? (
         <Tooltip arrow title="Delete item">
           <IconButton onClick={onDeleteItem}>
             <DeleteIcon color="warning" />

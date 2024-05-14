@@ -21,10 +21,10 @@ const FetchApi = async <TData>(url: string, params: ApiFetchParams) =>
     .get<TApiResponse<TData>>(url, { params: params })
     .then((response) => response.data.data); // AxiosResponse = {data: <T = TApiResponse>, ...others}
 
-const CreateApi = async (url: string, data: TApiRequestDTO) =>
+const CreateApi = async (url: string, data: TApiUpdateDTO) =>
   privateInstance.post<TApiResponse>(url, data).then((response) => response.data);
 
-const UpdateApi = async (url: string, params: ApiUpdateParams) =>
+const UpdateApi = async <TData = TApiUpdateDTO>(url: string, params: ApiUpdateParams<TData>) =>
   privateInstance
     .post<TApiResponse>(url + "/" + params.id, params.data)
     .then((response) => response.data);

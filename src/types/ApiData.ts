@@ -11,6 +11,16 @@ type TPagination = {
   empty: boolean;
 };
 
+interface IUser {
+  id: string;
+  email: string;
+  username: string;
+  fullName: string | null;
+  createDate: string;
+  active: boolean;
+  role: string;
+}
+
 type Customer = {
   id: string;
   status: ECustomerStatus;
@@ -30,11 +40,11 @@ type Contract = {
   apartment: Apartment;
 };
 
-type ContractDTO = {
-  apartmentId: string;
-  customerId: string;
-  endDate: string;
-  startDate: string;
+type Apartment = {
+  id: string;
+  address: string;
+  numberOfRoom: number;
+  retailPrice: number;
 };
 /**
  * Contract View Model for UI to consume
@@ -48,22 +58,24 @@ type ContractVM = {
   apartmentAddress: string;
 };
 
-type Apartment = {
-  id: string;
-  address: string;
-  numberOfRoom: number;
-  retailPrice: number;
-};
-
 type ApiExportParams = {
   getTemplate: false;
 };
 
 // For CREATE
-type TApiRequestDTO = Omit<Apartment, "id"> | ContractDTO | Omit<Customer, "id" | "status">;
+type ContractDTO = {
+  apartmentId: string;
+  customerId: string;
+  endDate: string;
+  startDate: string;
+};
+type UserUpdateDTO = Pick<IUser, "email" | "username" | "role" | "active">;
+type ApartmentUpdateDTO = Omit<Apartment, "id">;
+type CustomerUpdateDTO = Omit<Customer, "id" | "status">;
+type TApiUpdateDTO = ApartmentUpdateDTO | ContractDTO | CustomerUpdateDTO | UserUpdateDTO;
 
 // For UPDATE, DELTE
-type ApiUpdateParams<TData = TApiRequestDTO> = {
+type ApiUpdateParams<TData = TApiUpdateDTO> = {
   id: string;
   data: TData;
 };
