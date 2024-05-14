@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ApiRoutes } from "../constants";
 import AuthStorageService from "./authStorage";
-import { Api } from ".";
+import { AuthApi } from ".";
 
 const TEST_URL = "http://localhost:9090" as const;
 
@@ -48,7 +48,7 @@ privateInstance.interceptors.response.use(
       console.log("LOOK AT THIS RESPONSE ERROR");
 
       try {
-        await Api.refreshToken();
+        await AuthApi.refreshToken();
 
         const access_token = AuthStorageService.getAccessToken();
 

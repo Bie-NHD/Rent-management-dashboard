@@ -4,6 +4,7 @@ import privateInstance from "./privateInstance";
 import AuthStorageService from "./authStorage";
 import AuthApi from "./auth";
 ("./webStorage");
+export {default as AuthApi} from "./auth"
 
 const TEST_URL = "http://localhost:9090" as const;
 
@@ -61,7 +62,4 @@ export const Api = Object.freeze({
   import: ImportApi,
   create: CreateApi,
   delete: DeleteApi,
-  login: AuthApi.login,
-  refreshToken: AuthApi.refreshToken,
-  logout: AuthApi.logout,
 } as const);
