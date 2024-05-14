@@ -7,12 +7,18 @@ const UserNavPanel = () => {
   const { logout } = useAuth();
   const { user } = useUser();
 
-  console.log(`user in UserPanel ${JSON.stringify(user)}`);
-
   return user ? (
-    <Container>
-      <Typography>{user?.role}</Typography>
-      <Button variant="contained" onClick={() => logout()}>
+    <Container
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        padding: 3,
+      }}
+    >
+      <Typography align="center">{user.fullName}</Typography>
+      <Typography align="center">{`@${user.username}`}</Typography>
+      <Typography align="center">{user?.role}</Typography>
+      <Button variant="outlined" onClick={() => logout()}>
         Logout
       </Button>
     </Container>
