@@ -15,6 +15,7 @@ const schema = object({
 const ForgotPasswordPage = () => {
   const { control, handleSubmit, setError } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {},
   });
 
   const [result, setResult] = useState<{

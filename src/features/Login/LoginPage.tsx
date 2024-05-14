@@ -26,6 +26,7 @@ const LoginPage = () => {
 
   const { handleSubmit, control, reset } = useForm({
     resolver: yupResolver(LoginSchema),
+    defaultValues: {},
   });
 
   const { login, setToken, token } = useAuth();
