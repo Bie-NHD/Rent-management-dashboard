@@ -1,12 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Box,
-  Button,
-  Divider,
-  Link,
-  Stack,
-  TextField,
-} from "@mui/material";
+import { Box, Button, Divider, Link, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { object, string } from "yup";
@@ -44,20 +37,18 @@ const ForgotPasswordPage = () => {
           render={({ field, fieldState, formState }) => (
             <TextField
               {...field}
-              type="email"
               id={`txt-${field.name}`}
               label="Your Recovery Email"
               variant={"outlined"}
               fullWidth
               helperText={
-                (fieldState.error && fieldState.error.message) ||
-                formState.errors.email?.message
+                (fieldState.error && fieldState.error.message) || formState.errors.email?.message
               }
               error={!!fieldState.error}
             />
           )}
         />
-        <Button type="submit" variant="contained" color="info">
+        <Button type="submit" variant="contained">
           Sent
         </Button>
         <Divider />

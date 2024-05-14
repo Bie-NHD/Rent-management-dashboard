@@ -7,7 +7,7 @@ import { Button, Divider, Link, Stack, TextField } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string, ObjectSchema } from "yup";
 import useAuth from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { AppRoutes } from "../../constants";
 import LoginLayout from "../../components/LoginLayout";
@@ -32,8 +32,10 @@ const LoginPage = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log(`token ${token}`);
+
   // If logged in => dashboard
-  // if (token) return <Navigate to={"/"} replace />;
+  if (token) return <Navigate to={"/"} replace />;
 
   // Func
 
@@ -83,11 +85,7 @@ const LoginPage = () => {
         </Button>
         <Divider />
         or
-        <Button
-          LinkComponent={Link}
-          href={AppRoutes.Register}
-          variant="outlined"
-        >
+        <Button LinkComponent={Link} href={AppRoutes.Register} variant="outlined">
           Create new account
         </Button>
       </Stack>
