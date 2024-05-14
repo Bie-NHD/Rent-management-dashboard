@@ -34,7 +34,7 @@ interface ToggleablePasswordTextFieldProps extends OutlinedInputProps {
 const ToggleablePasswordTextField = (
   props: ToggleablePasswordTextFieldProps
 ) => {
-  const [showPassword, setShowPassword] = useState(false);
+  const [visibility, setVisibility] = useState(false);
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -43,17 +43,15 @@ const ToggleablePasswordTextField = (
   };
 
   const handleOnClickAdornment = () =>
-    setShowPassword((showPassword) => !showPassword);
+    setVisibility((showPassword) => !showPassword);
   return (
     <FormControl error={props.error} variant="outlined">
-      <InputLabel htmlFor={`txt-${props.name}`}>Password</InputLabel>
+      <InputLabel htmlFor={`txt-${props.name}`}>{props.label}</InputLabel>
       <OutlinedInput
         {...props}
         id={`txt-${props.name}`}
-        name={props.name}
-        label={props.label}
-        type={showPassword ? "text" : "password"}
-        ref={props.inputRef}
+        type={visibility ? "text" : "password"}
+        inputRef={props.inputRef}
         endAdornment={
           <InputAdornment position="end">
             <IconButton
@@ -62,7 +60,7 @@ const ToggleablePasswordTextField = (
               onMouseDown={handleMouseDownPassword}
               edge="end"
             >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
+              {visibility ? <VisibilityOff /> : <Visibility />}
             </IconButton>
           </InputAdornment>
         }
