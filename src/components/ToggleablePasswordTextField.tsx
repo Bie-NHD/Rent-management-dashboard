@@ -9,13 +9,13 @@ import {
   OutlinedInputProps,
   FormHelperTextProps,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 
 interface ToggleablePasswordTextFieldProps extends OutlinedInputProps {
-  /**
-   * Props applied to the [`FormHelperText`](/material-ui/api/form-helper-text/) element.
-   */
-  FormHelperTextProps?: Partial<FormHelperTextProps>;
+  // /**
+  //  * Props applied to the [`FormHelperText`](/material-ui/api/form-helper-text/) element.
+  //  */
+  // FormHelperTextProps?: Partial<FormHelperTextProps>;
   /**
    * If `true`, the input will take up the full width of its container.
    * @default false
@@ -25,25 +25,16 @@ interface ToggleablePasswordTextFieldProps extends OutlinedInputProps {
    * The helper text content.
    */
   helperText?: React.ReactNode;
-  /**
-   * The id of the `input` element.
-   * Use this prop to make `label` and `helperText` accessible for screen readers.
-   */
 }
 
-const ToggleablePasswordTextField = (
-  props: ToggleablePasswordTextFieldProps
-) => {
+const ToggleablePasswordTextField = forwardRef((props: ToggleablePasswordTextFieldProps, ref) => {
   const [visibility, setVisibility] = useState(false);
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
-  const handleOnClickAdornment = () =>
-    setVisibility((showPassword) => !showPassword);
+  const handleOnClickAdornment = () => setVisibility((showPassword) => !showPassword);
   return (
     <FormControl error={props.error} variant="outlined">
       <InputLabel htmlFor={`txt-${props.name}`}>{props.label}</InputLabel>
@@ -51,7 +42,8 @@ const ToggleablePasswordTextField = (
         {...props}
         id={`txt-${props.name}`}
         type={visibility ? "text" : "password"}
-        inputRef={props.inputRef}
+        // inputRef={props.inputRef}
+        ref={ref}
         endAdornment={
           <InputAdornment position="end">
             <IconButton
@@ -68,6 +60,6 @@ const ToggleablePasswordTextField = (
       <FormHelperText>{props.helperText}</FormHelperText>
     </FormControl>
   );
-};
+});
 
 export default ToggleablePasswordTextField;
