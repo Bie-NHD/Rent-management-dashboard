@@ -21,9 +21,10 @@ export const useGetUsers = createQuery<UseGetUserHookReturns, ApiFetchParams>({
   placeholderData: keepPreviousData,
 });
 
-export const useUser = createQuery({
+export const useGetUser = createQuery({
   queryKey: [QK_USER],
   fetcher: async () => {
+    console.log(`FETCHING USER FROM HOOK ${new Date()}`);
     return await UserApi.details();
   },
   placeholderData: keepPreviousData,

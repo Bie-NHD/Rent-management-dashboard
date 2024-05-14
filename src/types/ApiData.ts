@@ -1,12 +1,66 @@
+type TPagination = {
+  pageNumber: number;
+  pageSize: number;
+  offset: number;
+  numberOfElements: number;
+  totalElements: number;
+  totalPages: number;
+  sorted: boolean;
+  first: boolean;
+  last: boolean;
+  empty: boolean;
+};
+
+type Customer = {
+  id: string;
+  status: ECustomerStatus;
+  firstName: string;
+  lastName: string;
+  address: string;
+  age: number;
+};
+
+type ArrayDate = [number, number, number];
+
+type Contract = {
+  id: string;
+  startDate: ArrayDate;
+  endDate: ArrayDate;
+  customer: Customer;
+  apartment: Apartment;
+};
+
+type ContractDTO = {
+  apartmentId: string;
+  customerId: string;
+  endDate: string;
+  startDate: string;
+};
+/**
+ * Contract View Model for UI to consume
+ */
+type ContractVM = {
+  id: string;
+  endDate: string;
+  startDate: string;
+  customerName: string;
+  apartmentId: string;
+  apartmentAddress: string;
+};
+
+type Apartment = {
+  id: string;
+  address: string;
+  numberOfRoom: number;
+  retailPrice: number;
+};
+
 type ApiExportParams = {
   getTemplate: false;
 };
 
 // For CREATE
-type TApiRequestDTO =
-  | Omit<Apartment, "id">
-  | ContractDTO
-  | Omit<Customer, "id" | "status">;
+type TApiRequestDTO = Omit<Apartment, "id"> | ContractDTO | Omit<Customer, "id" | "status">;
 
 // For UPDATE, DELTE
 type ApiUpdateParams<TData = TApiRequestDTO> = {
