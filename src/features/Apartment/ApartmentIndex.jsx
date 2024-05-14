@@ -13,8 +13,7 @@ const ApartmentIndex = () => {
 
   const { mutate } = useCreateApartment(client)();
 
-  const handleNewApartment = () =>
-    NiceModal.show(NM_APARTMENT).then((data) => mutate(data));
+  const handleNewApartment = () => NiceModal.show(NM_APARTMENT).then((data) => mutate(data));
 
   return (
     <>

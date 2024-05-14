@@ -1,9 +1,8 @@
 import React from "react";
 import useAuth from "../../hooks/useAuth";
+import useUser from "../../hooks/useUser";
 
-const UserDetailsPage = () => {
-  const { user } = useAuth();
-
+const UserDetailsPage = ({ user }: { user: IUser }) => {
   return <div>UserDetailsPage</div>;
 };
 

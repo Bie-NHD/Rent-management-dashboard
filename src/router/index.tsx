@@ -7,22 +7,20 @@ import { lazy, Suspense } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { AppRoutes } from "../constants";
-import { RequireSignedIn } from "./RequireSignedIn";
+
 import RegisterPage from "../features/Login/RegisterPage";
 import RequireAdmin from "./RequireAdmin";
 import UserIndexPage from "../features/user/UserIndexPage";
+import LoginPage from "../features/Login/LoginPage";
 
 // ---------------------------------------------------------
-const ApartmentIndex = lazy(
-  () => import("../features/Apartment/ApartmentIndex")
-);
+const ApartmentIndex = lazy(() => import("../features/Apartment/ApartmentIndex"));
 const ContractIndex = lazy(() => import("../features/Contract/ContractIndex"));
 const CustomerIndex = lazy(() => import("../features/Customer/CustomerIndex"));
 const ImportPage = lazy(() => import("../features/Import/ImportPage"));
-const LoginPage = lazy(() => import("../features/Login/LoginPage"));
-const ForgotPasswordPage = lazy(
-  () => import("../features/Login/ForgotPasswordPage")
-);
+
+const ForgotPasswordPage = lazy(() => import("../features/Login/ForgotPasswordPage"));
+const RequireSignedIn = lazy(() => import("./RequireSignedIn"));
 
 // ---------------------------------------------------------
 
@@ -68,15 +66,27 @@ const importRoutes: RouteObject[] = [
 const indexRoutes: RouteObject[] = [
   {
     path: AppRoutes.Apartment,
-    element: <ApartmentIndex />,
+    element: (
+      <Suspense fallback={<Loading />}>
+        <ApartmentIndex />
+      </Suspense>
+    ),
   },
   {
     path: AppRoutes.Customer,
-    element: <CustomerIndex />,
+    element: (
+      <Suspense fallback={<Loading />}>
+        <CustomerIndex />
+      </Suspense>
+    ),
   },
   {
     path: AppRoutes.Contract,
-    element: <ContractIndex />,
+    element: (
+      <Suspense fallback={<Loading />}>
+        <ContractIndex />
+      </Suspense>
+    ),
   },
 ];
 
@@ -94,28 +104,20 @@ const requireAdminRoutes: RouteObject[] = [
 const requireSignedInRoutes: RouteObject[] = [
   {
     path: "/",
-    element: <RequireSignedIn />,
+    element: (
+      <Suspense fallback={<Loading />}>
+        <RequireSignedIn />
+      </Suspense>
+    ),
     errorElement: <ErrorPage />,
-    children: [
-      {
-        index: true,
-        element: <StatisticPage />,
-      },
-      ...indexRoutes,
-      ...importRoutes,
-      ...requireAdminRoutes,
-    ],
+    children: [...indexRoutes, ...importRoutes, ...requireAdminRoutes],
   },
 ];
 
 const publicRoutes: RouteObject[] = [
   {
     path: AppRoutes.Login,
-    element: (
-      <Suspense fallback={<Loading />}>
-        <LoginPage />
-      </Suspense>
-    ),
+    element: <LoginPage />,
   },
   {
     path: AppRoutes.ForgotPassword,

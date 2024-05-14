@@ -16,9 +16,35 @@ import AppsIcon from "@mui/icons-material/Apps";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import HolidayVillageIcon from "@mui/icons-material/HolidayVillage";
 import PeopleIcon from "@mui/icons-material/People";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
 
 import { Link, useLocation } from "react-router-dom";
 import { AppRoutes } from "../constants";
+import useAuth from "../hooks/useAuth";
+import { Suspense, lazy } from "react";
+import { Box, Button, CircularProgress } from "@mui/material";
+import UserNavPanel from "../features/user/UserNavPanel";
+import useUser from "../hooks/useUser";
+
+const styles = {
+  ListItemButton: {
+    padding: "20px",
+    borderTopRightRadius: "50px",
+    borderBottomRightRadius: "50px",
+    marginY: "10px",
+
+    "&.Mui-selected": {
+      bgcolor: "primary.main",
+      color: "white",
+    },
+    ":hover": {
+      color: "primary.light",
+    },
+  },
+  ListItemIcon: {
+    color: "inherit",
+  },
+};
 
 const appRoutes = [
   {
@@ -53,45 +79,51 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   boxShadow: "none",
 }));
 
+const USER_TEXT = "Users";
+const USER_LINK = "/users";
+
 const NavItems = () => {
   const location = useLocation().pathname;
 
+  const { isAdmin } = useUser();
+
   return (
     <List sx={{ paddingRight: "2rem" }}>
+      {isAdmin ? (
+        <ListItemButton
+          key={USER_TEXT}
+          LinkComponent={Link}
+          to={USER_LINK}
+          selected={location == USER_LINK}
+          sx={styles.ListItemButton}
+        >
+          <ListItemIcon sx={styles.ListItemIcon}>
+            <ContactPageIcon />
+          </ListItemIcon>
+          <ListItemText>{USER_TEXT}</ListItemText>
+        </ListItemButton>
+      ) : null}
       {appRoutes.map((item) => (
         <ListItemButton
           key={item.text}
           LinkComponent={Link}
           to={item.link}
           selected={location == item.link}
-          sx={{
-            padding: "20px",
-            borderTopRightRadius: "50px",
-            borderBottomRightRadius: "50px",
-            marginY: "10px",
-
-            "&.Mui-selected": {
-              bgcolor: "primary.main",
-              color: "white",
-            },
-            ":hover": {
-              color: "primary.light",
-            },
-          }}
+          sx={styles.ListItemButton}
         >
-          <ListItemIcon
-            sx={{
-              color: "inherit",
-            }}
-          >
-            {item.icon}
-          </ListItemIcon>
+          <ListItemIcon sx={styles.ListItemIcon}>{item.icon}</ListItemIcon>
           <ListItemText>{item.text}</ListItemText>
         </ListItemButton>
       ))}
     </List>
   );
 };
+
+const Loading = () => (
+  <Box>
+    <CircularProgress variant="indeterminate" />
+  </Box>
+);
 
 const Nav = ({ open, theme, handleClose }) => (
   <Drawer
@@ -114,6 +146,8 @@ const Nav = ({ open, theme, handleClose }) => (
         {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
       </IconButton>
     </DrawerHeader>
+    <Divider />
+    <UserNavPanel />
     <Divider />
     <NavItems />
   </Drawer>

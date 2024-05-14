@@ -1,9 +1,11 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import { useGetUser } from "../hooks/user";
+import { UserRoles } from "../constants/UserRoles";
 
 const UserContext = createContext<IUseUserContextHookReturns>({
   user: undefined,
   setUser: undefined,
+  isAdmin: false,
 });
 
 export default UserContext;
@@ -14,7 +16,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode | React.R
 
   useEffect(() => {
     setUser(data);
-  }, [refetch]);
+    console.log(`user in UserProvider ${user} ${new Date()}`);
+  }, [data]);
 
-  return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
+  const isAdmin = useMemo(() => user?.role == UserRoles.MANAGER, [user?.role]);
+
+  return <UserContext.Provider value={{ user, setUser, isAdmin }}>{children}</UserContext.Provider>;
 };

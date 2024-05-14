@@ -1,9 +1,16 @@
+import { useEffect } from "react";
 import Layout from "../App/Layout";
 import useAuth from "../hooks/useAuth";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
-export const RequireSignedIn = () => {
-  const { token } = useAuth();
+import { useGetUser } from "../hooks/user";
+import { UserProvider } from "../context/UserProvider";
+const RequireSignedIn = () => {
+  const { token, refresh } = useAuth();
   const location = useLocation();
+
+  useEffect(() => {
+    refresh;
+  }, []);
 
   // Check if the user is authenticated
   if (!token || token === "") {
@@ -13,8 +20,12 @@ export const RequireSignedIn = () => {
 
   // If authenticated, render the child routes
   return (
-    <Layout>
-      <Outlet />
-    </Layout>
+    <UserProvider>
+      <Layout>
+        <Outlet />
+      </Layout>
+    </UserProvider>
   );
 };
+
+export default RequireSignedIn;

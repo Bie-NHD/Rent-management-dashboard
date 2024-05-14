@@ -1,14 +1,15 @@
 import React, { ReactNode } from "react";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import useUser from "../hooks/useUser";
 
 const RequireAdmin = ({ children }: { children: ReactNode }) => {
-  const { user } = useAuth();
+  const { isAdmin } = useUser();
   const location = useLocation();
   const from = location.state?.from || "/";
 
-  if (user?.role != EUserRole.MANAGER) {
-    return <Navigate to={from} replace />;
+  if (!isAdmin) {
+    return <Navigate to={from} />;
   }
 
   return <>{children}</>;
