@@ -15,6 +15,12 @@ import { AppRoutes } from "../../constants";
 
 const options = ["Export File", "Download Template"];
 
+const getFileName = (getTemplate) => {
+  return `${window.location.pathname.slice(1)}${
+    getTemplate ? "_template" : "_" + new Date().toDateString()
+  }.csv`;
+};
+
 const ExportButton = ({ exportType: exportFileType }) => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
@@ -23,11 +29,11 @@ const ExportButton = ({ exportType: exportFileType }) => {
   const handleClick = async () => {
     const params = { getTemplate: selectedIndex === 1 };
     const link = document.createElement("a");
-    // const url = URL.createObjectURL(await Api.export(exportFileType + AppRoutes.Export, params));
-    link.href = await Api.export(exportFileType + AppRoutes.Export, params);
+    link.download = getFileName(params.getTemplate);
+    const url = URL.createObjectURL(await Api.export(exportFileType + AppRoutes.Export, params));
+    link.href = url;
     link.click();
-    // window.open(url, "_blank");
-    // window.URL.revokeObjectURL(url);
+    URL.revokeObjectURL(url);
   };
 
   const handleMenuItemClick = (event, index) => {
