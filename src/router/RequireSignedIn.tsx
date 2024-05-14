@@ -1,7 +1,7 @@
 import Layout from "../App/Layout";
 import useAuth from "../hooks/useAuth";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
-export const ProtectedRoute = () => {
+export const RequireSignedIn = () => {
   const { token } = useAuth();
   const location = useLocation();
 

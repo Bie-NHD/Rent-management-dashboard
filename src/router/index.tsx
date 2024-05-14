@@ -1,22 +1,23 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
 import { StatisticPage } from "../features/Statistic/StatisticPage";
 // import { loader as importLoader } from "./pages/ImportPage";
-import Layout from "../App/Layout";
+
 import ErrorPage from "../features/error-page/ErrorPage";
-import CustomerIndex from "../features/Customer/CustomerIndex";
-import ContractIndex from "../features/Contract/ContractIndex";
-import { lazy } from "react";
-import { Suspense } from "react";
+import { lazy, Suspense } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { AppRoutes } from "../constants";
-import ApartmentIndex from "../features/Apartment/ApartmentIndex";
-import { ProtectedRoute } from "./ProtectedRoute";
-// import ForgotPasswordPage from "../features/Login/ForgotPasswordPage";
+import { RequireSignedIn } from "./RequireSignedIn";
 import RegisterPage from "../features/Login/RegisterPage";
+import RequireAdmin from "./RequireAdmin";
+import UserIndexPage from "../features/user/UserIndexPage";
 
 // ---------------------------------------------------------
-
+const ApartmentIndex = lazy(
+  () => import("../features/Apartment/ApartmentIndex")
+);
+const ContractIndex = lazy(() => import("../features/Contract/ContractIndex"));
+const CustomerIndex = lazy(() => import("../features/Customer/CustomerIndex"));
 const ImportPage = lazy(() => import("../features/Import/ImportPage"));
 const LoginPage = lazy(() => import("../features/Login/LoginPage"));
 const ForgotPasswordPage = lazy(
@@ -42,57 +43,72 @@ const Loading = () => {
 // ---------------------------------------------------------
 
 const importRoutes: RouteObject[] = [
-  AppRoutes.Apartment,
-  AppRoutes.Contract,
-  AppRoutes.Customer,
-].map(
-  (value) =>
-    ({
-      path: value + AppRoutes.Import,
-      element: (
-        <Suspense fallback={<Loading />}>
-          <ImportPage />
-        </Suspense>
-      ),
-    } as const)
-);
+  ...[AppRoutes.Apartment, AppRoutes.Contract, AppRoutes.Customer].map(
+    (value) =>
+      ({
+        path: value + AppRoutes.Import,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ImportPage />
+          </Suspense>
+        ),
+      } as const)
+  ),
+  {
+    path: AppRoutes.Import,
+    element: (
+      <Suspense fallback={<Loading />}>
+        <ImportPage />
+      </Suspense>
+    ),
+    // loader: importLoader,
+  },
+];
 
-// ---------------------------------------------------------
+const indexRoutes: RouteObject[] = [
+  {
+    path: AppRoutes.Apartment,
+    element: <ApartmentIndex />,
+  },
+  {
+    path: AppRoutes.Customer,
+    element: <CustomerIndex />,
+  },
+  {
+    path: AppRoutes.Contract,
+    element: <ContractIndex />,
+  },
+];
 
-const router = createBrowserRouter([
+const requireAdminRoutes: RouteObject[] = [
+  {
+    path: "/users",
+    element: (
+      <RequireAdmin>
+        <UserIndexPage />
+      </RequireAdmin>
+    ),
+  },
+];
+
+const requireSignedInRoutes: RouteObject[] = [
   {
     path: "/",
-    element: <ProtectedRoute />,
+    element: <RequireSignedIn />,
     errorElement: <ErrorPage />,
     children: [
       {
         index: true,
         element: <StatisticPage />,
       },
-      {
-        path: AppRoutes.Apartment,
-        element: <ApartmentIndex />,
-      },
-      {
-        path: AppRoutes.Customer,
-        element: <CustomerIndex />,
-      },
-      {
-        path: AppRoutes.Contract,
-        element: <ContractIndex />,
-      },
-      {
-        path: AppRoutes.Import,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <ImportPage />
-          </Suspense>
-        ),
-        // loader: importLoader,
-      },
+      ...indexRoutes,
       ...importRoutes,
+      ...requireAdminRoutes,
     ],
   },
+];
+
+const publicRoutes: RouteObject[] = [
   {
     path: AppRoutes.Login,
     element: (
@@ -110,6 +126,10 @@ const router = createBrowserRouter([
     ),
   },
   { path: AppRoutes.Register, element: <RegisterPage /> },
-]);
+];
+
+// ---------------------------------------------------------
+
+const router = createBrowserRouter([...requireSignedInRoutes, ...publicRoutes]);
 
 export default router;

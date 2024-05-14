@@ -1,3 +1,10 @@
+enum EUserRole {
+  STAFF = "STAFF",
+  MANAGER = "MANAGER",
+}
+enum ECustomerStatus {
+  NORMAL = "Normal",
+}
 /**
  * define types of action in a pagination component
  */
