@@ -14,8 +14,8 @@ import MRTRefreshButton from "../../components/MRTRefreshButton";
 import MRTTableRowActions from "../../components/MRTRowAction";
 import ErrorPlaceHolder from "../../components/placeholder/ErrorPlaceHolder";
 import TableLoading from "../../components/placeholder/TableLoading";
-
-type UserVM = Pick<IUser, "id" | "email" | "createDate" | "role" | "username">;
+import NiceModal from "@ebay/nice-modal-react";
+import UserUpdateDialog from "./UserUpdateDialog";
 
 const columnDefs: MRT_ColumnDef<UserVM>[] = [
   {
@@ -74,11 +74,16 @@ const UserList = () => {
             createDate: item.createDate,
             role: item.role,
             username: item.username,
+            active: item.active,
           })
         ),
       };
     },
   });
+
+  const handleEditItem = (value: UserVM) => {
+    NiceModal.show(UserUpdateDialog, { user: value }).then(() => refetch());
+  };
   // Define table -----------------------------------------
 
   const table = useMaterialReactTable({
@@ -97,12 +102,8 @@ const UserList = () => {
       sorting,
     },
     enableRowActions: true,
-    renderRowActions: ({ row, table }) => (
-      <MRTTableRowActions
-        onEditItem={() => {
-          // table.setEditingRow(row);
-        }}
-      />
+    renderRowActions: ({ row }) => (
+      <MRTTableRowActions onEditItem={() => handleEditItem(users[row.index])} />
     ),
     renderTopToolbarCustomActions: () => <MRTRefreshButton onClick={() => refetch()} />,
     renderToolbarInternalActions: ({ table }) => (

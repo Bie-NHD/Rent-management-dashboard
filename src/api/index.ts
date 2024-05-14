@@ -17,9 +17,10 @@ const ImportConfig = {
 // --------------------------------------------------
 
 const FetchApi = async <TData>(url: string, params: ApiFetchParams) =>
-  privateInstance
-    .get<TApiResponse<TData>>(url, { params: params })
-    .then((response) => response.data.data); // AxiosResponse = {data: <T = TApiResponse>, ...others}
+  privateInstance.get<TApiResponse<TData>>(url, { params: params }).then((response) => {
+    console.log(`fetch response ${response}`);
+    return response.data.data;
+  }); // AxiosResponse = {data: <T = TApiResponse>, ...others}
 
 const CreateApi = async (url: string, data: TApiUpdateDTO) =>
   privateInstance.post<TApiResponse>(url, data).then((response) => response.data);

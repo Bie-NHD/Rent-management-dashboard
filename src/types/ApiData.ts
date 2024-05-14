@@ -58,6 +58,8 @@ type ContractVM = {
   apartmentAddress: string;
 };
 
+type UserVM = Pick<IUser, "id" | "email" | "createDate" | "role" | "username" | "active">;
+
 type ApiExportParams = {
   getTemplate: false;
 };
