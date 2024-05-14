@@ -11,22 +11,15 @@ const authInstance = axios.create({
 
 const _login = async (params: ApiLoginParams) =>
   await authInstance
-    .post<TApiResponse<TLoginApiResponse>>(ApiRoutes.auth.login, params)
+    .post<TApiResponse<TAuthTokens>>(ApiRoutes.auth.login, params)
     .then((response) => {
       console.log(response.data);
-
-      return response.data;
-    })
-    .then((authResponse) => {
-      console.log(authResponse);
-
-      if (authResponse.statusCode === 200) {
-        const { access_token, refresh_token } = authResponse.data;
-        AuthStorageService.setAccessToken(access_token);
-        AuthStorageService.setRefreshToken(refresh_token);
-
-        return access_token;
+      const _loginResp = response.data;
+      if (_loginResp.statusCode === 200) {
+        AuthStorageService.refreshTokens(_loginResp.data);
+        console.log(`LOGIN SUCCESS`);
       }
+      return _loginResp;
     });
 
 /**
@@ -36,7 +29,7 @@ const _login = async (params: ApiLoginParams) =>
 const _refreshToken = () => {
   const refresh_token = AuthStorageService.getRefreshToken();
   return authInstance
-    .post<TApiResponse<TLoginApiResponse>>(ApiRoutes.auth.refreshToken, {
+    .post<TApiResponse<TAuthTokens>>(ApiRoutes.auth.refreshToken, {
       refresh_token,
     })
     .then((response) => response.data)
@@ -62,7 +55,7 @@ const _logout = () => {
 
   console.log("LOGGED OUT");
 };
-const _forgotPassword = (data: { email: string }) =>
+const _forgotPassword = (data: { email: string }): Promise<ApiQueryStatus> =>
   authInstance
     .post<TApiResponse>(ApiRoutes.auth.resetPassword, null, { params: data })
     .then((res) => res.data)

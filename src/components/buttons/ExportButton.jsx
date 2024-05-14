@@ -20,11 +20,14 @@ const ExportButton = ({ exportType: exportFileType }) => {
   const anchorRef = React.useRef(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
-  const handleClick = () => {
-    const link = document.createElement("a");
+  const handleClick = async () => {
     const params = { getTemplate: selectedIndex === 1 };
-    link.href = Api.export(exportFileType + AppRoutes.Export, params);
+    const link = document.createElement("a");
+    // const url = URL.createObjectURL(await Api.export(exportFileType + AppRoutes.Export, params));
+    link.href = await Api.export(exportFileType + AppRoutes.Export, params);
     link.click();
+    // window.open(url, "_blank");
+    // window.URL.revokeObjectURL(url);
   };
 
   const handleMenuItemClick = (event, index) => {
@@ -46,11 +49,7 @@ const ExportButton = ({ exportType: exportFileType }) => {
 
   return (
     <React.Fragment>
-      <ButtonGroup
-        variant="outlined"
-        ref={anchorRef}
-        aria-label="Button group with a nested menu"
-      >
+      <ButtonGroup variant="outlined" ref={anchorRef} aria-label="Button group with a nested menu">
         <Button startIcon={<CloudDownloadIcon />} onClick={handleClick}>
           {options[selectedIndex]}
         </Button>
@@ -79,8 +78,7 @@ const ExportButton = ({ exportType: exportFileType }) => {
           <Grow
             {...TransitionProps}
             style={{
-              transformOrigin:
-                placement === "bottom" ? "center top" : "center bottom",
+              transformOrigin: placement === "bottom" ? "center top" : "center bottom",
             }}
           >
             <Paper>
