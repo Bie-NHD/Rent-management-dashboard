@@ -114,11 +114,11 @@ const LoginPage = () => {
             <LinearProgress variant="indeterminate" sx={{ color: "primary.light" }} />
           ) : null}
         </>
-        <Divider />
+        {/* <Divider />
         or
         <Button LinkComponent={Link} href={AppRoutes.Register} variant="outlined">
           Create new account
-        </Button>
+        </Button> */}
       </Stack>
       {/* <LinearProgress
               variant="indeterminate"
