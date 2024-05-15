@@ -14,14 +14,11 @@ const schema = object({
 });
 
 type Result = {
+  message: React.ReactNode | React.ReactNode[] | JSX.Element;
+  error: boolean;
+};
 
-  message: React.ReactNode | React.ReactNode [] | JSX.Element;
-  error: boolean
-}
-
-const successMsg = ({message}:{message:string})=><>{message}</>
-
-const initialState:Result = { message: "", error: false };
+const initialState: Result = { message: "", error: false };
 
 const ForgotPasswordPage = () => {
   const { control, handleSubmit, setError } = useForm({
@@ -40,7 +37,9 @@ const ForgotPasswordPage = () => {
     const _result = await AuthApi.forgotPassword(data);
     setResult(() => ({ error: _result.statusCode !== 200, message: _result.message }));
     if (_result.statusCode === 200) {
-      setResult((prev) => ({ ...prev, message: _result.message }));
+      const successMsg = <>{_result.message} Redirecting...</>;
+
+      setResult((prev) => ({ ...prev, message: successMsg }));
       setTimeout(() => {
         navigate("/login", { replace: true });
       }, 5000);
