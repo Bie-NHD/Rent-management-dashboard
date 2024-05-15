@@ -15,7 +15,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ObjectSchema, boolean, number, object, string } from "yup";
 import UserApi from "../../api/user";
 import { Api } from "../../api";
-import { ApiRoutes } from "../../constants";
+import { ApiRoutes, NM_WARNING } from "../../constants";
 import toast from "react-hot-toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useUser from "../../hooks/useUser";
@@ -45,16 +45,25 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
   });
 
   const onSubmit: SubmitHandler<InputsForAdmin> = async (data) => {
+    if (data.role != user.role) {
+      const wn_cntn: WarningDialogProps = {
+        title: `Confirm change "role"`,
+        content: `Confirm change from "${user.role}" to "${data.role}"? `,
+      };
+
+      NiceModal.show(NM_WARNING, wn_cntn).then(null, () => {
+        return;
+      });
+    }
+
     const res = await Api.update<UserUpdateDTO>(ApiRoutes.user.update, {
       id: user.id,
       data: data,
     });
 
     if (res.statusCode === 200) {
-      modal.remove();
       toast.success(res.message);
-
-      return;
+      modal.remove();
     }
 
     toast.error(res.message);
