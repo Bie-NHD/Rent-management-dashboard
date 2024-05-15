@@ -32,13 +32,18 @@ const ForgotPasswordPage = () => {
     const _result = await AuthApi.forgotPassword(data);
     setResult(() => ({ error: _result.statusCode !== 200, message: _result.message }));
     setIsLoading(false);
-    if (_result.statusCode === 200) navigate("/login", { replace: true });
+    if (_result.statusCode === 200) {
+      setResult((prev) => ({ ...prev, message: _result.message }));
+      setTimeout(() => {
+        navigate("/login", { replace: true });
+      }, 5000);
+    }
   };
 
   return (
     <LoginLayout title={"Account Recovery"}>
       <Stack spacing={2} component={"form"} onSubmit={handleSubmit(onSubmit)}>
-        {!!result && <Box sx={{ color: result.error ? "red" : "initial" }}>{result.message}</Box>}
+        {!!result && <Box sx={{ color: result.error ? "red" : "green" }}>{result.message}</Box>}
         <Controller
           name="email"
           control={control}
@@ -59,7 +64,7 @@ const ForgotPasswordPage = () => {
         />
         <>
           <Button type="submit" variant="contained">
-            Sent
+            Send
           </Button>
           {isLoading ? (
             <LinearProgress variant="indeterminate" sx={{ color: "primary.light" }} />

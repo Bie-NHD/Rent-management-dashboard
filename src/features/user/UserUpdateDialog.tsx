@@ -66,7 +66,6 @@ const UserUpdateDialog = NiceModal.create(({ user }: { user: UserVM }) => {
           control={control}
           margin="dense"
         />
-        <TextField disabled label="Create Date" value={user.createDate} margin="dense" fullWidth />
         <RHFOutlinedTextField
           variant="outlined"
           name="email"
@@ -74,6 +73,7 @@ const UserUpdateDialog = NiceModal.create(({ user }: { user: UserVM }) => {
           control={control}
           margin="dense"
         />
+        <TextField disabled label="Create Date" value={user.createDate} margin="dense" fullWidth />
       </DialogContent>
       <DialogActions>
         <Button onClick={modal.remove}>Cancel</Button>
