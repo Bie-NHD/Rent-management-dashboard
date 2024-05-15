@@ -6,6 +6,9 @@ const UserContext = createContext<IUseUserContextHookReturns>({
   user: undefined,
   setUser: undefined,
   isAdmin: false,
+  refetch: function (): Promise<any> {
+    throw new Error("Function not implemented.");
+  }
 });
 
 export default UserContext;
@@ -21,5 +24,5 @@ export const UserProvider = ({ children }: { children: React.ReactNode | React.R
 
   const isAdmin = useMemo(() => user?.role == UserRoles.MANAGER, [user?.role]);
 
-  return <UserContext.Provider value={{ user, setUser, isAdmin }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ user, setUser, isAdmin ,refetch}}>{children}</UserContext.Provider>;
 };

@@ -2,6 +2,7 @@ interface IUseUserContextHookReturns {
   user: IUser | undefined;
   setUser: React.Dispatch<React.SetStateAction<IUser | undefined>> | undefined;
   isAdmin: false | boolean;
+  refetch:  () => Promise<any>
 }
 interface IUseAuthHookResult {
   token: string | null;

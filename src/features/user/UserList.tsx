@@ -16,6 +16,8 @@ import ErrorPlaceHolder from "../../components/placeholder/ErrorPlaceHolder";
 import TableLoading from "../../components/placeholder/TableLoading";
 import NiceModal from "@ebay/nice-modal-react";
 import UserUpdateDialog from "./UserUpdateDialog";
+import useUser from "../../hooks/useUser";
+import UserUpdateDialogForAdmin from "./UserUpdateDialogForAdmin";
 
 const columnDefs: MRT_ColumnDef<UserVM>[] = [
   {
@@ -48,6 +50,8 @@ const UserList = () => {
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState(""); // search filter
   const client = useQueryClient();
+
+  const { refetch: refechUser, isAdmin } = useUser();
   /**
    *  Data fetching
    */
@@ -82,7 +86,12 @@ const UserList = () => {
   });
 
   const handleEditItem = (value: UserVM) => {
-    NiceModal.show(UserUpdateDialog, { user: value }).then(() => refetch());
+    NiceModal.show(isAdmin ? UserUpdateDialogForAdmin : UserUpdateDialog, { user: value }).then(
+      () => {
+        refetch();
+        refechUser();
+      }
+    );
   };
   // Define table -----------------------------------------
 

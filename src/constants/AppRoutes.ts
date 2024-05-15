@@ -61,6 +61,7 @@ export const UserRoutes = Object.freeze({
   details: "/users/details",
   index: "/users",
   update: "/users/update",
+  changePassword:"/users/changePassword",
 } as const);
 
 /**
