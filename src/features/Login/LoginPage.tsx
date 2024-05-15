@@ -102,6 +102,7 @@ const LoginPage = () => {
               label="Password"
               error={!!fieldState.error}
               helperText={!!fieldState.error && fieldState.error.message}
+              fullWidth
             />
           )}
         />
