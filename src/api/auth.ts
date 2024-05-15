@@ -51,7 +51,7 @@ const _refreshToken = () => {
 const _logout = () => {
   AuthStorageService.removeAllTokens();
 
-  authInstance.get(ApiRoutes.auth.refreshToken);
+  authInstance.get(ApiRoutes.auth.logout);
 
   console.log("LOGGED OUT");
 };
