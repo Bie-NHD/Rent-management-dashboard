@@ -95,6 +95,7 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
         />
         <Controller
           name="role"
+          control={control}
           render={({ field }) => (
             <Select {...field} defaultValue={control._defaultValues[field.name]} label="Role">
               {selectOptions}
