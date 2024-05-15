@@ -11,6 +11,7 @@ const LoginLayout = ({ children, title }: { children?: React.ReactNode; title: s
         paddingY: "1rem",
         bgcolor: "primary",
         justifyContent: "center",
+        minWidth: "30rem"
       }}
     >
       <Box component={"center"} bgcolor={"primary"} marginY={"2rem"} alignSelf={"center"}>
