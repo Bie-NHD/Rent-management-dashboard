@@ -15,11 +15,11 @@ import { ApiRoutes } from "../../constants";
 import toast from "react-hot-toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-type Inputs = Pick<UserUpdateDTO, "email" | "username">;
-type InputsForAdmin = UserUpdateDTO;
+type Inputs = Pick<UserUpdateDTO, "email" | "fullName">;
+
 const schema: ObjectSchema<Inputs> = object({
   email: string().email().label("Email").required().default(""),
-  username: string().label("Username").required().default(""),
+  fullName: string().label("Username").required().default(""),
 });
 
 const UserUpdateDialog = NiceModal.create(({ user }: { user: UserVM }) => {
@@ -59,8 +59,8 @@ const UserUpdateDialog = NiceModal.create(({ user }: { user: UserVM }) => {
       <DialogContent>
         <RHFOutlinedTextField
           variant="outlined"
-          name="username"
-          label="Username"
+          name="fullName"
+          label="Full name"
           control={control}
           margin="dense"
         />

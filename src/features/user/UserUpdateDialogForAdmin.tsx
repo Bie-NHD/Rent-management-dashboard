@@ -8,6 +8,7 @@ import {
   TextField,
   MenuItem,
   Select,
+  FormControlLabel,
 } from "@mui/material";
 import React from "react";
 import RHFOutlinedTextField from "../../components/RHFTextField";
@@ -23,18 +24,21 @@ import { findRightPinnedHeadersBeforeCol } from "@mui/x-data-grid/utils/domUtils
 import { UserRoles } from "../../constants/UserRoles";
 import ToggleButton from "@mui/material/ToggleButton";
 import CheckIcon from "@mui/icons-material/Check";
+import { CheckBox } from "@mui/icons-material";
 
 type InputsForAdmin = UserUpdateDTO;
 
 const schema: ObjectSchema<InputsForAdmin> = object({
   email: string().email().label("Email").required().default(""),
-  username: string().label("Username").required().default(""),
+  fullName: string().label("Username").required().default(""),
   active: boolean().label("Active").required().default(true),
   role: string().label("Role").required().default(UserRoles.STAFF),
 });
 
 const selectOptions = [...Object.values(UserRoles)].map((item) => (
-  <MenuItem value={item}>{item}</MenuItem>
+  <MenuItem key={item} value={item}>
+    {item}
+  </MenuItem>
 ));
 
 const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) => {
@@ -44,6 +48,8 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
     defaultValues: user || schema.getDefault(),
   });
 
+  modal.keepMounted = true
+
   const onSubmit: SubmitHandler<InputsForAdmin> = async (data) => {
     if (data.role != user.role) {
       const wn_cntn: WarningDialogProps = {
@@ -51,9 +57,13 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
         content: `Confirm change from "${user.role}" to "${data.role}"? `,
       };
 
+      
+
       NiceModal.show(NM_WARNING, wn_cntn).then(null, () => {
+        modal.show()
         return;
       });
+      
     }
 
     const res = await Api.update<UserUpdateDTO>(ApiRoutes.user.update, {
@@ -81,8 +91,8 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
       <DialogContent>
         <RHFOutlinedTextField
           variant="outlined"
-          name="username"
-          label="Username"
+          name="fullName"
+          label="Full name"
           control={control}
           margin="dense"
         />
@@ -97,11 +107,10 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
           name="active"
           control={control}
           render={({ field }) => (
-            <ToggleButton {...field} selected={field.value}>
-              {field.value ? "Active" : "Inactive"} <CheckIcon />
-            </ToggleButton>
+            <FormControlLabel  label={"Active"} control={<CheckBox {...field}  />} />
           )}
         />
+        <br/>
         <Controller
           name="role"
           control={control}
@@ -113,7 +122,7 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={modal.remove}>Cancel</Button>
+        <Button onClick={()=>{modal.reject();modal.remove()}}>Cancel</Button>
         <Button type="submit"> Save </Button>
       </DialogActions>
     </Dialog>

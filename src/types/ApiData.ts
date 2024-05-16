@@ -15,7 +15,7 @@ interface IUser {
   id: string;
   email: string;
   username: string;
-  fullName: string | null;
+  fullName: string ;
   createDate: string;
   active: boolean;
   role: string;
@@ -71,7 +71,7 @@ type ContractDTO = {
   endDate: string;
   startDate: string;
 };
-type UserUpdateDTO = Pick<IUser, "email" | "username" | "role" | "active">;
+type UserUpdateDTO = Pick<IUser, "email" | "role" | "active" | "fullName">;
 type ApartmentUpdateDTO = Omit<Apartment, "id">;
 type CustomerUpdateDTO = Omit<Customer, "id" | "status">;
 type TApiUpdateDTO = ApartmentUpdateDTO | ContractDTO | CustomerUpdateDTO | UserUpdateDTO;
