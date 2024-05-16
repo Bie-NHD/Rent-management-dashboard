@@ -4,15 +4,9 @@ import { ApartmentURLs, AppRoutes, QK_APARTMENTS } from "../constants";
 import toast from "react-hot-toast";
 import { QueryClient, keepPreviousData } from "@tanstack/react-query";
 
-type Data = {
-  data: Apartment[];
-  meta: { totalRowCount: number };
-};
-
 export const useCreateApartment = (client: QueryClient) =>
   createMutation({
-    mutationFn: async (variables: Omit<Apartment, "id">) =>
-      Api.create(ApartmentURLs.Add, variables),
+    mutationFn: async (variables: ApartmentUpdateDTO) => Api.create(ApartmentURLs.Add, variables),
     onSuccess(data, variables, context) {
       toast.success(data.message);
       client.invalidateQueries({ queryKey: [QK_APARTMENTS] });
@@ -28,10 +22,7 @@ export const useCreateApartment = (client: QueryClient) =>
  @param action from ```ApiActions```
  */
 export const useUpdateApartment = createMutation({
-  mutationFn: async (variables: {
-    data: ApiUpdateParams<Omit<Apartment, "id">>;
-    action: string;
-  }) =>
+  mutationFn: async (variables: { data: ApiUpdateParams<ApartmentUpdateDTO>; action: string }) =>
     variables.action === AppRoutes.Update
       ? Api.update(ApartmentURLs.Update, variables.data)
       : Api.delete(ApartmentURLs.Delete, variables.data),
@@ -41,16 +32,14 @@ export const useUpdateApartment = createMutation({
   },
 });
 
-export const useGetApartments = createQuery<Data, ApiFetchParams>({
+export const useGetApartments = createQuery<UseGetApartmentsHookReturns, ApiFetchParams>({
   queryKey: [QK_APARTMENTS],
-  fetcher: (variables: ApiFetchParams): Promise<Data> =>
-    Api.fetch<TApartmentApiResponse>(ApartmentURLs.GetAll, variables).then(
-      (value) => ({
-        data: value.apartments,
-        meta: {
-          totalRowCount: value.page.totalElements,
-        },
-      })
-    ),
+  fetcher: (variables: ApiFetchParams) =>
+    Api.fetch<TApartmentApiResponse>(ApartmentURLs.GetAll, variables).then((value) => ({
+      data: value.apartments,
+      meta: {
+        totalRowCount: value.page.totalElements,
+      },
+    })),
   placeholderData: keepPreviousData,
 });

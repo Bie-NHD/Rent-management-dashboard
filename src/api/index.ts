@@ -3,6 +3,7 @@ import { ApiRoutes } from "../constants";
 import privateInstance from "./privateInstance";
 import AuthStorageService from "./authStorage";
 import AuthApi from "./auth";
+import { config } from "localforage";
 ("./webStorage");
 export { default as AuthApi } from "./auth";
 
@@ -17,10 +18,9 @@ const ImportConfig = {
 // --------------------------------------------------
 
 const FetchApi = async <TData>(url: string, params: ApiFetchParams) =>
-  privateInstance.get<TApiResponse<TData>>(url, { params: params }).then((response) => {
-    console.log(`fetch response ${response}`);
-    return response.data.data;
-  }); // AxiosResponse = {data: <T = TApiResponse>, ...others}
+  privateInstance
+    .get<TApiResponse<TData>>(url, { params: params })
+    .then((response) => response.data.data); // AxiosResponse = {data: <T = TApiResponse>, ...others}
 
 const CreateApi = async (url: string, data: TApiUpdateDTO) =>
   privateInstance.post<TApiResponse>(url, data).then((response) => response.data);
@@ -37,17 +37,12 @@ const ImportApi = async (url: string, formData: FormData) =>
   privateInstance
     .post<TApiResponse<ImportResponse>>(url, formData, ImportConfig)
     .then((response) => response.data);
-
+/**
+ * Cannot access resp's custom headers
+ * https://stackoverflow.com/questions/37897523/axios-get-access-to-response-header-fields
+ */
 const ExportApi = async (url: string, params: ApiExportParams) =>
-  // `http://authorization:Bearer ${AuthStorageService.getAccessToken()}@` +
-  // "localhost:9090" +
-  // url +
-  // `?getTemplate=${params.getTemplate}`;
-  privateInstance.get(url, { params: params, responseType: "blob" }).then((res) => {
-    console.log(`res ${res.headers}`);
-
-    return res.data;
-  });
+  privateInstance.get(url, { params: params, responseType: "blob" }).then((res) => res.data);
 
 const SearchApi = async (url: string, params: ApiSearchParams) =>
   privateInstance.get(url, { params: params }).then((response) => response.data);

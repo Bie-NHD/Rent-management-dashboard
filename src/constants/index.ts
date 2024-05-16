@@ -11,7 +11,7 @@ export const QK_APARTMENTS = "apartments" as const;
 export const QK_CONTRACTS = "contracts" as const;
 export const QK_CUSTOMERs = "customers" as const;
 export const QK_USERS = "users" as const;
-export const QK_USER = "/user/details" as const;
+export const QK_ACCOUNT = "account" as const;
 export const QK_ACCESS_TOKEN = "access_token" as const;
 
 export const UserRoles = Object.freeze({

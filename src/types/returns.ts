@@ -4,17 +4,22 @@ interface IUseUserContextHookReturns {
   isAdmin: false | boolean;
   refetch: () => Promise<any>;
 }
-interface IUseAuthHookResult {
+interface IUseAuthHookReturns {
   token: string | null;
-  setToken: (token: string) => any;
+  // setToken: (token: string) => any;
   login: (params: ApiLoginParams) => Promise<ApiQueryStatus> | ApiQueryStatus;
   logout: () => any;
-  refresh: () => any;
+  refresh?: () => any;
   // user: IUser | undefined;
   // isAdmin: false | boolean;
   // setUser: React.Dispatch<React.SetStateAction<IUser | undefined>> | undefined;
 }
 type UseGetUserHookReturns = {
   users: IUser[];
+  meta: { totalRowCount: number };
+};
+
+type UseGetApartmentsHookReturns = {
+  data: Apartment[];
   meta: { totalRowCount: number };
 };

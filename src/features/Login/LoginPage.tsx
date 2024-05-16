@@ -22,6 +22,7 @@ import { useMemo, useState } from "react";
 import { AppRoutes } from "../../constants";
 import LoginLayout from "../../components/LoginLayout";
 import ToggleablePasswordTextField from "../../components/ToggleablePasswordTextField";
+import toast from "react-hot-toast";
 
 const styles = {
   Notif: {
@@ -49,7 +50,7 @@ const LoginPage = () => {
     defaultValues: {},
   });
 
-  const { login, setToken, token } = useAuth();
+  const { login, token } = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
   const [notif, setNotif] = useState<React.ReactNode[] | React.ReactNode>(null);
@@ -69,7 +70,10 @@ const LoginPage = () => {
     // if login fails
     if (statusCode !== 200) {
       setNotif(message);
-    } else navigate("/", { replace: true });
+    } else {
+      navigate("/", { replace: true });
+      toast.success("Logging in ...");
+    }
   };
 
   const Notif = () => <>{!!notif && <Box sx={styles.Notif}>{notif}</Box>}</>;

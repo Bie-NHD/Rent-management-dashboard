@@ -19,14 +19,14 @@ import muiThemeConfigs from "../configs/muiThemeConfigs";
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ThemeProvider theme={muiThemeConfigs}>
-          <NiceModal.Provider>
+      <ThemeProvider theme={muiThemeConfigs}>
+        <NiceModal.Provider>
+          <AuthProvider>
             <RouterProvider router={router} />
-            <Toaster toastOptions={toastConfigs} />
-          </NiceModal.Provider>
-        </ThemeProvider>
-      </AuthProvider>
+          </AuthProvider>
+        </NiceModal.Provider>
+        <Toaster toastOptions={toastConfigs} />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
