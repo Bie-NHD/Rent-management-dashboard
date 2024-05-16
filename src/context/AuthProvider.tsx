@@ -5,7 +5,7 @@ import AuthStorageService from "../api/authStorage";
 import AuthApi from "../api/auth";
 import UserApi from "../api/user";
 import { useNavigate } from "react-router-dom";
-import { UserRoles } from "../constants/UserRoles";
+import { QK_ACCESS_TOKEN, UserRoles } from "../constants";
 import { useGetUser } from "../hooks/user";
 
 const defaultValue: IUseAuthHookResult = {

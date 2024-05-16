@@ -85,6 +85,7 @@ const UserList = () => {
     },
   });
 
+  // when resolved, refetch current account & data
   const handleEditItem = (value: UserVM) => {
     NiceModal.show(isAdmin ? UserUpdateDialogForAdmin : UserUpdateDialog, { user: value }).then(
       () => {

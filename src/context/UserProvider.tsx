@@ -1,6 +1,6 @@
 import { createContext, useEffect, useMemo, useState } from "react";
 import { useGetUser } from "../hooks/user";
-import { UserRoles } from "../constants/UserRoles";
+import { UserRoles } from "../constants";
 
 const UserContext = createContext<IUseUserContextHookReturns>({
   user: undefined,

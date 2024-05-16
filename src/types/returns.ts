@@ -2,7 +2,7 @@ interface IUseUserContextHookReturns {
   user: IUser | undefined;
   setUser: React.Dispatch<React.SetStateAction<IUser | undefined>> | undefined;
   isAdmin: false | boolean;
-  refetch:  () => Promise<any>
+  refetch: () => Promise<any>;
 }
 interface IUseAuthHookResult {
   token: string | null;
@@ -11,6 +11,10 @@ interface IUseAuthHookResult {
   logout: () => any;
   refresh: () => any;
   // user: IUser | undefined;
-  isAdmin: false | boolean;
+  // isAdmin: false | boolean;
   // setUser: React.Dispatch<React.SetStateAction<IUser | undefined>> | undefined;
 }
+type UseGetUserHookReturns = {
+  users: IUser[];
+  meta: { totalRowCount: number };
+};

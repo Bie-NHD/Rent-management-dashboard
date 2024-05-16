@@ -4,11 +4,6 @@ import { Api } from "../api";
 import { QK_USERS, ApiRoutes, QK_USER } from "../constants";
 import UserApi from "../api/user";
 
-type UseGetUserHookReturns = {
-  users: IUser[];
-  meta: { totalRowCount: number };
-};
-
 export const useGetUsers = createQuery<UseGetUserHookReturns, ApiFetchParams>({
   queryKey: [QK_USERS],
   fetcher: (variables: ApiFetchParams): Promise<UseGetUserHookReturns> =>
