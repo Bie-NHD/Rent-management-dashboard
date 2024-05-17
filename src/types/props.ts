@@ -1,4 +1,3 @@
-
 // Dialogs
 type WarningDialogProps = {
   title: string;
@@ -8,3 +7,9 @@ type WarningDialogProps = {
 // type NMDialogResult<Type = `success` | `reject` > = {
 // value?: Type typeof `success` ? boolean : undefined
 // }
+
+interface ChangePasswordProps {
+  prevPassword: string;
+  newPassword: string;
+  repeatNewPassword: string;
+}
