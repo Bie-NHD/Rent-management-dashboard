@@ -37,32 +37,30 @@ const _logout = () => {
 };
 
 const _refreshToken = () => {
-  try {
-    const refresh_token = AuthStorageService.getRefreshToken();
+  AuthStorageService.getRefreshToken().then(
+    (refresh_token) =>
+      authInstance
+        .post<TApiResponse<TAuthTokens>>(ApiRoutes.auth.refreshToken, {
+          refresh_token,
+        })
+        .then((response) => response.data)
+        .then((data) => {
+          //   const { access_token, refresh_token } = data.data;
 
-    return authInstance
-      .post<TApiResponse<TAuthTokens>>(ApiRoutes.auth.refreshToken, {
-        refresh_token,
-      })
-      .then((response) => response.data)
-      .then((data) => {
-        //   const { access_token, refresh_token } = data.data;
-
-        //   WebStorageService.setRefreshToken(data.data.refresh_token);
-        if (data.statusCode === 200) {
-          AuthStorageService.refreshTokens(data.data);
-          console.log("REFRESH TOKEN CHANGED in Api.refreshToken");
-          return data.data;
-        } else {
-          console.log(data);
-          window.location.href = "/login";
-          throw Error("REFRESH TOKEN FAILED");
-        }
-      });
-  } catch (error) {
-    _logout();
-    throw error;
-  }
+          //   WebStorageService.setRefreshToken(data.data.refresh_token);
+          if (data.statusCode === 200) {
+            AuthStorageService.refreshTokens(data.data);
+            console.log("REFRESH TOKEN CHANGED in Api.refreshToken");
+            return data.data;
+          }
+          // else
+          return Promise.reject(new Error("REFRESH TOKEN FAILED"));
+        }),
+    (error) => {
+      _logout();
+      return Promise.reject(error);
+    }
+  );
 };
 
 const _forgotPassword = (data: { email: string }): Promise<ApiQueryStatus> =>

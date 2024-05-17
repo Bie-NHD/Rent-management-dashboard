@@ -18,12 +18,13 @@ const privateInstance = axios.create({
 privateInstance.interceptors.request.use(
   // Do something before request is sent
   (config) => {
-    console.log("APPEND AUTH HEADER");
-    const access_token = AuthStorageService.getAccessToken();
-
-    if (access_token) {
-      config.headers.Authorization = `Bearer ${access_token}`;
-    }
+    AuthStorageService.getAccessToken().then(
+      (token) => {
+        config.headers.Authorization = `Bearer ${token}`;
+        console.log("APPEND AUTH HEADER");
+      },
+      (error) => Promise.reject(error)
+    );
 
     return config;
   },
@@ -64,6 +65,7 @@ privateInstance.interceptors.response.use(
     } catch (error) {
       console.log(error);
       AuthStorageService.removeAccessToken();
+      Promise.reject(error);
     }
 
     return Promise.reject(error);
