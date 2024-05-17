@@ -13,20 +13,12 @@ const styles = {
   marginRight: 0,
 };
 
-type Props = {
-  handleNewItem: (...args: any[]) => any;
-};
-
-const IndexToolBar = ({ handleNewItem }: Props) => {
+const IndexToolBar = ({ handleNewItem }: IndexToolbarProps) => {
   const location = window.location.pathname;
 
   return (
     <Container sx={styles}>
-      <Button
-        variant="contained"
-        startIcon={<AddCircleIcon />}
-        onClick={handleNewItem}
-      >
+      <Button variant="contained" startIcon={<AddCircleIcon />} onClick={handleNewItem}>
         New
       </Button>
       <ImportButton />

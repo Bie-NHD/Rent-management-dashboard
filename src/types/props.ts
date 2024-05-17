@@ -13,3 +13,6 @@ interface ChangePasswordProps {
   newPassword: string;
   repeatNewPassword: string;
 }
+type IndexToolbarProps = {
+  handleNewItem?: (...args: any[]) => any;
+};

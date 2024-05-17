@@ -19,15 +19,17 @@ authInstance.interceptors.request.use(
 );
 
 const _login = async (params: ApiLoginParams) =>
-  await authInstance.post<TApiResponse<TAuthTokens>>(ApiRoutes.auth.login, params).then((response) => {
-    console.log(response.data);
-    const _loginResp = response.data;
-    if (_loginResp.statusCode === 200) {
-      AuthStorageService.refreshTokens(_loginResp.data);
-      console.log(`LOGIN SUCCESS`);
-    }
-    return _loginResp;
-  });
+  await authInstance
+    .post<TApiResponse<TAuthTokens>>(ApiRoutes.auth.login, params)
+    .then((response) => {
+      console.log(response.data);
+      const _loginResp = response.data;
+      if (_loginResp.statusCode === 200) {
+        AuthStorageService.refreshTokens(_loginResp.data);
+        console.log(`LOGIN SUCCESS`);
+      }
+      return _loginResp;
+    });
 const _logout = () => {
   AuthStorageService.removeAllTokens();
 
@@ -37,30 +39,30 @@ const _logout = () => {
 };
 
 const _refreshToken = () => {
-  AuthStorageService.getRefreshToken().then(
+  const getRefreshToken = AuthStorageService.getRefreshToken();
+  const reqAuthToken = getRefreshToken.then(
     (refresh_token) =>
       authInstance
-        .post<TApiResponse<TAuthTokens>>(ApiRoutes.auth.refreshToken, {
-          refresh_token,
-        })
-        .then((response) => response.data)
-        .then((data) => {
-          //   const { access_token, refresh_token } = data.data;
-
-          //   WebStorageService.setRefreshToken(data.data.refresh_token);
-          if (data.statusCode === 200) {
-            AuthStorageService.refreshTokens(data.data);
-            console.log("REFRESH TOKEN CHANGED in Api.refreshToken");
-            return data.data;
-          }
-          // else
-          return Promise.reject(new Error("REFRESH TOKEN FAILED"));
-        }),
+        .post<TApiResponse<TAuthTokens>>(ApiRoutes.auth.refreshToken, { refresh_token })
+        .then((response) => response.data),
     (error) => {
+      // logout if  no refresh token
       _logout();
       return Promise.reject(error);
     }
   );
+  const getAuthToken = reqAuthToken.then(
+    (response) => {
+      if (response.statusCode && response.statusCode === 200) {
+        AuthStorageService.refreshTokens(response.data);
+        console.log("REFRESH TOKEN CHANGED in Api.refreshToken");
+        return Promise.resolve(<TAuthTokens>response.data);
+      } else return Promise.reject(new Error("REFRESH TOKEN FAILED"));
+    },
+    (error) => Promise.reject(error)
+  );
+
+  return getAuthToken;
 };
 
 const _forgotPassword = (data: { email: string }): Promise<ApiQueryStatus> =>

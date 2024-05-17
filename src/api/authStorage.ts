@@ -36,8 +36,8 @@ const removeAccessToken = () => {
   );
 };
 const refreshTokens = (tokens: TAuthTokens) => {
-  setAccessToken(tokens.access_token);
   setRefreshToken(tokens.refresh_token);
+  setAccessToken(tokens.access_token);
 };
 
 const AuthStorageService = Object.freeze({
