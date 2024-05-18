@@ -17,15 +17,13 @@ const privateInstance = axios.create({
 
 privateInstance.interceptors.request.use(
   // Do something before request is sent
-  (config) => {
-    const getToken = AuthStorageService.getAccessToken();
-    getToken.then(
-      (token) => {
+  async (config) => {
+    await AuthStorageService.getAccessToken()
+      .then((token) => {
         config.headers.Authorization = `Bearer ${token}`;
         console.info("New access_token appended...");
-      },
-      (error) => Promise.reject(error)
-    );
+      })
+      .catch((error) => Promise.reject(error));
 
     return config;
   },

@@ -26,7 +26,7 @@ const removeAllTokens = () => {
   localStorage.removeItem(REFRESH_TOKEN);
 };
 const removeAccessToken = () => {
-  getAccessToken()
+  return getAccessToken()
     .then(() => {
       localStorage.removeItem(ACCESS_TOKEN);
       console.log(`${ACCESS_TOKEN} removed.`);
