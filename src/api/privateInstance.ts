@@ -64,7 +64,7 @@ privateInstance.interceptors.response.use(
       }
     } catch (error) {
       console.error(`ERROR while refresh token\n${error}`);
-      AuthStorageService.removeAccessToken();
+      AuthStorageService.removeAccessToken().catch((error) => Promise.reject(error));
       return Promise.reject(error);
     }
 

@@ -1,15 +1,12 @@
-import { useEffect } from "react";
 import Layout from "../App/Layout";
 import useAuth from "../hooks/useAuth";
-import { Outlet, Navigate, useLocation } from "react-router-dom";
-import { useGetUser } from "../hooks/user";
+import { Outlet, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { UserProvider } from "../context/UserProvider";
-import toast from "react-hot-toast";
 const RequireSignedIn = () => {
   const { token, logout } = useAuth();
   const location = useLocation();
 
-  console.log(`At RequireSignedIn: access_token = ${token}`);
+  console.info(`${Date.now()}\nAt RequireSignedIn:\naccess_token =\n${token}`);
 
   // Check if the user is authenticated
   if (!token || token === "") {

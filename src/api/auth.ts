@@ -31,12 +31,14 @@ const login = async (params: ApiLoginParams) =>
       return _loginResp;
     })
     .catch((error) => Promise.reject(error));
+
 const logout = () => {
   AuthStorageService.removeAllTokens();
 
-  authInstance.get(ApiRoutes.auth.logout);
-
-  console.log("LOGGED OUT");
+  return authInstance.get(ApiRoutes.auth.logout).finally(() => {
+    console.log("LOGGED OUT");
+    return Promise.resolve();
+  });
 };
 
 const refreshToken = () => {

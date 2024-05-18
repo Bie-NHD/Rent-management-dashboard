@@ -47,7 +47,7 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
     defaultValues: user || schema.getDefault(),
   });
 
-  modal.keepMounted = true
+  modal.keepMounted = true;
 
   const onSubmit: SubmitHandler<InputsForAdmin> = async (data) => {
     if (data.role != user.role) {
@@ -56,13 +56,10 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
         content: `Confirm change from "${user.role}" to "${data.role}"? `,
       };
 
-      
-
       NiceModal.show(NM_WARNING, wn_cntn).then(null, () => {
-        modal.show()
+        modal.show();
         return;
       });
-      
     }
 
     const res = await Api.update<UserUpdateDTO>(ApiRoutes.user.update, {
@@ -85,7 +82,8 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
       PaperProps={{
         component: "form",
         onSubmit: handleSubmit(onSubmit),
-      }}>
+      }}
+    >
       <DialogTitle>Edit User</DialogTitle>
       <DialogContent>
         <RHFOutlinedTextField
@@ -106,10 +104,10 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
           name="active"
           control={control}
           render={({ field }) => (
-            <FormControlLabel  label={"Active"} control={<CheckBox {...field}  />} />
+            <FormControlLabel label={"Active"} control={<CheckBox {...field} />} />
           )}
         />
-        <br/>
+        <br />
         <Controller
           name="role"
           control={control}
@@ -121,7 +119,14 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={()=>{modal.reject();modal.remove()}}>Cancel</Button>
+        <Button
+          onClick={() => {
+            modal.reject();
+            modal.remove();
+          }}
+        >
+          Cancel
+        </Button>
         <Button type="submit"> Save </Button>
       </DialogActions>
     </Dialog>
