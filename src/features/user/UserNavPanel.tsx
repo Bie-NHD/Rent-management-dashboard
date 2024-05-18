@@ -7,6 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import NiceModal from "@ebay/nice-modal-react";
 import UserUpdateDialog from "./UserUpdateDialog";
 import { useNavigate } from "react-router-dom";
+import { NM_WARNING } from "../../constants";
 
 const UserNavPanel = () => {
   const { logout } = useAuth();
@@ -14,8 +15,14 @@ const UserNavPanel = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await logout().finally(() => {
-      navigate("/login", { replace: true });
+    const wn_ctnt: WarningDialogProps = {
+      title: "Confirm logout?",
+    };
+
+    NiceModal.show(NM_WARNING, { props: wn_ctnt }).then(async () => {
+      await logout().finally(() => {
+        navigate("/login", { replace: true });
+      });
     });
   };
 
@@ -32,16 +39,15 @@ const UserNavPanel = () => {
     });
   };
 
-  return user ? (
+  return (
     <Container
       sx={{
         display: "flex",
         flexDirection: "column",
         padding: 3,
-      }}
-    >
-      <Typography align="center">{user.fullName}</Typography>
-      <Typography align="center">{`@${user.username}`}</Typography>
+      }}>
+      <Typography align="center">{user?.fullName}</Typography>
+      <Typography align="center">{`@${user?.username}`}</Typography>
       <Typography align="center">{user?.role}</Typography>
       <Button startIcon={<EditIcon />} onClick={handleOnClickEdit}>
         Edit
@@ -50,8 +56,6 @@ const UserNavPanel = () => {
         Logout
       </Button>
     </Container>
-  ) : (
-    <></>
   );
 };
 

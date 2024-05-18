@@ -2,6 +2,8 @@
 type WarningDialogProps = {
   title: string;
   content?: string | React.ReactNode | React.ReactNode[] | undefined;
+  positiveText?: string;
+  negativeText?: string;
 };
 
 // type NMDialogResult<Type = `success` | `reject` > = {

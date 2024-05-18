@@ -72,7 +72,7 @@ const ApartmentList = () => {
 
   const handleDeleteItem = (index: number) => {
     NiceModal.show(NM_WARNING, {
-      title: "Confirm Delete Apartment",
+      props: { title: "Confirm Delete Apartment" },
     }).then((res) => {
       if (res === true) {
         const { id, ...others } = data[index];
