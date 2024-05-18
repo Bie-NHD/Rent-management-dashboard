@@ -26,8 +26,8 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
   // Login
 
   const login = async (params: ApiLoginParams) => {
-    const { message, statusCode } = await AuthApi.login(params);
-
+    const login = AuthApi.login(params)
+      .then((_) => {
     client.refetchQueries({ queryKey: [QK_ACCESS_TOKEN] });
 
     return { message, statusCode };
@@ -35,7 +35,8 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
 
   // Logout
 
-  const logout = async () => {
+  const logout = async (message?: string) => {
+    toast.error(message!);
     AuthApi.logout();
   };
 

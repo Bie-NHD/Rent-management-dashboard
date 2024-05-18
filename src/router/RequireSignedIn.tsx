@@ -14,9 +14,8 @@ const RequireSignedIn = () => {
   // Check if the user is authenticated
   if (!token || token === "") {
     // If not authenticated, redirect to the login page
-    console.log(`FORCING LOGOUT ${new Date()}`);
-    toast.error("Signed out. Please sign in again.");
-    logout();
+    console.info(`FORCING LOGOUT ${new Date()}`);
+    logout("Signed out. Please sign in again.");
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

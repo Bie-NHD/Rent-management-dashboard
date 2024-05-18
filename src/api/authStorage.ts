@@ -26,14 +26,13 @@ const removeAllTokens = () => {
   localStorage.removeItem(REFRESH_TOKEN);
 };
 const removeAccessToken = () => {
-  getAccessToken().then(
-    () => {
+  getAccessToken()
+    .then(() => {
       localStorage.removeItem(ACCESS_TOKEN);
       console.log(`${ACCESS_TOKEN} removed.`);
       return Promise.resolve();
-    },
-    (error) => Promise.reject(error)
-  );
+    })
+    .catch((error) => Promise.reject(error));
 };
 const refreshTokens = (tokens: TAuthTokens) => {
   setRefreshToken(tokens.refresh_token);

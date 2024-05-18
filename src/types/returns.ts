@@ -8,7 +8,7 @@ interface IUseAuthHookReturns {
   token: string | null;
   // setToken: (token: string) => any;
   login: (params: ApiLoginParams) => Promise<ApiQueryStatus> | ApiQueryStatus;
-  logout: () => any;
+  logout: (...args: any[]) => any;
   refresh?: () => any;
   // user: IUser | undefined;
   // isAdmin: false | boolean;

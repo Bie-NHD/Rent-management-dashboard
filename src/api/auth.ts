@@ -18,7 +18,7 @@ authInstance.interceptors.request.use(
   }
 );
 
-const _login = async (params: ApiLoginParams) =>
+const login = async (params: ApiLoginParams) =>
   await authInstance
     .post<TApiResponse<TAuthTokens>>(ApiRoutes.auth.login, params)
     .then((response) => {
@@ -29,8 +29,9 @@ const _login = async (params: ApiLoginParams) =>
         console.log(`LOGIN SUCCESS`);
       }
       return _loginResp;
-    });
-const _logout = () => {
+    })
+    .catch((error) => Promise.reject(error));
+const logout = () => {
   AuthStorageService.removeAllTokens();
 
   authInstance.get(ApiRoutes.auth.logout);
@@ -38,7 +39,7 @@ const _logout = () => {
   console.log("LOGGED OUT");
 };
 
-const _refreshToken = () => {
+const refreshToken = () => {
   const getRefreshToken = AuthStorageService.getRefreshToken();
   const reqAuthToken = getRefreshToken.then(
     (refresh_token) =>
@@ -47,7 +48,7 @@ const _refreshToken = () => {
         .then((response) => response.data),
     (error) => {
       // logout if  no refresh token
-      _logout();
+      logout();
       return Promise.reject(error);
     }
   );
@@ -65,7 +66,7 @@ const _refreshToken = () => {
   return getAuthToken;
 };
 
-const _forgotPassword = (data: { email: string }): Promise<ApiQueryStatus> =>
+const forgotPassword = (data: { email: string }): Promise<ApiQueryStatus> =>
   authInstance
     .post<ApiQueryStatus>(ApiRoutes.auth.resetPassword, null, { params: data })
     .then((res) => res.data)
@@ -74,10 +75,16 @@ const _forgotPassword = (data: { email: string }): Promise<ApiQueryStatus> =>
       statusCode: apiRes.statusCode,
     }));
 
+const getAccessToken = () =>
+  AuthStorageService.getAccessToken()
+    .then((_) => Promise.resolve(_))
+    .catch((error) => Promise.reject(error));
+
 const AuthApi = Object.freeze({
-  login: _login,
-  refreshToken: _refreshToken,
-  logout: _logout,
-  forgotPassword: _forgotPassword,
+  login,
+  refreshToken,
+  logout,
+  forgotPassword,
+  getAccessToken,
 } as const);
 export default AuthApi;

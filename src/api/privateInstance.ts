@@ -18,24 +18,25 @@ const privateInstance = axios.create({
 privateInstance.interceptors.request.use(
   // Do something before request is sent
   (config) => {
-    AuthStorageService.getAccessToken().then(
+    const getToken = AuthStorageService.getAccessToken();
+    getToken.then(
       (token) => {
         config.headers.Authorization = `Bearer ${token}`;
-        console.log("APPEND AUTH HEADER");
+        console.info("New access_token appended...");
       },
       (error) => Promise.reject(error)
     );
 
     return config;
   },
-  async (error) => Promise.reject(error)
+  (error) => Promise.reject(error)
 );
 
 // Add a response interceptor
 privateInstance.interceptors.response.use(
   // Any status code that lie within the range of 2xx cause this function to trigger
   // Do something with response data
-  (response) => response,
+  null,
   async (error) => {
     const prevReqConfig = error.config;
 
@@ -44,28 +45,29 @@ privateInstance.interceptors.response.use(
       // it means the token has expired and we need to refresh it
       if (error.response.status === 401 || error.response.status === 403) {
         // prevReqConfig._retry = true;
-        console.log("LOOK AT THIS RESPONSE ERROR");
+        console.info("Attempting to refresh tokens...");
 
-        try {
-          await AuthApi.refreshToken();
+        AuthApi.refreshToken().catch((error) => {
+          throw error;
+        });
 
-          const access_token = AuthStorageService.getAccessToken();
-
+        AuthStorageService.getAccessToken()
           // Retry the original request with the new token
-          prevReqConfig.headers.Authorization = `Bearer ${access_token}`;
-          console.log("ACCESS TOKEN CHANGED");
-
-          return privateInstance(prevReqConfig);
-        } catch (error) {
+          .then((access_token) => {
+            prevReqConfig.headers.Authorization = `Bearer ${access_token}`;
+            console.info("New access_token appended...");
+            return privateInstance(prevReqConfig);
+          })
           // Handle refresh token error or redirect to login
-          console.log("ERROR while refresh token");
-          console.log(error);
-        }
+          .catch((error) => {
+            // console.error(`ERROR while refresh token\n${error}`);
+            throw error;
+          });
       }
     } catch (error) {
-      console.log(error);
+      console.error(`ERROR while refresh token\n${error}`);
       AuthStorageService.removeAccessToken();
-      Promise.reject(error);
+      return Promise.reject(error);
     }
 
     return Promise.reject(error);
