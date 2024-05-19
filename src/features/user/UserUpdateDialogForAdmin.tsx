@@ -127,7 +127,19 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: User }) => 
           />
           <FormControlLabel
             label={"Active"}
-            control={<Controller name="active" control={control} render={({ field }) => <CheckBox {...field} />} />}
+            control={
+              <Controller
+                name="active"
+                control={control}
+                render={({ field }) => (
+                  <Checkbox
+                    {...field}
+                    checked={!!field.value}
+                    // onChange={(e) => field.onChange(e.target.checked)}
+                  />
+                )}
+              />
+            }
           />
           <Controller
             name="role"

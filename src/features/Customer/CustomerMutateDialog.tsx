@@ -14,85 +14,127 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import RHFOutlinedTextField from "../../components/RHFTextField";
-import { ObjectSchema, object, string, number } from "yup";
-import { Stack } from "@mui/material";
+import { ObjectSchema, object, string, number, date } from "yup";
+import { Box, Stack } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/vi";
 import dayjs from "dayjs";
 
-const schema: ObjectSchema<CustomerUpdateDTO> = object({
+type Inputs = Omit<CustomerUpdateDTO, "dob"> & {
+  dob: Date;
+};
+
+const schema: ObjectSchema<Inputs> = object({
   address: string().required().default(""),
   fullName: string().required().default(""),
   citizenId: string().required().default(""),
-  dob: string().datetime().required().default(""),
+  // dob: string().datetime().required().default(""),
+  dob: date().required().default(new Date()),
   phoneNumber: string().required().default(""),
 });
 
-const CustomerMutateDialog = NiceModal.create(({ data, onCreate, onUpdate }: CustomerMutateDialogProps) => {
-  // Hook provided by Nice-modal-react
-  const modal = useModal();
+const CustomerMutateDialog = NiceModal.create(
+  ({ data, onCreate, onUpdate }: CustomerMutateDialogProps) => {
+    // Hook provided by Nice-modal-react
+    const modal = useModal();
 
-  const { handleSubmit, control } = useForm({
-    defaultValues: data || schema.__default,
-    resolver: yupResolver(schema),
-  });
+    const { handleSubmit, control } = useForm<Inputs>({
+      defaultValues: data || schema.__default,
+      resolver: yupResolver<Inputs>(schema),
+    });
 
-  const onSubmitNew: SubmitHandler<CustomerUpdateDTO> = (
-    _data, //TFieldValues
-    event
-  ) => {
-    event?.preventDefault();
-    /**
-     * https://stackoverflow.com/a/67535605/20423795
-     */
-    // data ? onUpdate?.(data) : onCreate?.(data);
-    console.log("PRESSED");
+    const onSubmitNew: SubmitHandler<Inputs> = (
+      _data, //TFieldValues
+      event
+    ) => {
+      event?.preventDefault();
+      /**
+       * https://stackoverflow.com/a/67535605/20423795
+       */
+      // data ? onUpdate?.(data) : onCreate?.(data);
+      console.log("PRESSED");
 
-    console.log(data);
+      console.log(_data);
 
-    modal.remove();
-  };
+      modal.remove();
+    };
 
-  return (
-    <Dialog
-      open={modal.visible}
-      onClose={() => modal.remove}
-      PaperProps={{
-        component: "form",
-        onSubmit: handleSubmit(onSubmitNew),
-      }}>
-      <DialogTitle>New customer</DialogTitle>
-      <DialogContent>
-        <RHFOutlinedTextField control={control} name="fullName" label="Full name" margin="dense" variant="outlined" />
-        <RHFOutlinedTextField control={control} name="address" label="Address" margin="dense" variant="outlined" />
-        <RHFOutlinedTextField control={control} name="citizenId" label="Citizen Id" margin="dense" variant="outlined" />
-        {/* <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="vi">
-          <Controller
-            name="dob"
+    return (
+      <Dialog
+        open={modal.visible}
+        onClose={() => modal.remove}
+        PaperProps={{
+          component: "form",
+          onSubmit: handleSubmit(onSubmitNew),
+        }}>
+        <DialogTitle>New customer</DialogTitle>
+        <DialogContent>
+          <RHFOutlinedTextField
             control={control}
-            render={({ field }) => (
-              <DatePicker
-                label="Date of birth"
-                // name={field.name}
-                {...field}
-                value={dayjs(field.value)}
-                // inputRef={field.ref}
-                onChange={(value) => field.onChange(value?.toString())
-                }
-                disableFuture 
-              />
-            )}
+            name="fullName"
+            label="Full name"
+            margin="dense"
+            variant="outlined"
           />
-        </LocalizationProvider> */}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={modal.remove}>Cancel</Button>
-        <Button type="submit">{data ? "Save" : "Create"}</Button>
-      </DialogActions>
-    </Dialog>
-  );
-});
+          <RHFOutlinedTextField
+            control={control}
+            name="address"
+            label="Address"
+            margin="dense"
+            variant="outlined"
+          />
+          <RHFOutlinedTextField
+            control={control}
+            name="citizenId"
+            label="Citizen Id"
+            margin="dense"
+            variant="outlined"
+          />
+          <RHFOutlinedTextField
+            control={control}
+            name="phoneNumber"
+            label="Phone number"
+            margin="dense"
+            variant="outlined"
+          />
+          <Box>
+            <Controller
+              name="dob"
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="vi">
+                  <DatePicker
+                    {...field}
+                    label="Date of birth"
+                    format="DD-MM-YYYY"
+                    // name={field.name}
+                    value={dayjs(field.value)}
+                    inputRef={field.ref}
+                    onChange={(value) => field.onChange(value?.toDate())}
+                    disableFuture
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        variant: "outlined",
+                        error: !!error,
+                        helperText: error?.message,
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
+              )}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={modal.remove}>Cancel</Button>
+          <Button type="submit">{data ? "Save" : "Create"}</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+);
 
 export default CustomerMutateDialog;
