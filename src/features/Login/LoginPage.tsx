@@ -3,17 +3,7 @@
 // https://react-hook-form.com/get-started
 //
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Divider,
-  LinearProgress,
-  Link,
-  Stack,
-  SxProps,
-  TextField,
-} from "@mui/material";
+import { Box, Button, CircularProgress, Divider, LinearProgress, Link, Stack, SxProps, TextField } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string, ObjectSchema } from "yup";
 import useAuth from "../../hooks/useAuth";
@@ -107,6 +97,7 @@ const LoginPage = () => {
               error={!!fieldState.error}
               helperText={!!fieldState.error && fieldState.error.message}
               fullWidth
+              onChange={(e) => field.onChange(e.target.value)}
             />
           )}
         />
@@ -115,9 +106,7 @@ const LoginPage = () => {
           <Button type="submit" variant="contained">
             Login
           </Button>
-          {isLoading ? (
-            <LinearProgress variant="indeterminate" sx={{ color: "primary.light" }} />
-          ) : null}
+          {isLoading ? <LinearProgress variant="indeterminate" sx={{ color: "primary.light" }} /> : null}
         </>
         {/* <Divider />
         or
