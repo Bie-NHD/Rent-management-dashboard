@@ -15,31 +15,26 @@ import MRTTableRowActions from "../../components/MRTRowAction";
 import ErrorPlaceHolder from "../../components/placeholder/ErrorPlaceHolder";
 import TableLoading from "../../components/placeholder/TableLoading";
 import NiceModal from "@ebay/nice-modal-react";
-import UserUpdateDialog from "./UserUpdateDialog";
-import useUser from "../../hooks/useUser";
-import UserUpdateDialogForAdmin from "./UserUpdateDialogForAdmin";
 
-const columnDefs: MRT_ColumnDef<User>[] = [
+import useUser from "../../hooks/useUser";
+import { useGetCustomers } from "../../hooks";
+
+const columnDefs: MRT_ColumnDef<Customer>[] = [
   {
-    accessorKey: "role",
+    accessorKey: "fullname",
     header: "Role",
   },
   {
-    accessorKey: "username",
-    header: "Username",
+    accessorKey: "citizenId",
+    header: "Citizen Id",
   },
   {
-    accessorKey: "email",
-    header: "Email",
-  },
-
-  {
-    accessorKey: "createDate",
-    header: "Date Created",
+    accessorKey: "phoneNumber",
+    header: "Phone Number",
   },
 ];
 
-const UserList = () => {
+const CustomerList = () => {
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -58,42 +53,22 @@ const UserList = () => {
     isRefetching,
     error,
     refetch,
-    data: { data: users = [], meta } = {},
-  } = useGetUsers({
+    data: { data: customers = [], meta } = {},
+  } = useGetCustomers({
     variables: {
       page: pagination.pageIndex, //refetch when pagination.pageIndex changes
       pageSize: pagination.pageSize, //refetch when pagination.pageSize changes
       sortBy: sorting?.map((value) => value.id).toString(), //refetch when sorting changes
     },
-    // select(data) {
-    //   return {
-    //     ...data,
-    //     users: data.users.map(
-    //       (item): UserVM => ({
-    //         id: item.id,
-    //         email: item.email,
-    //         createDate: item.createDate,
-    //         role: item.role,
-    //         username: item.username,
-    //         active: item.active,
-    //       })
-    //     ),
-    //   };
-    // },
   });
 
   // when resolved, refetch current account & data
-  const handleEditItem = (user: User) => {
-    NiceModal.show(isAdmin ? UserUpdateDialogForAdmin : UserUpdateDialog, { user }).then(() => {
-      refetch();
-      _user?.id == user.id ? refechUser() : null;
-    });
-  };
+  const handleEditItem = (user: Customer) => {};
   // Define table -----------------------------------------
 
   const table = useMaterialReactTable({
     columns: columnDefs,
-    data: users,
+    data: customers,
     rowCount: meta?.totalRowCount ?? 0,
     manualPagination: true, //turn off built-in client-side pagination
     manualSorting: true, //turn off built-in client-side sorting
@@ -107,7 +82,7 @@ const UserList = () => {
       sorting,
     },
     enableRowActions: true,
-    renderRowActions: ({ row }) => <MRTTableRowActions onEditItem={() => handleEditItem(users[row.index])} />,
+    renderRowActions: ({ row }) => <MRTTableRowActions onEditItem={() => handleEditItem(customers[row.index])} />,
     renderTopToolbarCustomActions: () => <MRTRefreshButton onClick={() => refetch()} />,
     renderToolbarInternalActions: ({ table }) => (
       <>
@@ -134,4 +109,4 @@ const UserList = () => {
   return <MaterialReactTable table={table} />;
 };
 
-export default UserList;
+export default CustomerList;

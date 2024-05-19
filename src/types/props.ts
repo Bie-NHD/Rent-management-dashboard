@@ -18,3 +18,8 @@ interface ChangePasswordProps {
 type IndexToolbarProps = {
   handleNewItem?: (...args: any[]) => any;
 };
+type CustomerMutateDialogProps = {
+  data?: Customer;
+  onCreate?: (...args: any[]) => void | null | any;
+  onUpdate?: (...args: any[]) => void | null | any;
+};

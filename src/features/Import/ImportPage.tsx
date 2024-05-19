@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  FormControl,
-  Box,
-  Stack,
-  LinearProgress,
-  List,
-  ListItem,
-  Typography,
-  Paper,
-} from "@mui/material";
+import { Button, FormControl, Box, Stack, LinearProgress, List, ListItem, Typography, Paper } from "@mui/material";
 import Container from "@mui/material/Container";
 // icons
 import { CloudUploadOutlined } from "@mui/icons-material";
@@ -62,7 +52,7 @@ type FileState = {
 //   action: A
 // ): FileState[] => {};
 
-function getImportMessages(response: TApiResponse<ImportResponse>) {
+function getImportMessages(response: ApiResponse<ImportResponse>) {
   switch (response.statusCode) {
     case 200: {
       console.log(response.data);
@@ -139,8 +129,7 @@ const ImportPage = () => {
         display: "flex",
         flexDirection: "column",
         paddingTop: "2rem",
-      }}
-    >
+      }}>
       <FormControl>
         <Stack spacing={1}>
           <Button
@@ -149,15 +138,9 @@ const ImportPage = () => {
             variant="outlined"
             tabIndex={-1}
             startIcon={<CloudUploadOutlined />}
-            sx={styles.button}
-          >
+            sx={styles.button}>
             Upload file
-            <VisuallyHiddenInput
-              type="file"
-              accept=".csv"
-              multiple
-              onChange={(e) => updateFiles(e.target.files)}
-            />
+            <VisuallyHiddenInput type="file" accept=".csv" multiple onChange={(e) => updateFiles(e.target.files)} />
           </Button>
           <Button
             variant="contained"
@@ -185,8 +168,7 @@ const ImportPage = () => {
                 <ListItem
                   key={item.file.name}
                   // components={Container}
-                  sx={styles.fileItem}
-                >
+                  sx={styles.fileItem}>
                   <Typography>{item.file.name}</Typography>
                   <Box>
                     <span>{item.message}</span>

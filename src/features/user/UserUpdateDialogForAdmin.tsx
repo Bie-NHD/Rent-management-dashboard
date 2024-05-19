@@ -9,6 +9,7 @@ import {
   MenuItem,
   Select,
   FormControlLabel,
+  Stack,
 } from "@mui/material";
 import React from "react";
 import RHFOutlinedTextField from "../../components/RHFTextField";
@@ -34,13 +35,32 @@ const schema: ObjectSchema<InputsForAdmin> = object({
   role: string().label("Role").required().default(UserRoles.STAFF),
 });
 
-const selectOptions = [...Object.values(UserRoles)].map((item) => (
+const activeValues = Object.freeze({
+  Enabled: true,
+  Disabled: false,
+} as const);
+
+const roleOptions = [...Object.values(UserRoles)].map((item) => (
   <MenuItem key={item} value={item}>
     {item}
   </MenuItem>
 ));
 
-const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) => {
+const _updateData = async (userVM: User, data: UserUpdateDTO) => {
+  const res = await Api.update<UserUpdateDTO>(ApiRoutes.user.update, {
+    id: userVM.id,
+    data: data,
+  }).catch((error) => error);
+
+  if (res.statusCode === 200) {
+    toast.success(res.message);
+    return Promise.resolve();
+  }
+
+  toast.error(res.message);
+};
+
+const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: User }) => {
   const modal = useModal();
   const { handleSubmit, control } = useForm<InputsForAdmin>({
     resolver: yupResolver(schema),
@@ -56,23 +76,25 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
         content: `Confirm change from "${user.role}" to "${data.role}"? `,
       };
 
-      NiceModal.show(NM_WARNING, wn_cntn).then(null, () => {
-        modal.show();
-        return;
+      NiceModal.show(NM_WARNING, { props: wn_cntn }).then(() => {
+        // _handleSubmit();
+        _updateData(user, data).then(() => modal.remove());
       });
     }
 
-    const res = await Api.update<UserUpdateDTO>(ApiRoutes.user.update, {
-      id: user.id,
-      data: data,
-    });
+    // async function _handleSubmit() {
+    //   const res = await Api.update<UserUpdateDTO>(ApiRoutes.user.update, {
+    //     id: user.id,
+    //     data: data,
+    //   });
 
-    if (res.statusCode === 200) {
-      toast.success(res.message);
-      modal.remove();
-    }
+    //   if (res.statusCode === 200) {
+    //     toast.success(res.message);
+    //     modal.remove();
+    //   }
 
-    toast.error(res.message);
+    //   toast.error(res.message);
+    // }
   };
 
   return (
@@ -82,49 +104,33 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: UserVM }) =
       PaperProps={{
         component: "form",
         onSubmit: handleSubmit(onSubmit),
-      }}
-    >
+      }}>
       <DialogTitle>Edit User</DialogTitle>
       <DialogContent>
-        <RHFOutlinedTextField
-          variant="outlined"
-          name="fullName"
-          label="Full name"
-          control={control}
-          margin="dense"
-        />
-        <RHFOutlinedTextField
-          variant="outlined"
-          name="email"
-          label="Email"
-          control={control}
-          margin="dense"
-        />
-        <Controller
-          name="active"
-          control={control}
-          render={({ field }) => (
-            <FormControlLabel label={"Active"} control={<CheckBox {...field} />} />
-          )}
-        />
-        <br />
-        <Controller
-          name="role"
-          control={control}
-          render={({ field }) => (
-            <Select {...field} defaultValue={control._defaultValues[field.name]} label="Role">
-              {selectOptions}
-            </Select>
-          )}
-        />
+        <Stack>
+          <RHFOutlinedTextField variant="outlined" name="fullName" label="Full name" control={control} margin="dense" />
+          <RHFOutlinedTextField variant="outlined" name="email" label="Email" control={control} margin="dense" />
+          <FormControlLabel
+            label={"Active"}
+            control={<Controller name="active" control={control} render={({ field }) => <CheckBox {...field} />} />}
+          />
+          <Controller
+            name="role"
+            control={control}
+            render={({ field }) => (
+              <Select {...field} label="Role">
+                {roleOptions}
+              </Select>
+            )}
+          />
+        </Stack>
       </DialogContent>
       <DialogActions>
         <Button
           onClick={() => {
             modal.reject();
             modal.remove();
-          }}
-        >
+          }}>
           Cancel
         </Button>
         <Button type="submit"> Save </Button>

@@ -1,12 +1,5 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
 import RHFOutlinedTextField from "../../components/RHFTextField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ObjectSchema, object, string } from "yup";
@@ -22,7 +15,7 @@ const schema: ObjectSchema<Inputs> = object({
   fullName: string().label("Username").required().default(""),
 });
 
-const UserUpdateDialog = NiceModal.create(({ user }: { user: UserVM }) => {
+const UserUpdateDialog = NiceModal.create(({ user }: { user: User }) => {
   const modal = useModal();
   const { handleSubmit, control } = useForm<Inputs>({
     resolver: yupResolver(schema),
@@ -57,20 +50,8 @@ const UserUpdateDialog = NiceModal.create(({ user }: { user: UserVM }) => {
       }}>
       <DialogTitle>Edit User</DialogTitle>
       <DialogContent>
-        <RHFOutlinedTextField
-          variant="outlined"
-          name="fullName"
-          label="Full name"
-          control={control}
-          margin="dense"
-        />
-        <RHFOutlinedTextField
-          variant="outlined"
-          name="email"
-          label="Email"
-          control={control}
-          margin="dense"
-        />
+        <RHFOutlinedTextField variant="outlined" name="fullName" label="Full name" control={control} margin="dense" />
+        <RHFOutlinedTextField variant="outlined" name="email" label="Email" control={control} margin="dense" />
         <TextField disabled label="Create Date" value={user.createDate} margin="dense" fullWidth />
       </DialogContent>
       <DialogActions>

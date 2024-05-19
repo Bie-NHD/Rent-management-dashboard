@@ -8,10 +8,11 @@ import NiceModal from "@ebay/nice-modal-react";
 import UserUpdateDialog from "./UserUpdateDialog";
 import { useNavigate } from "react-router-dom";
 import { NM_WARNING } from "../../constants";
+import UserUpdateDialogForAdmin from "./UserUpdateDialogForAdmin";
 
 const UserNavPanel = () => {
   const { logout } = useAuth();
-  const { user } = useUser();
+  const { user, isAdmin } = useUser();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -27,15 +28,8 @@ const UserNavPanel = () => {
   };
 
   const handleOnClickEdit = () => {
-    NiceModal.show(UserUpdateDialog, {
-      user: {
-        username: user?.username!,
-        email: user?.email!,
-        role: user?.role!,
-        active: user?.active!,
-        id: user?.id!,
-        createDate: user?.createDate!,
-      },
+    NiceModal.show(isAdmin ? UserUpdateDialogForAdmin : UserUpdateDialog, {
+      user: user,
     });
   };
 
