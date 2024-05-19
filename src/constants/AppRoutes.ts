@@ -2,16 +2,19 @@
  * define actions for each object
  */
 
-const IMPORT = "/import";
-const ADD = "/add";
-const SEARCH = "/search";
-const DELETE = "/delete";
-const UPDATE = "/update";
-const EXPORT = "/export";
-const APARTMENT = "/apartments";
-const CONTRACT = "/contracts";
-const CUSTOMER = "/customers";
-const USER = "/user";
+const IMPORT = "/import" as const;
+const ADD = "/add" as const;
+const SEARCH = "/search" as const;
+const DELETE = "/delete" as const;
+const UPDATE = "/update" as const;
+const EXPORT = "/export" as const;
+const APARTMENT = "/apartments" as const;
+const CONTRACT = "/contracts" as const;
+const CUSTOMER = "/customers" as const;
+const USER = "/user" as const;
+/**
+ * App routes in client
+ */
 export const AppRoutes = Object.freeze({
   Import: "/import",
   Add: "/add",
@@ -32,23 +35,21 @@ export const AppRoutes = Object.freeze({
  * provide URL for each api action
  */
 
-export const ApartmentURLs = Object.freeze({
-  GetAll: AppRoutes.Apartment,
-  Add: AppRoutes.Apartment + AppRoutes.Add,
-  Update: AppRoutes.Apartment + AppRoutes.Update,
-  Delete: AppRoutes.Apartment + AppRoutes.Delete,
-  Import: AppRoutes.Apartment + AppRoutes.Import,
-  Export: AppRoutes.Apartment + AppRoutes.Export,
-} as const);
+const RoutesFactory = (url: string) =>
+  Object.freeze({
+    GetAll: url,
+    Add: url + AppRoutes.Add,
+    Update: url + AppRoutes.Update,
+    Delete: url + AppRoutes.Delete,
+    Import: url + AppRoutes.Import,
+    Export: url + AppRoutes.Export,
+  } as const);
 
-export const ContractURLs = Object.freeze({
-  GetAll: AppRoutes.Contract,
-  Add: AppRoutes.Contract + AppRoutes.Add,
-  Update: AppRoutes.Contract + AppRoutes.Update,
-  Delete: AppRoutes.Contract + AppRoutes.Delete,
-  Import: AppRoutes.Contract + AppRoutes.Import,
-  Export: AppRoutes.Contract + AppRoutes.Export,
-} as const);
+export const ApartmentURLs = RoutesFactory(APARTMENT);
+
+export const ContractURLs = RoutesFactory(CONTRACT);
+
+export const CustomerRoutes = RoutesFactory(CUSTOMER);
 
 const AuthRoutes = Object.freeze({
   login: "/auth/login",
@@ -61,7 +62,7 @@ export const UserRoutes = Object.freeze({
   details: "/users/details",
   index: "/users",
   update: "/users/update",
-  changePassword:"/users/changePassword",
+  changePassword: "/users/changePassword",
 } as const);
 
 /**
@@ -73,4 +74,5 @@ export const ApiRoutes = Object.freeze({
   contract: ContractURLs,
   auth: AuthRoutes,
   user: UserRoutes,
+  customer: CustomerRoutes,
 } as const);

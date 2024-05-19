@@ -3,7 +3,7 @@ import privateInstance from "./privateInstance";
 
 const getUserDetails = () =>
   privateInstance
-    .get<TApiResponse<IUser>>(UserRoutes.details)
+    .get<ApiResponse<User>>(UserRoutes.details)
     .then((res) => res.data)
     .catch((error) => Promise.reject(error))
     .then((_) => _.data);

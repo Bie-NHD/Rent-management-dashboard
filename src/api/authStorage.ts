@@ -34,7 +34,7 @@ const removeAccessToken = () => {
     })
     .catch((error) => Promise.reject(error));
 };
-const refreshTokens = (tokens: TAuthTokens) => {
+const refreshTokens = (tokens: AuthTokens) => {
   setRefreshToken(tokens.refresh_token);
   setAccessToken(tokens.access_token);
 };

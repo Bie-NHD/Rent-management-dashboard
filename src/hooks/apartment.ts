@@ -35,7 +35,7 @@ export const useUpdateApartment = createMutation({
 export const useGetApartments = createQuery<UseGetApartmentsHookReturns, ApiFetchParams>({
   queryKey: [QK_APARTMENTS],
   fetcher: (variables: ApiFetchParams) =>
-    Api.fetch<TApartmentApiResponse>(ApartmentURLs.GetAll, variables).then((value) => ({
+    Api.fetch<ApartmentApiResponse>(ApartmentURLs.GetAll, variables).then((value) => ({
       data: value.apartments,
       meta: {
         totalRowCount: value.page.totalElements,

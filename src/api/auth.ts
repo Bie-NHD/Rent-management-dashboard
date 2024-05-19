@@ -20,7 +20,7 @@ authInstance.interceptors.request.use(
 
 const login = async (params: ApiLoginParams) =>
   await authInstance
-    .post<TApiResponse<TAuthTokens>>(ApiRoutes.auth.login, params)
+    .post<ApiResponse<AuthTokens>>(ApiRoutes.auth.login, params)
     .then((response) => {
       console.log(response.data);
       const _loginResp = response.data;
@@ -46,7 +46,7 @@ const refreshToken = () => {
   const reqAuthToken = getRefreshToken.then(
     (refresh_token) =>
       authInstance
-        .post<TApiResponse<TAuthTokens>>(ApiRoutes.auth.refreshToken, { refresh_token })
+        .post<ApiResponse<AuthTokens>>(ApiRoutes.auth.refreshToken, { refresh_token })
         .then((response) => response.data),
     (error) => {
       // logout if  no refresh token
@@ -59,7 +59,7 @@ const refreshToken = () => {
       if (response.statusCode && response.statusCode === 200) {
         AuthStorageService.refreshTokens(response.data);
         console.log("REFRESH TOKEN CHANGED in Api.refreshToken");
-        return Promise.resolve(<TAuthTokens>response.data);
+        return Promise.resolve(<AuthTokens>response.data);
       } else return Promise.reject(new Error("REFRESH TOKEN FAILED"));
     },
     (error) => Promise.reject(error)

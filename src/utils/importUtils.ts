@@ -1,8 +1,6 @@
 import { StatusCode } from "../constants";
 
-export function checkChangesFromImportResponse(
-  response: TApiResponse<ImportResponse>
-) {
+export function checkChangesFromImportResponse(response: ApiResponse<ImportResponse>) {
   const isSuccess = StatusCode.OK.includes(response.statusCode);
   let isChanged = false;
 

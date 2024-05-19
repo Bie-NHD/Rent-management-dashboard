@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
     data: _token,
     isError,
     error,
+    isLoading,
     refetch,
   } = useQuery<string | null>({
     queryFn,
@@ -88,6 +89,7 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
       login,
       logout,
       refresh,
+      isLoading,
     }),
     [_token]
   );

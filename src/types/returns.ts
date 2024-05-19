@@ -1,8 +1,8 @@
 interface IUseUserContextHookReturns {
-  user: IUser | undefined;
+  user: User | undefined;
   // setUser: React.Dispatch<React.SetStateAction<IUser | undefined>> | undefined;
   isAdmin: false | boolean;
-  refetch?: () => Promise<any> | any;
+  refetch: () => Promise<any> | any;
   isLoading: boolean;
 }
 interface IUseAuthHookReturns {
@@ -11,16 +11,16 @@ interface IUseAuthHookReturns {
   login: (params: ApiLoginParams) => Promise<ApiQueryStatus> | ApiQueryStatus;
   logout: (...args: any[]) => Promise<any> | any;
   refresh?: () => any;
+  isLoading: boolean;
   // user: IUser | undefined;
   // isAdmin: false | boolean;
   // setUser: React.Dispatch<React.SetStateAction<IUser | undefined>> | undefined;
 }
-type UseGetUserHookReturns = {
-  users: IUser[];
-  meta: { totalRowCount: number };
-};
 
-type UseGetApartmentsHookReturns = {
-  data: Apartment[];
+type UseGetHookReturns<TData> = {
+  data: TData[];
   meta: { totalRowCount: number };
 };
+type UseGetUserHookReturns = UseGetHookReturns<User>;
+type UseGetApartmentsHookReturns = UseGetHookReturns<Apartment>;
+type UseGetCutomerssHookReturns = UseGetHookReturns<Customer>;

@@ -18,25 +18,19 @@ const ImportConfig = {
 // --------------------------------------------------
 
 const FetchApi = async <TData>(url: string, params: ApiFetchParams) =>
-  privateInstance
-    .get<TApiResponse<TData>>(url, { params: params })
-    .then((response) => response.data.data); // AxiosResponse = {data: <T = TApiResponse>, ...others}
+  privateInstance.get<ApiResponse<TData>>(url, { params: params }).then((response) => response.data.data); // AxiosResponse = {data: <T = TApiResponse>, ...others}
 
 const CreateApi = async (url: string, data: TApiUpdateDTO) =>
-  privateInstance.post<TApiResponse>(url, data).then((response) => response.data);
+  privateInstance.post<ApiResponse>(url, data).then((response) => response.data);
 
 const UpdateApi = async <TData = TApiUpdateDTO>(url: string, params: ApiUpdateParams<TData>) =>
-  privateInstance
-    .post<TApiResponse>(url + "/" + params.id, params.data)
-    .then((response) => response.data);
+  privateInstance.post<ApiResponse>(url + "/" + params.id, params.data).then((response) => response.data);
 
 const DeleteApi = async (url: string, params: ApiUpdateParams) =>
-  privateInstance.delete<TApiResponse>(url + "/" + params.id).then((response) => response.data);
+  privateInstance.delete<ApiResponse>(url + "/" + params.id).then((response) => response.data);
 
 const ImportApi = async (url: string, formData: FormData) =>
-  privateInstance
-    .post<TApiResponse<ImportResponse>>(url, formData, ImportConfig)
-    .then((response) => response.data);
+  privateInstance.post<ApiResponse<ImportResponse>>(url, formData, ImportConfig).then((response) => response.data);
 /**
  * Cannot access resp's custom headers
  * https://stackoverflow.com/questions/37897523/axios-get-access-to-response-header-fields

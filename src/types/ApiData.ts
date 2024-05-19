@@ -11,23 +11,32 @@ type TPagination = {
   empty: boolean;
 };
 
-interface IUser {
+type User = {
   id: string;
   email: string;
   username: string;
-  fullName: string ;
+  fullName: string;
   createDate: string;
   active: boolean;
   role: string;
-}
+};
+
+// type Customer = {
+//   id: string;
+//   status: ECustomerStatus;
+//   firstName: string;
+//   lastName: string;
+//   address: string;
+//   age: number;
+// };
 
 type Customer = {
   id: string;
-  status: ECustomerStatus;
-  firstName: string;
-  lastName: string;
   address: string;
-  age: number;
+  fullName: string;
+  citizenId: string;
+  dob: string;
+  phoneNumber: string;
 };
 
 type ArrayDate = [number, number, number];
@@ -58,7 +67,7 @@ type ContractVM = {
   apartmentAddress: string;
 };
 
-type UserVM = Pick<IUser, "id" | "email" | "createDate" | "role" | "username" | "active">;
+type UserVM = Pick<User, "id" | "email" | "createDate" | "role" | "username" | "active">;
 
 type ApiExportParams = {
   getTemplate: false;
@@ -71,10 +80,15 @@ type ContractDTO = {
   endDate: string;
   startDate: string;
 };
-type UserUpdateDTO = Pick<IUser, "email" | "role" | "active" | "fullName">;
+
+type UserUpdateDTO = Pick<User, "email" | "role" | "active" | "fullName">;
 type ApartmentUpdateDTO = Omit<Apartment, "id">;
-type CustomerUpdateDTO = Omit<Customer, "id" | "status">;
-type TApiUpdateDTO = ApartmentUpdateDTO | ContractDTO | CustomerUpdateDTO | UserUpdateDTO;
+type CustomerUpdateDTO = Omit<Customer, "id">;
+type ChangePasswordDTO = {
+  currentPassword: string;
+  newPassword: string;
+};
+type TApiUpdateDTO = ApartmentUpdateDTO | ContractDTO | CustomerUpdateDTO | UserUpdateDTO | ChangePasswordDTO;
 
 // For UPDATE, DELTE
 type ApiUpdateParams<TData = TApiUpdateDTO> = {
@@ -98,24 +112,24 @@ type ApiLoginParams = {
   password: string;
 };
 
-type TApartmentApiResponse = {
+type ApartmentApiResponse = {
   apartments: Apartment[];
   page: TPagination;
 };
 
-type TContractApiResponse = {
+type ContractApiResponse = {
   page: TPagination;
   contracts: Contract[];
 };
 
-type TCustomerApiResponse = {
+type CustomerApiResponse = {
   page: TPagination;
   customers: Customer[];
 };
 
-type TUserApiResponse = {
+type UserApiResponse = {
   page: TPagination;
-  users: IUser[];
+  users: User[];
 };
 
 type ImportResponseData = {
@@ -126,7 +140,7 @@ type ImportResponseData = {
 
 type ImportResponse = ImportResponseData[];
 
-type TAuthTokens = {
+type AuthTokens = {
   access_token: string;
   refresh_token: string;
 };
@@ -136,14 +150,14 @@ type ApiQueryStatus = {
   statusCode: number;
 };
 
-type TApiResponseData =
-  | TApartmentApiResponse
-  | TContractApiResponse
-  | TCustomerApiResponse
+type ApiResponseData =
+  | ApartmentApiResponse
+  | ContractApiResponse
+  | CustomerApiResponse
   | ImportResponse
-  | TAuthTokens
-  | TUserApiResponse;
+  | AuthTokens
+  | UserApiResponse;
 
-type TApiResponse<TData = TApiResponseData> = ApiQueryStatus & {
+type ApiResponse<TData = ApiResponseData> = ApiQueryStatus & {
   data: TData;
 };

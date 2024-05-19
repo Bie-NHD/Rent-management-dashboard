@@ -8,8 +8,8 @@ import AuthStorageService from "../api/authStorage";
 export const useGetUsers = createQuery<UseGetUserHookReturns, ApiFetchParams>({
   queryKey: [QK_USERS],
   fetcher: (variables: ApiFetchParams): Promise<UseGetUserHookReturns> =>
-    Api.fetch<TUserApiResponse>(ApiRoutes.user.index, variables).then((value) => ({
-      users: value.users,
+    Api.fetch<UserApiResponse>(ApiRoutes.user.index, variables).then((value) => ({
+      data: value.users,
       meta: {
         totalRowCount: value.page.totalElements,
       },
