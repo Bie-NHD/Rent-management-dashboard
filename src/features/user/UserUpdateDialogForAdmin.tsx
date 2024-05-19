@@ -10,6 +10,7 @@ import {
   Select,
   FormControlLabel,
   Stack,
+  Checkbox,
 } from "@mui/material";
 import React from "react";
 import RHFOutlinedTextField from "../../components/RHFTextField";
@@ -70,6 +71,8 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: User }) => 
   modal.keepMounted = true;
 
   const onSubmit: SubmitHandler<InputsForAdmin> = async (data) => {
+    console.log(data);
+
     if (data.role != user.role) {
       const wn_cntn: WarningDialogProps = {
         title: `Confirm change "role"`,
@@ -108,8 +111,20 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: User }) => 
       <DialogTitle>Edit User</DialogTitle>
       <DialogContent>
         <Stack>
-          <RHFOutlinedTextField variant="outlined" name="fullName" label="Full name" control={control} margin="dense" />
-          <RHFOutlinedTextField variant="outlined" name="email" label="Email" control={control} margin="dense" />
+          <RHFOutlinedTextField
+            variant="outlined"
+            name="fullName"
+            label="Full name"
+            control={control}
+            margin="dense"
+          />
+          <RHFOutlinedTextField
+            variant="outlined"
+            name="email"
+            label="Email"
+            control={control}
+            margin="dense"
+          />
           <FormControlLabel
             label={"Active"}
             control={<Controller name="active" control={control} render={({ field }) => <CheckBox {...field} />} />}
