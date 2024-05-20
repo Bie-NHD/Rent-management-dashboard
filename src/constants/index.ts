@@ -22,3 +22,9 @@ export const UserRoles = Object.freeze({
   STAFF: "STAFF",
   MANAGER: "MANAGER",
 } as const);
+
+export const REGEX_VALID_CITIZENID = new RegExp(/^[0-9]{12}$/g);
+export const REGEX_VALID_PHONE_NUMBER = new RegExp(
+  /0(3[2-9]|5[689]|7[06-9]|8[1-68-9]|9[0-46-9])[0-9]{7}/g
+);
+export const REGEX_VALID_USERNAME = new RegExp(/[A-Za-z][A-Za-z0-9_]{4,24}/);

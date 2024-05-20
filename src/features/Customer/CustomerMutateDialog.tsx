@@ -21,6 +21,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/vi";
 import dayjs from "dayjs";
+import { REGEX_VALID_CITIZENID, REGEX_VALID_PHONE_NUMBER } from "../../constants";
 
 type Inputs = Omit<CustomerUpdateDTO, "dob"> & {
   dob: Date;
@@ -34,14 +35,19 @@ const schema: ObjectSchema<Inputs> = object({
   address: string().required().default(""),
   fullName: string().required().default(""),
   citizenId: string()
-    .matches(new RegExp(`^[0-9]*$`), ({ label }) => `${label} must only contains number`)
+    .matches(REGEX_VALID_CITIZENID, ({ label }) => `${label} must only contains number`)
     .length(12)
     .required()
     .default("")
     .label("Citizen Id"),
   // dob: string().datetime().required().default(""),
   dob: date().required().default(new Date()),
-  phoneNumber: string().required().default(""),
+  phoneNumber: string()
+    .required()
+    .default("")
+    .label("Phone number")
+    .length(7)
+    .matches(REGEX_VALID_PHONE_NUMBER),
 });
 
 const CustomerMutateDialog = NiceModal.create(
@@ -60,12 +66,7 @@ const CustomerMutateDialog = NiceModal.create(
     ) => {
       event?.preventDefault();
 
-      console.log("PRESSED");
-
-      console.log(_data);
-
       const { dob, ...others } = _data;
-
       const customerDto: CustomerUpdateDTO = {
         ...others,
         dob: dayjs(dob).format(`YYYY-MM-DD`).toString(),
@@ -73,11 +74,12 @@ const CustomerMutateDialog = NiceModal.create(
 
       console.log(customerDto);
 
-      /**
-       * https://stackoverflow.com/a/67535605/20423795
-       */
-
-      new Promise(data ? onUpdate?.(customerDto) : onCreate?.(customerDto)).finally(() => {
+      new Promise(
+        /**
+         * https://stackoverflow.com/a/67535605/20423795
+         */
+        data ? onUpdate?.(customerDto) : onCreate?.(customerDto)
+      ).finally(() => {
         modal.remove();
       });
     };

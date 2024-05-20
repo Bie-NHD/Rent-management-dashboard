@@ -12,6 +12,7 @@ const CustomerIndex = () => {
       if (data.statusCode == 200) {
         toast.success(data.message);
       } else {
+        console.log(data.statusCode, data.message);
         toast.error(data.message);
       }
     },
