@@ -12,6 +12,7 @@ const APARTMENT = "/apartments" as const;
 const CONTRACT = "/contracts" as const;
 const CUSTOMER = "/customers" as const;
 const USER = "/user" as const;
+const STATISTICS = "/statistic" as const;
 /**
  * App routes in client
  */
@@ -44,6 +45,7 @@ const RoutesFactory = (url: string) =>
     Import: url + AppRoutes.Import,
     Export: url + AppRoutes.Export,
     Search: url + SEARCH,
+    Statistics: url + STATISTICS,
   } as const);
 
 export const ApartmentURLs = RoutesFactory(APARTMENT);

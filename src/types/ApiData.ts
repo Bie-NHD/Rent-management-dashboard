@@ -147,6 +147,15 @@ type ImportResponseData = {
 
 type ImportResponse = ImportResponseData[];
 
+// TODO: check data type
+
+type TokenData = {
+  role: string;
+  iss: string; //issuer
+  iat: 1716227715; //issuedAt
+  exp: 1716228015;
+};
+
 type AuthTokens = {
   access_token: string;
   refresh_token: string;
