@@ -13,7 +13,7 @@ import Button from "@mui/material/Button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import RHFOutlinedTextField from "../../components/RHFTextField";
+import RHFOutlinedTextField from "../../components/inputs/RHFTextField";
 import { ObjectSchema, object, string, number } from "yup";
 
 type ApartmentInputs = Omit<Apartment, "id">;
@@ -56,8 +56,7 @@ const ApartmentDialog = NiceModal.create(({ apartment }: { apartment: Apartment 
       PaperProps={{
         component: "form",
         onSubmit: handleSubmit(onSubmitNew),
-      }}
-    >
+      }}>
       <DialogTitle>New Apartment</DialogTitle>
       <DialogContent>
         <RHFOutlinedTextField

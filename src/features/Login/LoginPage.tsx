@@ -3,7 +3,17 @@
 // https://react-hook-form.com/get-started
 //
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { Box, Button, CircularProgress, Divider, LinearProgress, Link, Stack, SxProps, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  LinearProgress,
+  Link,
+  Stack,
+  SxProps,
+  TextField,
+} from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string, ObjectSchema } from "yup";
 import useAuth from "../../hooks/useAuth";
@@ -11,7 +21,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { AppRoutes } from "../../constants";
 import LoginLayout from "../../components/LoginLayout";
-import ToggleablePasswordTextField from "../../components/ToggleablePasswordTextField";
+import ToggleablePasswordTextField from "../../components/inputs/ToggleablePasswordTextField";
 import toast from "react-hot-toast";
 
 const styles = {
@@ -106,7 +116,9 @@ const LoginPage = () => {
           <Button type="submit" variant="contained">
             Login
           </Button>
-          {isLoading ? <LinearProgress variant="indeterminate" sx={{ color: "primary.light" }} /> : null}
+          {isLoading ? (
+            <LinearProgress variant="indeterminate" sx={{ color: "primary.light" }} />
+          ) : null}
         </>
         {/* <Divider />
         or

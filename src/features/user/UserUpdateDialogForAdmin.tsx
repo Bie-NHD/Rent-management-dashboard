@@ -13,7 +13,7 @@ import {
   Checkbox,
 } from "@mui/material";
 import React from "react";
-import RHFOutlinedTextField from "../../components/RHFTextField";
+import RHFOutlinedTextField from "../../components/inputs/RHFTextField";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ObjectSchema, boolean, number, object, string } from "yup";
 import UserApi from "../../api/user";

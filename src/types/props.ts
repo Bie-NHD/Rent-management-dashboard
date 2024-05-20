@@ -12,7 +12,7 @@ export type WarningDialogProps = {
 // value?: Type typeof `success` ? boolean : undefined
 // }
 
-interface ChangePasswordProps {
+export interface ChangePasswordProps {
   prevPassword: string;
   newPassword: string;
   repeatNewPassword: string;
@@ -33,5 +33,3 @@ export type AppDefaultMRTOptionsProps = {
   setGlobalFilter: React.Dispatch<React.SetStateAction<string | any>>;
   refetch: (...args: any[]) => Promise<any>;
 };
-
-type AppPaginationState = Pick<TPagination, "pageNumber" | "pageSize">;

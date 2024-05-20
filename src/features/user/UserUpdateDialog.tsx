@@ -1,6 +1,13 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
-import RHFOutlinedTextField from "../../components/RHFTextField";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+} from "@mui/material";
+import RHFOutlinedTextField from "../../components/inputs/RHFTextField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ObjectSchema, object, string } from "yup";
 import { Api } from "../../api";
@@ -50,8 +57,20 @@ const UserUpdateDialog = NiceModal.create(({ user }: { user: User }) => {
       }}>
       <DialogTitle>Edit User</DialogTitle>
       <DialogContent>
-        <RHFOutlinedTextField variant="outlined" name="fullName" label="Full name" control={control} margin="dense" />
-        <RHFOutlinedTextField variant="outlined" name="email" label="Email" control={control} margin="dense" />
+        <RHFOutlinedTextField
+          variant="outlined"
+          name="fullName"
+          label="Full name"
+          control={control}
+          margin="dense"
+        />
+        <RHFOutlinedTextField
+          variant="outlined"
+          name="email"
+          label="Email"
+          control={control}
+          margin="dense"
+        />
         <TextField disabled label="Create Date" value={user.createDate} margin="dense" fullWidth />
       </DialogContent>
       <DialogActions>

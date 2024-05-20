@@ -5,11 +5,12 @@ import { NM_APARTMENT, AppRoutes } from "../constants";
 import ExportButton from "./buttons/ExportButton";
 import ImportButton from "./buttons/ImportButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { IndexToolbarProps } from "../types/props";
 
 const styles = {
   display: "flex",
   justifyContent: "end",
-  justifyItems: "flex-end",
+  justifyItems: "start",
   marginRight: 0,
 };
 

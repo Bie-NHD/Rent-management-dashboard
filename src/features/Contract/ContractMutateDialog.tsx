@@ -13,7 +13,7 @@ import Button from "@mui/material/Button";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import RHFOutlinedTextField from "../../components/RHFTextField";
+import RHFOutlinedTextField from "../../components/inputs/RHFTextField";
 import { ObjectSchema, object, string, number, date } from "yup";
 import { Box, Stack } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -21,7 +21,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/vi";
 import dayjs from "dayjs";
-import RHFDatePicker from "../../components/RHFDatePicker";
+import RHFDatePicker from "../../components/inputs/RHFDatePicker";
 import { MutateDialogProps } from "../../types/props";
 
 type Inputs = Omit<ContractDTO, "endDate" | "startDate"> & {

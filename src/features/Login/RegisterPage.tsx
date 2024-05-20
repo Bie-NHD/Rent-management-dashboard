@@ -3,8 +3,8 @@ import { Button, Stack } from "@mui/material";
 import { ObjectSchema, object, string } from "yup";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import RHFOutlinedTextField from "../../components/RHFTextField";
-import ToggleablePasswordTextField from "../../components/ToggleablePasswordTextField";
+import RHFOutlinedTextField from "../../components/inputs/RHFTextField";
+import ToggleablePasswordTextField from "../../components/inputs/ToggleablePasswordTextField";
 
 interface RegisterInputs {
   username: string;
@@ -44,12 +44,7 @@ const RegisterPage = () => {
           label="Username"
           variant={"outlined"}
         />
-        <RHFOutlinedTextField
-          control={control}
-          name="email"
-          label="Email"
-          variant={"outlined"}
-        />
+        <RHFOutlinedTextField control={control} name="email" label="Email" variant={"outlined"} />
         <Controller
           name={"password"}
           control={control}
@@ -71,8 +66,7 @@ const RegisterPage = () => {
               label="Repeat Password"
               error={!!fieldState.error}
               helperText={
-                (!!fieldState.error && fieldState.error.message) ||
-                "Repeat your password here"
+                (!!fieldState.error && fieldState.error.message) || "Repeat your password here"
               }
             />
           )}

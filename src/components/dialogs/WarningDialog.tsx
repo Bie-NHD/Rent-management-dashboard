@@ -1,6 +1,7 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { DialogActions, DialogContent, DialogTitle, Button } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
+import { WarningDialogProps } from "../../types/props";
 
 const WarningDialog = NiceModal.create(
   ({ props: { title, content, positiveText, negativeText } }: { props: WarningDialogProps }) => {

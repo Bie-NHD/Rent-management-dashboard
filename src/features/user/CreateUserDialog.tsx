@@ -19,8 +19,9 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import toast from "react-hot-toast";
 import { ObjectSchema, object, string, boolean } from "yup";
 import user from "../../api/user";
-import RHFOutlinedTextField from "../../components/RHFTextField";
+import RHFOutlinedTextField from "../../components/inputs/RHFTextField";
 import { UserRoles, ApiRoutes, NM_WARNING, REGEX_VALID_USERNAME } from "../../constants";
+import { MutateDialogProps } from "../../types/props";
 
 type Inputs = Omit<UserUpdateDTO, "active"> & Pick<User, "username">;
 
