@@ -37,6 +37,7 @@ const columnDefs: MRT_ColumnDef<User>[] = [
     accessorKey: "createDate",
     header: "Date Created",
   },
+  { accessorKey: "fullName", header: "Full name" },
 ];
 
 const UserList = () => {
@@ -84,9 +85,9 @@ const UserList = () => {
 
   // when resolved, refetch current account & data
   const handleEditItem = (user: User) => {
-    NiceModal.show(isAdmin ? UserUpdateDialogForAdmin : UserUpdateDialog, { user }).then(() => {
+    NiceModal.show(UserUpdateDialogForAdmin, { user }).then(() => {
       refetch();
-      _user?.id == user.id ? refechUser() : null;
+      _user!.id == user.id ? refechUser() : null;
     });
   };
   // Define table -----------------------------------------
@@ -107,7 +108,9 @@ const UserList = () => {
       sorting,
     },
     enableRowActions: true,
-    renderRowActions: ({ row }) => <MRTTableRowActions onEditItem={() => handleEditItem(users[row.index])} />,
+    renderRowActions: ({ row }) => (
+      <MRTTableRowActions onEditItem={() => handleEditItem(users[row.index])} />
+    ),
     renderTopToolbarCustomActions: () => <MRTRefreshButton onClick={() => refetch()} />,
     renderToolbarInternalActions: ({ table }) => (
       <>

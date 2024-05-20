@@ -1,35 +1,31 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Api } from "@mui/icons-material";
 import {
+  MenuItem,
   Dialog,
   DialogTitle,
   DialogContent,
+  Stack,
+  FormControlLabel,
+  Checkbox,
+  Select,
   DialogActions,
   Button,
-  TextField,
-  MenuItem,
-  Select,
-  FormControlLabel,
-  Stack,
-  Checkbox,
+  InputAdornment,
 } from "@mui/material";
 import React from "react";
-import RHFOutlinedTextField from "../../components/RHFTextField";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { ObjectSchema, boolean, number, object, string } from "yup";
-import UserApi from "../../api/user";
-import { Api } from "../../api";
-import { ApiRoutes, NM_WARNING } from "../../constants";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import toast from "react-hot-toast";
-import { yupResolver } from "@hookform/resolvers/yup";
-import useUser from "../../hooks/useUser";
-import { UserRoles } from "../../constants";
-import ToggleButton from "@mui/material/ToggleButton";
-import CheckIcon from "@mui/icons-material/Check";
-import { CheckBox } from "@mui/icons-material";
+import { ObjectSchema, object, string, boolean } from "yup";
+import user from "../../api/user";
+import RHFOutlinedTextField from "../../components/RHFTextField";
+import { UserRoles, ApiRoutes, NM_WARNING } from "../../constants";
 
-type InputsForAdmin = UserUpdateDTO;
+type Inputs = UserUpdateDTO & Pick<User, "username">;
 
-const schema: ObjectSchema<InputsForAdmin> = object({
+const schema: ObjectSchema<Inputs> = object({
+  username: string().label("Username").required().default(""),
   email: string().email().label("Email").required().default(""),
   fullName: string().label("Username").required().default(""),
   active: boolean().label("Active").required().default(true),
@@ -47,55 +43,19 @@ const roleOptions = [...Object.values(UserRoles)].map((item) => (
   </MenuItem>
 ));
 
-const _updateData = async (userVM: User, data: UserUpdateDTO) => {
-  const res = await Api.update<UserUpdateDTO>(ApiRoutes.user.update, {
-    id: userVM.id,
-    data: data,
-  }).catch((error) => error);
-
-  if (res.statusCode === 200) {
-    toast.success(res.message);
-    return Promise.resolve();
-  }
-
-  toast.error(res.message);
-};
-
-const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: User }) => {
+const CreateUserDialog = NiceModal.create(() => {
   const modal = useModal();
-  const { handleSubmit, control } = useForm<InputsForAdmin>({
+  const { handleSubmit, control } = useForm<Inputs>({
     resolver: yupResolver(schema),
-    defaultValues: user || schema.getDefault(),
+    defaultValues: schema.getDefault(),
   });
 
-  modal.keepMounted = true;
+  // modal.keepMounted = true;
 
-  const onSubmit: SubmitHandler<InputsForAdmin> = async (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(data);
 
-    const isRoleChanged = data.role != user.role;
-    const isActiveChanged = data.active != user.active;
-
-    if (isRoleChanged || isActiveChanged) {
-      const wn_cntn: WarningDialogProps = {
-        title: `Confirm changes?`,
-        content: (
-          <>
-            {isRoleChanged ? (
-              <p>
-                Confirm change from "{user.role}" to "{data.role}"?
-              </p>
-            ) : null}
-            {isActiveChanged ? <p>Confirm change user state?</p> : null}
-          </>
-        ),
-      };
-
-      NiceModal.show(NM_WARNING, { props: wn_cntn }).then(() => {
-        // _handleSubmit();
-        _updateData(user, data).then(() => modal.remove());
-      });
-    } else _updateData(user, data).then(() => modal.remove());
+    // TODO: Handle new user
 
     // async function _handleSubmit() {
     //   const res = await Api.update<UserUpdateDTO>(ApiRoutes.user.update, {
@@ -120,9 +80,17 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: User }) => 
         component: "form",
         onSubmit: handleSubmit(onSubmit),
       }}>
-      <DialogTitle>Edit User</DialogTitle>
+      <DialogTitle>New User</DialogTitle>
       <DialogContent>
         <Stack>
+          <RHFOutlinedTextField
+            variant="outlined"
+            name="username"
+            label="Username"
+            control={control}
+            margin="dense"
+            InputProps={{ startAdornment: <InputAdornment position="start">@</InputAdornment> }}
+          />
           <RHFOutlinedTextField
             variant="outlined"
             name="fullName"
@@ -156,7 +124,6 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: User }) => 
           <Controller
             name="role"
             control={control}
-            disabled={user.role == UserRoles.MANAGER}
             render={({ field }) => (
               <Select {...field} label="Role">
                 {roleOptions}
@@ -179,4 +146,4 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: User }) => 
   );
 });
 
-export default UserUpdateDialogForAdmin;
+export default CreateUserDialog;
