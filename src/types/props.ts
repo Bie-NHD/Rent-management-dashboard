@@ -21,6 +21,6 @@ type IndexToolbarProps = {
 
 type MutateDialogProps<TData = Apartment | Customer | Contract> = {
   data?: TData;
-  onCreate?: (...args: any[]) => void | null | any;
-  onUpdate?: (...args: any[]) => void | null | any;
+  onCreate?: (...args: any[]) => any | Promise<any>;
+  onUpdate?: (...args: any[]) => any | Promise<any>;
 };

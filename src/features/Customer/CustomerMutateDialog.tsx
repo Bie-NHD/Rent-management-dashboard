@@ -51,17 +51,28 @@ const CustomerMutateDialog = NiceModal.create(
     ) => {
       event?.preventDefault();
 
+      console.log("PRESSED");
+
+      console.log(_data);
+      //
       // TODO: Handle submit customer
+      //
+      const { dob, ...others } = _data;
+
+      const customerDto: CustomerUpdateDTO = {
+        ...others,
+        dob: dayjs(dob).format(`YYYY-MM-DD`).toString(),
+      };
+
+      console.log(JSON.stringify(customerDto));
 
       /**
        * https://stackoverflow.com/a/67535605/20423795
        */
-      // data ? onUpdate?.(data) : onCreate?.(data);
-      console.log("PRESSED");
 
-      console.log(_data);
-
-      modal.remove();
+      new Promise(data ? onUpdate?.(customerDto) : onCreate?.(customerDto)).finally(() => {
+        modal.remove();
+      });
     };
 
     return (
