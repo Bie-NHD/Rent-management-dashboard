@@ -40,6 +40,7 @@ const CustomerList = () => {
     pageSize: 10,
   });
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
+  // TODO: Add search in ```CustomerList```
   const [globalFilter, setGlobalFilter] = useState(""); // search filter
   const client = useQueryClient();
 
@@ -63,6 +64,7 @@ const CustomerList = () => {
   });
 
   // when resolved, refetch current account & data
+  //TODO: Handle Edit Item
   const handleEditItem = (user: Customer) => {};
   // Define table -----------------------------------------
 
@@ -82,7 +84,9 @@ const CustomerList = () => {
       sorting,
     },
     enableRowActions: true,
-    renderRowActions: ({ row }) => <MRTTableRowActions onEditItem={() => handleEditItem(customers[row.index])} />,
+    renderRowActions: ({ row }) => (
+      <MRTTableRowActions onEditItem={() => handleEditItem(customers[row.index])} />
+    ),
     renderTopToolbarCustomActions: () => <MRTRefreshButton onClick={() => refetch()} />,
     renderToolbarInternalActions: ({ table }) => (
       <>

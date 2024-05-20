@@ -50,6 +50,7 @@ const ContractList = () => {
     pageSize: 10,
   });
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
+  // TODO: Add search in ```ContractList```
   const [globalFilter, setGlobalFilter] = useState(""); // search filter
   const client = useQueryClient();
 

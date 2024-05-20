@@ -46,6 +46,7 @@ const UserList = () => {
     pageSize: 10,
   });
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
+  // TODO: Add search in ```UserList```
   const [globalFilter, setGlobalFilter] = useState(""); // search filter
   const client = useQueryClient();
 
