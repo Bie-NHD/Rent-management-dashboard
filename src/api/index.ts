@@ -18,19 +18,25 @@ const ImportConfig = {
 // --------------------------------------------------
 
 const FetchApi = async <TData>(url: string, params: ApiFetchParams) =>
-  privateInstance.get<ApiResponse<TData>>(url, { params: params }).then((response) => response.data.data); // AxiosResponse = {data: <T = TApiResponse>, ...others}
+  privateInstance
+    .get<ApiResponse<TData>>(url, { params: params })
+    .then((response) => response.data.data); // AxiosResponse = {data: <T = TApiResponse>, ...others}
 
 const CreateApi = async (url: string, data: TApiUpdateDTO) =>
   privateInstance.post<ApiResponse>(url, data).then((response) => response.data);
 
 const UpdateApi = async <TData = TApiUpdateDTO>(url: string, params: ApiUpdateParams<TData>) =>
-  privateInstance.post<ApiResponse>(url + "/" + params.id, params.data).then((response) => response.data);
+  privateInstance
+    .post<ApiResponse>(url + "/" + params.id, params.data)
+    .then((response) => response.data);
 
 const DeleteApi = async (url: string, params: ApiUpdateParams) =>
   privateInstance.delete<ApiResponse>(url + "/" + params.id).then((response) => response.data);
 
 const ImportApi = async (url: string, formData: FormData) =>
-  privateInstance.post<ApiResponse<ImportResponse>>(url, formData, ImportConfig).then((response) => response.data);
+  privateInstance
+    .post<ApiResponse<ImportResponse>>(url, formData, ImportConfig)
+    .then((response) => response.data);
 /**
  * Cannot access resp's custom headers
  * https://stackoverflow.com/questions/37897523/axios-get-access-to-response-header-fields
@@ -38,8 +44,10 @@ const ImportApi = async (url: string, formData: FormData) =>
 const ExportApi = async (url: string, params: ApiExportParams) =>
   privateInstance.get(url, { params: params, responseType: "blob" }).then((res) => res.data);
 
-const SearchApi = async (url: string, params: ApiSearchParams) =>
-  privateInstance.get(url, { params: params }).then((response) => response.data);
+const SearchApi = async <TData>(url: string, params: ApiSearchParams) =>
+  privateInstance
+    .get<ApiResponse<TData>>(url, { params: params })
+    .then((response) => response.data.data);
 
 // ---------------------------------------------------
 
@@ -50,4 +58,5 @@ export const Api = Object.freeze({
   import: ImportApi,
   create: CreateApi,
   delete: DeleteApi,
+  search: SearchApi,
 } as const);

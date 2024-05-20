@@ -43,6 +43,7 @@ const RoutesFactory = (url: string) =>
     Delete: url + AppRoutes.Delete,
     Import: url + AppRoutes.Import,
     Export: url + AppRoutes.Export,
+    Search: url + SEARCH,
   } as const);
 
 export const ApartmentURLs = RoutesFactory(APARTMENT);

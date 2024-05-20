@@ -111,7 +111,7 @@ type ApiFetchParams = {
 /**
  * @param {q} string query
  */
-type ApiSearchParams = Omit<ApiFetchParams, "sortBy"> & { q: string };
+type ApiSearchParams = ApiFetchParams & { q: string };
 
 // LOGIN
 type ApiLoginParams = {

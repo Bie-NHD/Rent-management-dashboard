@@ -32,14 +32,24 @@ export const useUpdateApartment = createMutation({
   },
 });
 
-export const useGetApartments = createQuery<UseGetApartmentsHookReturns, ApiFetchParams>({
+export const useGetApartments = createQuery<UseGetApartmentsHookReturns, ApiSearchParams>({
   queryKey: [QK_APARTMENTS],
-  fetcher: (variables: ApiFetchParams) =>
-    Api.fetch<ApartmentApiResponse>(ApartmentURLs.GetAll, variables).then((value) => ({
-      data: value.apartments,
-      meta: {
-        totalRowCount: value.page.totalElements,
-      },
-    })),
+  fetcher: (variables: ApiSearchParams) => {
+    const { q, ...others } = variables;
+
+    return !!q
+      ? Api.search<ApartmentApiResponse>(ApartmentURLs.Search, variables).then((value) => ({
+          data: value.apartments,
+          meta: {
+            totalRowCount: value.page.totalElements,
+          },
+        }))
+      : Api.fetch<ApartmentApiResponse>(ApartmentURLs.GetAll, { ...others }).then((value) => ({
+          data: value.apartments,
+          meta: {
+            totalRowCount: value.page.totalElements,
+          },
+        }));
+  },
   placeholderData: keepPreviousData,
 });

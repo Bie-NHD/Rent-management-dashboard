@@ -42,7 +42,8 @@ const ApartmentList = () => {
     pageSize: 10,
   });
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
-  const [globalFilter, setGlobalFilter] = useState(""); // search filter
+  // TODO: Add search in ```ApartmentList```
+  const [globalFilter, setGlobalFilter] = useState<string>(""); // search filter
   const client = useQueryClient();
 
   const { mutate } = useUpdateApartment({
@@ -67,6 +68,7 @@ const ApartmentList = () => {
       page: pagination.pageIndex, //refetch when pagination.pageIndex changes
       pageSize: pagination.pageSize, //refetch when pagination.pageSize changes
       sortBy: sorting?.map((value) => value.id).toString(), //refetch when sorting changes
+      q: globalFilter,
     },
   });
 
@@ -109,6 +111,7 @@ const ApartmentList = () => {
     manualSorting: true, //turn off built-in client-side sorting
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
     state: {
       isLoading,
       pagination,
