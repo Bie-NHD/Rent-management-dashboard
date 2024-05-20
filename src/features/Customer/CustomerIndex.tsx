@@ -9,7 +9,11 @@ import CustomerList from "./CustomerList";
 const CustomerIndex = () => {
   const { mutate } = useCreateCustomer({
     onSuccess(data) {
-      toast.success(data.message);
+      if (data.statusCode == 200) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
     },
   });
 

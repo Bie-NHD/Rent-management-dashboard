@@ -26,10 +26,19 @@ type Inputs = Omit<CustomerUpdateDTO, "dob"> & {
   dob: Date;
 };
 
+/**
+ * TODO: Validate inputs
+ */
+
 const schema: ObjectSchema<Inputs> = object({
   address: string().required().default(""),
   fullName: string().required().default(""),
-  citizenId: string().required().default(""),
+  citizenId: string()
+    .matches(new RegExp(`^[0-9]*$`), ({ label }) => `${label} must only contains number`)
+    .length(12)
+    .required()
+    .default("")
+    .label("Citizen Id"),
   // dob: string().datetime().required().default(""),
   dob: date().required().default(new Date()),
   phoneNumber: string().required().default(""),
@@ -54,9 +63,7 @@ const CustomerMutateDialog = NiceModal.create(
       console.log("PRESSED");
 
       console.log(_data);
-      //
-      // TODO: Handle submit customer
-      //
+
       const { dob, ...others } = _data;
 
       const customerDto: CustomerUpdateDTO = {
@@ -64,7 +71,7 @@ const CustomerMutateDialog = NiceModal.create(
         dob: dayjs(dob).format(`YYYY-MM-DD`).toString(),
       };
 
-      console.log(JSON.stringify(customerDto));
+      console.log(customerDto);
 
       /**
        * https://stackoverflow.com/a/67535605/20423795
