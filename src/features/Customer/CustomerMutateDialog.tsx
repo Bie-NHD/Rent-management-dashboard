@@ -36,7 +36,7 @@ const schema: ObjectSchema<Inputs> = object({
 });
 
 const CustomerMutateDialog = NiceModal.create(
-  ({ data, onCreate, onUpdate }: CustomerMutateDialogProps) => {
+  ({ data, onCreate, onUpdate }: MutateDialogProps<Customer>) => {
     // Hook provided by Nice-modal-react
     const modal = useModal();
 
@@ -50,6 +50,9 @@ const CustomerMutateDialog = NiceModal.create(
       event
     ) => {
       event?.preventDefault();
+
+      // TODO: Handle submit customer
+
       /**
        * https://stackoverflow.com/a/67535605/20423795
        */

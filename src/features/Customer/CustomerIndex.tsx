@@ -14,7 +14,7 @@ const CustomerIndex = () => {
   });
 
   const handleNewItem = () => {
-    const params: CustomerMutateDialogProps = {
+    const params: MutateDialogProps = {
       onCreate: mutate,
     };
 
