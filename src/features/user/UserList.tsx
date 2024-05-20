@@ -18,6 +18,7 @@ import NiceModal from "@ebay/nice-modal-react";
 import UserUpdateDialog from "./UserUpdateDialog";
 import useUser from "../../hooks/useUser";
 import UserUpdateDialogForAdmin from "./UserUpdateDialogForAdmin";
+import getDefaultMRTOptions from "../../utils/defaultMRTOptions";
 
 const columnDefs: MRT_ColumnDef<User>[] = [
   {
@@ -67,21 +68,6 @@ const UserList = () => {
       pageSize: pagination.pageSize, //refetch when pagination.pageSize changes
       sortBy: sorting?.map((value) => value.id).toString(), //refetch when sorting changes
     },
-    // select(data) {
-    //   return {
-    //     ...data,
-    //     users: data.users.map(
-    //       (item): UserVM => ({
-    //         id: item.id,
-    //         email: item.email,
-    //         createDate: item.createDate,
-    //         role: item.role,
-    //         username: item.username,
-    //         active: item.active,
-    //       })
-    //     ),
-    //   };
-    // },
   });
 
   // when resolved, refetch current account & data
@@ -94,13 +80,10 @@ const UserList = () => {
   // Define table -----------------------------------------
 
   const table = useMaterialReactTable({
+    ...getDefaultMRTOptions<User>({ setGlobalFilter, setPagination, setSorting, refetch }),
     columns: columnDefs,
     data: users,
     rowCount: meta?.totalRowCount ?? 0,
-    manualPagination: true, //turn off built-in client-side pagination
-    manualSorting: true, //turn off built-in client-side sorting
-    onPaginationChange: setPagination,
-    onSortingChange: setSorting,
     state: {
       isLoading,
       pagination,
@@ -108,18 +91,8 @@ const UserList = () => {
       showProgressBars: isLoading || isRefetching,
       sorting,
     },
-    enableRowActions: true,
     renderRowActions: ({ row }) => (
       <MRTTableRowActions onEditItem={() => handleEditItem(users[row.index])} />
-    ),
-    renderTopToolbarCustomActions: () => <MRTRefreshButton onClick={() => refetch()} />,
-    renderToolbarInternalActions: ({ table }) => (
-      <>
-        {/* built-in buttons (must pass in table prop for them to work!) */}
-        <MRT_ToggleGlobalFilterButton table={table} />
-        <MRT_ShowHideColumnsButton table={table} />
-        {/* <MRT_ToggleDensePaddingButton table={table} /> */}
-      </>
     ),
   });
 

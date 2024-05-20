@@ -27,6 +27,8 @@ import { transformToContractVM } from "../../utils/transform";
 
 // ------------------------------------
 
+// TODO: Fix Data type
+
 const columnDefs: MRT_ColumnDef<ContractVM>[] = [
   {
     accessorKey: "id",

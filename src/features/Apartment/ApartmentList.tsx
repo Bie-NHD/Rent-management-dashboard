@@ -17,6 +17,7 @@ import { useGetApartments, useUpdateApartment } from "../../hooks";
 import { useMemo, useState } from "react";
 import MRTTableRowActions from "../../components/MRTRowAction";
 import MRTRefreshButton from "../../components/MRTRefreshButton";
+import getDefaultMRTOptions from "../../utils/defaultMRTOptions";
 // ------------------------------------
 
 const columnDefs: MRT_ColumnDef<Apartment>[] = [
@@ -41,8 +42,9 @@ const ApartmentList = () => {
     pageIndex: 0,
     pageSize: 10,
   });
+
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
-  // TODO: Add search in ```ApartmentList```
+  // TODO: Add search in ```ApartmentList``` (untested)
   const [globalFilter, setGlobalFilter] = useState<string>(""); // search filter
   const client = useQueryClient();
 
@@ -99,19 +101,14 @@ const ApartmentList = () => {
     });
 
   // Define columns ---------------------------------------
-  // const columns = useMemo<MRT_ColumnDef<Apartment>[]>(() => columnDefs, []);
 
   // Define table -----------------------------------------
 
   const table = useMaterialReactTable({
+    ...getDefaultMRTOptions<Apartment>({ setGlobalFilter, setPagination, setSorting, refetch }),
     columns: columnDefs,
     data: data,
     rowCount: meta?.totalRowCount ?? 0,
-    manualPagination: true, //turn off built-in client-side pagination
-    manualSorting: true, //turn off built-in client-side sorting
-    onPaginationChange: setPagination,
-    onSortingChange: setSorting,
-    onGlobalFilterChange: setGlobalFilter,
     state: {
       isLoading,
       pagination,
@@ -119,21 +116,11 @@ const ApartmentList = () => {
       showProgressBars: isLoading || isRefetching,
       sorting,
     },
-    enableRowActions: true,
     renderRowActions: ({ row }) => (
       <MRTTableRowActions
         onDeleteItem={() => handleDeleteItem(row.index)}
         onEditItem={() => handleEditITem(row.index)}
       />
-    ),
-    renderTopToolbarCustomActions: () => <MRTRefreshButton onClick={() => refetch()} />,
-    renderToolbarInternalActions: ({ table }) => (
-      <>
-        {/* built-in buttons (must pass in table prop for them to work!) */}
-        <MRT_ToggleGlobalFilterButton table={table} />
-        <MRT_ShowHideColumnsButton table={table} />
-        {/* <MRT_ToggleDensePaddingButton table={table} /> */}
-      </>
     ),
   });
 

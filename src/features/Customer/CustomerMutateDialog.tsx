@@ -22,6 +22,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/vi";
 import dayjs from "dayjs";
 import { REGEX_VALID_CITIZENID, REGEX_VALID_PHONE_NUMBER } from "../../constants";
+import { MutateDialogProps } from "../../types/props";
 
 type Inputs = Omit<CustomerUpdateDTO, "dob"> & {
   dob: Date;

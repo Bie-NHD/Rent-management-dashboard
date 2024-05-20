@@ -22,6 +22,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/vi";
 import dayjs from "dayjs";
 import RHFDatePicker from "../../components/RHFDatePicker";
+import { MutateDialogProps } from "../../types/props";
 
 type Inputs = Omit<ContractDTO, "endDate" | "startDate"> & {
   endDate: Date;

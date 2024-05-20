@@ -18,6 +18,7 @@ import NiceModal from "@ebay/nice-modal-react";
 
 import useUser from "../../hooks/useUser";
 import { useGetCustomers } from "../../hooks";
+import getDefaultMRTOptions from "../../utils/defaultMRTOptions";
 
 const columnDefs: MRT_ColumnDef<Customer>[] = [
   {
@@ -69,13 +70,10 @@ const CustomerList = () => {
   // Define table -----------------------------------------
 
   const table = useMaterialReactTable({
+    ...getDefaultMRTOptions<Customer>({ setGlobalFilter, setPagination, setSorting, refetch }),
     columns: columnDefs,
     data: customers,
     rowCount: meta?.totalRowCount ?? 0,
-    manualPagination: true, //turn off built-in client-side pagination
-    manualSorting: true, //turn off built-in client-side sorting
-    onPaginationChange: setPagination,
-    onSortingChange: setSorting,
     state: {
       isLoading,
       pagination,
@@ -83,18 +81,8 @@ const CustomerList = () => {
       showProgressBars: isLoading || isRefetching,
       sorting,
     },
-    enableRowActions: true,
     renderRowActions: ({ row }) => (
       <MRTTableRowActions onEditItem={() => handleEditItem(customers[row.index])} />
-    ),
-    renderTopToolbarCustomActions: () => <MRTRefreshButton onClick={() => refetch()} />,
-    renderToolbarInternalActions: ({ table }) => (
-      <>
-        {/* built-in buttons (must pass in table prop for them to work!) */}
-        <MRT_ToggleGlobalFilterButton table={table} />
-        <MRT_ShowHideColumnsButton table={table} />
-        {/* <MRT_ToggleDensePaddingButton table={table} /> */}
-      </>
     ),
   });
 

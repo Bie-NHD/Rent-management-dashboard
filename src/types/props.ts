@@ -1,5 +1,7 @@
+import { MRT_PaginationState, MRT_SortingState } from "material-react-table";
+
 // Dialogs
-type WarningDialogProps = {
+export type WarningDialogProps = {
   title: string;
   content?: string | React.ReactNode | React.ReactNode[] | undefined;
   positiveText?: string;
@@ -15,12 +17,21 @@ interface ChangePasswordProps {
   newPassword: string;
   repeatNewPassword: string;
 }
-type IndexToolbarProps = {
+export type IndexToolbarProps = {
   handleNewItem?: (...args: any[]) => any;
 };
 
-type MutateDialogProps<TData = Apartment | Customer | Contract> = {
+export type MutateDialogProps<TData = Apartment | Customer | Contract> = {
   data?: TData;
   onCreate?: (...args: any[]) => any | Promise<any>;
   onUpdate?: (...args: any[]) => any | Promise<any>;
 };
+
+export type AppDefaultMRTOptionsProps = {
+  setPagination: React.Dispatch<React.SetStateAction<MRT_PaginationState>>;
+  setSorting: React.Dispatch<React.SetStateAction<MRT_SortingState>>;
+  setGlobalFilter: React.Dispatch<React.SetStateAction<string | any>>;
+  refetch: (...args: any[]) => Promise<any>;
+};
+
+type AppPaginationState = Pick<TPagination, "pageNumber" | "pageSize">;

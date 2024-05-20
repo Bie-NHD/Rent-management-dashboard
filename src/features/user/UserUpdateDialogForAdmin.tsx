@@ -25,7 +25,7 @@ import useUser from "../../hooks/useUser";
 import { UserRoles } from "../../constants";
 import ToggleButton from "@mui/material/ToggleButton";
 import CheckIcon from "@mui/icons-material/Check";
-import { CheckBox } from "@mui/icons-material";
+import { WarningDialogProps } from "../../types/props";
 
 type InputsForAdmin = UserUpdateDTO;
 
@@ -96,20 +96,6 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: User }) => 
         _updateData(user, data).then(() => modal.remove());
       });
     } else _updateData(user, data).then(() => modal.remove());
-
-    // async function _handleSubmit() {
-    //   const res = await Api.update<UserUpdateDTO>(ApiRoutes.user.update, {
-    //     id: user.id,
-    //     data: data,
-    //   });
-
-    //   if (res.statusCode === 200) {
-    //     toast.success(res.message);
-    //     modal.remove();
-    //   }
-
-    //   toast.error(res.message);
-    // }
   };
 
   return (
