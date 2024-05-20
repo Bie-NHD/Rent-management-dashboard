@@ -68,7 +68,7 @@ const UserUpdateDialogForAdmin = NiceModal.create(({ user }: { user: User }) => 
     defaultValues: user || schema.getDefault(),
   });
 
-  modal.keepMounted = true;
+  // modal.keepMounted = true;
 
   const onSubmit: SubmitHandler<InputsForAdmin> = async (data) => {
     console.log(data);

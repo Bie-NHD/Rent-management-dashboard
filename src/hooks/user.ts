@@ -1,5 +1,5 @@
 import { keepPreviousData } from "@tanstack/react-query";
-import { createQuery } from "react-query-kit";
+import { createMutation, createQuery } from "react-query-kit";
 import { Api } from "../api";
 import { QK_USERS, ApiRoutes, QK_ACCOUNT, QK_ACCESS_TOKEN } from "../constants";
 import UserApi from "../api/user";
@@ -36,4 +36,11 @@ export const useGetAccessToken = createQuery<string | null>({
   initialData: null,
   placeholderData: null,
   refetchInterval: 120000,
+});
+
+export const useCreateUser = createMutation({
+  mutationFn: (variables: UserCreateDTO) => Api.create(ApiRoutes.user.add, variables),
+  onError(error, variables, context) {
+    console.log(error);
+  },
 });

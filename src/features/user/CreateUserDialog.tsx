@@ -20,22 +20,16 @@ import toast from "react-hot-toast";
 import { ObjectSchema, object, string, boolean } from "yup";
 import user from "../../api/user";
 import RHFOutlinedTextField from "../../components/RHFTextField";
-import { UserRoles, ApiRoutes, NM_WARNING } from "../../constants";
+import { UserRoles, ApiRoutes, NM_WARNING, REGEX_VALID_USERNAME } from "../../constants";
 
-type Inputs = UserUpdateDTO & Pick<User, "username">;
+type Inputs = Omit<UserUpdateDTO, "active"> & Pick<User, "username">;
 
 const schema: ObjectSchema<Inputs> = object({
-  username: string().label("Username").required().default(""),
+  username: string().label("Username").required().default("").matches(REGEX_VALID_USERNAME),
   email: string().email().label("Email").required().default(""),
   fullName: string().label("Username").required().default(""),
-  active: boolean().label("Active").required().default(true),
   role: string().label("Role").required().default(UserRoles.STAFF),
 });
-
-const activeValues = Object.freeze({
-  Enabled: true,
-  Disabled: false,
-} as const);
 
 const roleOptions = [...Object.values(UserRoles)].map((item) => (
   <MenuItem key={item} value={item}>
@@ -43,33 +37,19 @@ const roleOptions = [...Object.values(UserRoles)].map((item) => (
   </MenuItem>
 ));
 
-const CreateUserDialog = NiceModal.create(() => {
+const CreateUserDialog = NiceModal.create(({ onCreate }: MutateDialogProps) => {
   const modal = useModal();
   const { handleSubmit, control } = useForm<Inputs>({
     resolver: yupResolver(schema),
     defaultValues: schema.getDefault(),
   });
 
-  // modal.keepMounted = true;
-
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data, event) => {
+    event?.preventDefault();
     console.log(data);
 
-    // TODO: Handle new user
-
-    // async function _handleSubmit() {
-    //   const res = await Api.update<UserUpdateDTO>(ApiRoutes.user.update, {
-    //     id: user.id,
-    //     data: data,
-    //   });
-
-    //   if (res.statusCode === 200) {
-    //     toast.success(res.message);
-    //     modal.remove();
-    //   }
-
-    //   toast.error(res.message);
-    // }
+    await onCreate?.(data);
+    modal.remove();
   };
 
   return (
@@ -105,22 +85,6 @@ const CreateUserDialog = NiceModal.create(() => {
             control={control}
             margin="dense"
           />
-          <FormControlLabel
-            label={"Active"}
-            control={
-              <Controller
-                name="active"
-                control={control}
-                render={({ field }) => (
-                  <Checkbox
-                    {...field}
-                    checked={!!field.value}
-                    // onChange={(e) => field.onChange(e.target.checked)}
-                  />
-                )}
-              />
-            }
-          />
           <Controller
             name="role"
             control={control}
@@ -133,13 +97,7 @@ const CreateUserDialog = NiceModal.create(() => {
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={() => {
-            modal.reject();
-            modal.remove();
-          }}>
-          Cancel
-        </Button>
+        <Button onClick={modal.remove}>Cancel</Button>
         <Button type="submit"> Save </Button>
       </DialogActions>
     </Dialog>

@@ -82,13 +82,20 @@ type ContractDTO = {
 };
 
 type UserUpdateDTO = Pick<User, "email" | "role" | "active" | "fullName">;
+type UserCreateDTO = Omit<UserUpdateDTO, "active"> & Pick<User, "username">;
 type ApartmentUpdateDTO = Omit<Apartment, "id">;
 type CustomerUpdateDTO = Omit<Customer, "id">;
 type ChangePasswordDTO = {
   currentPassword: string;
   newPassword: string;
 };
-type TApiUpdateDTO = ApartmentUpdateDTO | ContractDTO | CustomerUpdateDTO | UserUpdateDTO | ChangePasswordDTO;
+type TApiUpdateDTO =
+  | ApartmentUpdateDTO
+  | ContractDTO
+  | CustomerUpdateDTO
+  | UserCreateDTO
+  | UserUpdateDTO
+  | ChangePasswordDTO;
 
 // For UPDATE, DELTE
 type ApiUpdateParams<TData = TApiUpdateDTO> = {
