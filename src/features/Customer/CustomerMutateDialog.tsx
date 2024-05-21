@@ -56,24 +56,22 @@ const CustomerMutateDialog = NiceModal.create(
     // Hook provided by Nice-modal-react
     const modal = useModal();
 
-    const _defaultValue = useMemo(() => {
-      const { dob, ...others } = data!;
-
-      return data ? { ...others, dob: dayjs(dob).toDate() } : schema.__default;
-    }, [data]);
+    const _defaultValue = useMemo(
+      () => (!!data ? { ...data, dob: dayjs(data?.dob).toDate() } : schema.__default),
+      [data]
+    );
 
     const { handleSubmit, control } = useForm<Inputs>({
       defaultValues: _defaultValue,
       resolver: yupResolver<Inputs>(schema),
     });
 
-    const onSubmitNew: SubmitHandler<Inputs> = (_data, event) => {
+    const onSubmitNew: SubmitHandler<Inputs> = (__data, event) => {
       event?.preventDefault();
 
-      const { dob, ...others } = _data;
       const customerDto: CustomerUpdateDTO = {
-        ...others,
-        dob: dayjs(dob).format(`YYYY-MM-DD`).toString(),
+        ...__data,
+        dob: dayjs(__data.dob).format(`YYYY-MM-DD`).toString(),
       };
 
       console.log(customerDto);
