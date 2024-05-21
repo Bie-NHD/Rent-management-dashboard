@@ -11,6 +11,7 @@ import { Container, Button } from "@mui/material";
 import ExportButton from "../../components/buttons/ExportButton";
 import ImportButton from "../../components/buttons/ImportButton";
 import AddCircle from "@mui/icons-material/AddCircle";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const styles = {
   display: "flex",
@@ -28,11 +29,17 @@ const UserIndexPage = () => {
     },
   });
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const createDialogProps: MutateDialogProps = {
     onCreate: mutateAsync,
   };
 
-  const handleNewItem = () => NiceModal.show(NM_USER_CREATE, createDialogProps);
+  const handleNewItem = () => {
+    // NiceModal.show(NM_USER_CREATE, createDialogProps);
+    navigate("add", { state: { from: location } });
+  };
 
   return (
     <>

@@ -13,7 +13,7 @@ import RequireAdmin from "./RequireAdmin";
 import UserIndexPage from "../features/user/UserIndexPage";
 import LoginPage from "../features/Login/LoginPage";
 
-import { customerLoader } from "../utils/routerLoader";
+import { customerLoader, userLoader } from "../utils/routerLoader";
 
 // ---------------------------------------------------------
 const ApartmentIndex = lazy(() => import("../features/Apartment/ApartmentIndex"));
@@ -28,6 +28,9 @@ const CreateContract = lazy(() => import("../features/Contract/CreateContract"))
 
 const CreateCustomer = lazy(() => import("../features/Customer/CreateCustomer"));
 const EditCustomer = lazy(() => import("../features/Customer/EditCustomer"));
+
+const CreateUser = lazy(() => import("../features/user/CreateUser"));
+const EditUser = lazy(() => import("../features/user/EditUser"));
 // ---------------------------------------------------------
 
 const Loading = () => {
@@ -98,11 +101,32 @@ const indexRoutes: RouteObject[] = [
 const requireAdminRoutes: RouteObject[] = [
   {
     path: "/users",
-    element: (
-      <RequireAdmin>
-        <UserIndexPage />
-      </RequireAdmin>
-    ),
+    element: <RequireAdmin />,
+
+    children: [
+      {
+        path: "/users",
+        index: true,
+        element: <UserIndexPage />,
+      },
+      {
+        path: "add",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <CreateUser />
+          </Suspense>
+        ),
+      },
+      {
+        path: ":id/edit",
+        loader: userLoader,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <EditUser />
+          </Suspense>
+        ),
+      },
+    ],
   },
 ];
 

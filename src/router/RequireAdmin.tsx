@@ -3,7 +3,7 @@ import { useLocation, Navigate, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useUser from "../hooks/useUser";
 
-const RequireAdmin = ({ children }: { children: ReactNode }) => {
+const RequireAdmin = () => {
   const { isAdmin } = useUser();
   const location = useLocation();
   const from = location.state?.from || "/";
@@ -12,7 +12,7 @@ const RequireAdmin = ({ children }: { children: ReactNode }) => {
     return <Navigate to={from} />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 };
 
 export default RequireAdmin;

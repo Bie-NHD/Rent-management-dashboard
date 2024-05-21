@@ -44,3 +44,8 @@ export const useCreateUser = createMutation({
     console.log(error);
   },
 });
+
+export const useUpdateUser = createMutation({
+  mutationFn: (variables: { data: UserUpdateDTO } & { id: string }) =>
+    Api.update<UserUpdateDTO>(ApiRoutes.user.update, variables),
+});

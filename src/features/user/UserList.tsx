@@ -22,6 +22,7 @@ import getDefaultMRTOptions from "../../utils/defaultMRTOptions";
 import Button from "@mui/material/Button";
 import { IconButton } from "@mui/material";
 import Edit from "@mui/icons-material/Edit";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // TODO: Check respone's status code
 
@@ -36,6 +37,8 @@ const UserList = () => {
 
   // const [globalFilter, setGlobalFilter] = useState(""); // search filter
   const client = useQueryClient();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const { refetch: refechUser, isAdmin, user: _user } = useUser();
   /**
@@ -57,11 +60,13 @@ const UserList = () => {
   });
 
   // when resolved, refetch current account & data
-  const handleEditItem = (user: User) => {
-    NiceModal.show(UserUpdateDialogForAdmin, { user }).then(() => {
-      refetch();
-      _user!.id == user.id ? refechUser() : null;
-    });
+  const handleEditItem = (id: string) => {
+    // NiceModal.show(UserUpdateDialogForAdmin, { user }).then(() => {
+    //   refetch();
+    //   _user!.id == user.id ? refechUser() : null;
+    // });
+
+    navigate(`./${id}/edit`, { state: { from: location } });
   };
 
   // ------------------------------------------------------
@@ -112,7 +117,7 @@ const UserList = () => {
       sorting,
     },
     renderRowActions: ({ row }) => (
-      <MRTTableRowActions onEditItem={() => handleEditItem(users[row.index])} />
+      <MRTTableRowActions onEditItem={() => handleEditItem(users[row.index].id)} />
     ),
   });
 
