@@ -6,6 +6,7 @@ import NiceModal from "@ebay/nice-modal-react";
 import { NM_CONTRACT, NM_USER_CREATE } from "../../constants";
 import { useCreateUser } from "../../hooks/user";
 import toast from "react-hot-toast";
+import { MutateDialogProps } from "../../types/props";
 
 const UserIndexPage = () => {
   const { mutateAsync } = useCreateUser({

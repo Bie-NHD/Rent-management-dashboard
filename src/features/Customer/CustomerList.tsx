@@ -17,8 +17,11 @@ import TableLoading from "../../components/placeholder/TableLoading";
 import NiceModal from "@ebay/nice-modal-react";
 
 import useUser from "../../hooks/useUser";
-import { useGetCustomers } from "../../hooks";
+import { useGetCustomers, useUpdateCustomer } from "../../hooks";
 import getDefaultMRTOptions from "../../utils/defaultMRTOptions";
+import { MutateDialogProps } from "../../types/props";
+import { NM_CUSTOMER, QK_CUSTOMERs } from "../../constants";
+import toast from "react-hot-toast";
 
 const columnDefs: MRT_ColumnDef<Customer>[] = [
   {
@@ -64,9 +67,24 @@ const CustomerList = () => {
     },
   });
 
+  const { mutate } = useUpdateCustomer({
+    onSuccess(data, variables, context) {
+      client.invalidateQueries({ queryKey: [QK_CUSTOMERs] });
+
+      data.statusCode == 200 ? toast.success(data.message) : toast.error(data.message);
+    },
+  });
+
   // when resolved, refetch current account & data
-  //TODO: Handle Edit Item
-  const handleEditItem = (user: Customer) => {};
+
+  const handleEditItem = (user: Customer) => {
+    const params: MutateDialogProps<Customer> = {
+      data: user,
+      onUpdate: mutate,
+    };
+
+    NiceModal.show(NM_CUSTOMER, params);
+  };
   // Define table -----------------------------------------
 
   const table = useMaterialReactTable({
@@ -93,7 +111,7 @@ const CustomerList = () => {
   // Show, throw Error
   if (isError) {
     console.log(error || new Error("Error with ApartmentTable"));
-    return <ErrorPlaceHolder onClick={() => refetch()} />;
+    return <ErrorPlaceHolder onClick={refetch} />;
   }
 
   // -------------------------------------------------------

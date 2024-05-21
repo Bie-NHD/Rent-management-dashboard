@@ -56,15 +56,18 @@ const CustomerMutateDialog = NiceModal.create(
     // Hook provided by Nice-modal-react
     const modal = useModal();
 
+    const _defaultValue = useMemo(() => {
+      const { dob, ...others } = data!;
+
+      return data ? { ...others, dob: dayjs(dob).toDate() } : schema.__default;
+    }, [data]);
+
     const { handleSubmit, control } = useForm<Inputs>({
-      defaultValues: data || schema.__default,
+      defaultValues: _defaultValue,
       resolver: yupResolver<Inputs>(schema),
     });
 
-    const onSubmitNew: SubmitHandler<Inputs> = (
-      _data, //TFieldValues
-      event
-    ) => {
+    const onSubmitNew: SubmitHandler<Inputs> = (_data, event) => {
       event?.preventDefault();
 
       const { dob, ...others } = _data;
@@ -75,12 +78,19 @@ const CustomerMutateDialog = NiceModal.create(
 
       console.log(customerDto);
 
-      new Promise(
-        /**
-         * https://stackoverflow.com/a/67535605/20423795
-         */
-        data ? onUpdate?.(customerDto) : onCreate?.(customerDto)
-      ).finally(() => {
+      new Promise((resolve, reject) => {
+        // update type: {id,data:dto}; create type: dto
+        if (!!data) {
+          const customerUpdateDto: ApiUpdateParams<CustomerUpdateDTO> = {
+            id: data!.id,
+            data: customerDto,
+          };
+          /**
+           * https://stackoverflow.com/a/67535605/20423795
+           */
+          return resolve(onUpdate?.(customerUpdateDto));
+        } else return resolve(onCreate?.(customerDto));
+      }).finally(() => {
         modal.remove();
       });
     };

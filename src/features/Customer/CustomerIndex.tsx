@@ -5,6 +5,7 @@ import { NM_CUSTOMER } from "../../constants";
 import { useCreateCustomer } from "../../hooks";
 import toast from "react-hot-toast";
 import CustomerList from "./CustomerList";
+import { MutateDialogProps } from "../../types/props";
 
 const CustomerIndex = () => {
   const { mutate } = useCreateCustomer({
