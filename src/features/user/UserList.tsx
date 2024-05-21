@@ -19,11 +19,27 @@ import UserUpdateDialog from "./UserUpdateDialog";
 import useUser from "../../hooks/useUser";
 import UserUpdateDialogForAdmin from "./UserUpdateDialogForAdmin";
 import getDefaultMRTOptions from "../../utils/defaultMRTOptions";
+import Button from "@mui/material/Button";
+import { IconButton } from "@mui/material";
+import Edit from "@mui/icons-material/Edit";
+
+// TODO: Check respone's status code
+
+// TODO: Add handle change status
 
 const columnDefs: MRT_ColumnDef<User>[] = [
   {
     accessorKey: "role",
     header: "Role",
+  },
+  {
+    accessorKey: "active",
+    header: "Active",
+    Cell: ({ cell }) => (
+      <>
+        {cell.getValue} <Button startIcon={<Edit />}>Edit </Button>
+      </>
+    ),
   },
   {
     accessorKey: "username",
