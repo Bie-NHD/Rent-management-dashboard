@@ -27,36 +27,6 @@ import Edit from "@mui/icons-material/Edit";
 
 // TODO: Add handle change status
 
-const columnDefs: MRT_ColumnDef<User>[] = [
-  {
-    accessorKey: "role",
-    header: "Role",
-  },
-  {
-    accessorKey: "active",
-    header: "Active",
-    Cell: ({ cell }) => (
-      <>
-        {cell.getValue} <Button startIcon={<Edit />}>Edit </Button>
-      </>
-    ),
-  },
-  {
-    accessorKey: "username",
-    header: "Username",
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-  },
-
-  {
-    accessorKey: "createDate",
-    header: "Date Created",
-  },
-  { accessorKey: "fullName", header: "Full name" },
-];
-
 const UserList = () => {
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
@@ -93,6 +63,40 @@ const UserList = () => {
       _user!.id == user.id ? refechUser() : null;
     });
   };
+
+  // ------------------------------------------------------
+
+  const columnDefs: MRT_ColumnDef<User>[] = [
+    {
+      accessorKey: "role",
+      header: "Role",
+    },
+    {
+      accessorKey: "active",
+      header: "Active",
+      Cell: ({ cell }) => (
+        <>
+          {cell.getValue<boolean>() ? "Active" : "Inactive"}
+          <Button startIcon={<Edit />}>Edit </Button>
+        </>
+      ),
+    },
+    {
+      accessorKey: "username",
+      header: "Username",
+    },
+    {
+      accessorKey: "email",
+      header: "Email",
+    },
+
+    {
+      accessorKey: "createDate",
+      header: "Date Created",
+    },
+    { accessorKey: "fullName", header: "Full name" },
+  ];
+
   // Define table -----------------------------------------
 
   const table = useMaterialReactTable({

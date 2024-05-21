@@ -11,14 +11,7 @@ const defaultValue: IUseAuthHookReturns = {
   logout: function () {
     throw new Error("Function not implemented.");
   },
-  // refresh: function () {
-  //   throw new Error("Function not implemented.");
-  // },
-  // user: undefined,
-  // isAdmin: false,
-  // setUser: function (value: SetStateAction<IUser | undefined>): void {
-  //   throw new Error("Function not implemented.");
-  // },
+  isLoading: false,
 };
 
 const AuthContext = createContext<IUseAuthHookReturns>(defaultValue);

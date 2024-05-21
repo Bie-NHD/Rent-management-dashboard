@@ -29,3 +29,9 @@ export function sanitize(input: string) {
 export function transformArrayDateToString(arrayDate: ArrayDate): string {
   return arrayDate.join("-");
 }
+
+export const formatCurrency = (value: number) => {
+  const formatter = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
+
+  return formatter.format(value);
+};

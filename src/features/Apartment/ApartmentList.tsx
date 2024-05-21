@@ -18,6 +18,7 @@ import { useMemo, useState } from "react";
 import MRTTableRowActions from "../../components/MRTRowAction";
 import MRTRefreshButton from "../../components/MRTRefreshButton";
 import getDefaultMRTOptions from "../../utils/defaultMRTOptions";
+import { formatCurrency } from "../../utils/stringFormats";
 // ------------------------------------
 
 const columnDefs: MRT_ColumnDef<Apartment>[] = [
@@ -32,6 +33,7 @@ const columnDefs: MRT_ColumnDef<Apartment>[] = [
   {
     accessorKey: "retailPrice",
     header: "Retail Price",
+    Cell: ({ cell }) => <>{formatCurrency(cell.getValue<number>())}</>,
   },
 ];
 
@@ -115,6 +117,7 @@ const ApartmentList = () => {
       showAlertBanner: isError,
       showProgressBars: isLoading || isRefetching,
       sorting,
+      showColumnFilters: false,
     },
     renderRowActions: ({ row }) => (
       <MRTTableRowActions
