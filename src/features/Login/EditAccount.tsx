@@ -144,7 +144,11 @@ const EditAccount = () => {
               Disable account
             </Button>
           )}
-          <Button variant="outlined">Change password</Button>
+          <Button
+            variant="outlined"
+            onClick={() => navigate("changePassword", { state: { from: location } })}>
+            Change password
+          </Button>
         </Box>
         <RHFOutlinedTextField
           fullWidth

@@ -33,6 +33,7 @@ const CreateUser = lazy(() => import("../features/user/CreateUser"));
 const EditUser = lazy(() => import("../features/user/EditUser"));
 
 const EditAccount = lazy(() => import("../features/Login/EditAccount"));
+const ChangePassword = lazy(() => import("../features/Login/ChangePassword"));
 // ---------------------------------------------------------
 
 const Loading = () => {
@@ -176,6 +177,14 @@ const requireSignedInRoutes: RouteObject[] = [
         element: (
           <Suspense fallback={<Loading />}>
             <EditAccount />
+          </Suspense>
+        ),
+      },
+      {
+        path: "account/edit/changePassword",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ChangePassword />
           </Suspense>
         ),
       },

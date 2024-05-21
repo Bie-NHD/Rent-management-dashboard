@@ -13,7 +13,7 @@ export type WarningDialogProps = {
 // }
 
 export interface ChangePasswordProps {
-  prevPassword: string;
+  currentPassword: string;
   newPassword: string;
   repeatNewPassword: string;
 }
