@@ -20,7 +20,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/vi";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { REGEX_VALID_CITIZENID, REGEX_VALID_PHONE_NUMBER } from "../../constants";
 import { MutateDialogProps } from "../../types/props";
 
@@ -48,7 +48,7 @@ const schema: ObjectSchema<Inputs> = object({
     .default("")
     .label("Phone number")
     .length(10)
-    .matches(REGEX_VALID_PHONE_NUMBER),
+    .matches(REGEX_VALID_PHONE_NUMBER, ({ label }) => `${label} not valid`),
 });
 
 const CustomerMutateDialog = NiceModal.create(
@@ -146,6 +146,7 @@ const CustomerMutateDialog = NiceModal.create(
                     inputRef={field.ref}
                     onChange={(value) => field.onChange(value?.toDate())}
                     disableFuture
+                    maxDate={new Dayjs().subtract(1, "day")}
                     slotProps={{
                       textField: {
                         fullWidth: true,
