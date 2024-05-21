@@ -13,6 +13,8 @@ import RequireAdmin from "./RequireAdmin";
 import UserIndexPage from "../features/user/UserIndexPage";
 import LoginPage from "../features/Login/LoginPage";
 
+import { customerLoader } from "../utils/routerLoader";
+
 // ---------------------------------------------------------
 const ApartmentIndex = lazy(() => import("../features/Apartment/ApartmentIndex"));
 const ContractIndex = lazy(() => import("../features/Contract/ContractIndex"));
@@ -23,8 +25,9 @@ const ForgotPasswordPage = lazy(() => import("../features/Login/ForgotPasswordPa
 const RequireSignedIn = lazy(() => import("./RequireSignedIn"));
 
 const CreateContract = lazy(() => import("../features/Contract/CreateContract"));
-const CreateCustomer = lazy(() => import("../features/Customer/CreateCustomer"));
 
+const CreateCustomer = lazy(() => import("../features/Customer/CreateCustomer"));
+const EditCustomer = lazy(() => import("../features/Customer/EditCustomer"));
 // ---------------------------------------------------------
 
 const Loading = () => {
@@ -136,6 +139,11 @@ const requireSignedInRoutes: RouteObject[] = [
             <CreateContract />
           </Suspense>
         ),
+      },
+      {
+        path: `${ApiRoutes.customer.GetAll}/:id/edit`,
+        element: <EditCustomer />,
+        loader: customerLoader,
       },
     ],
   },

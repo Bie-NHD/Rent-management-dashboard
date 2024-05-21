@@ -1,31 +1,42 @@
+import React, { useEffect, useMemo, useState } from "react";
+import { redirect, useLoaderData, useLocation, useNavigate, useParams } from "react-router-dom";
+import { customerLoader } from "../../utils/routerLoader";
+import toast from "react-hot-toast";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { CustomerRoutes } from "../../constants";
-import dayjs from "dayjs";
-import PageHeader from "../../components/PageHeader";
-import { Box, Button, FormLabel } from "@mui/material";
+import { Box, FormLabel, Button } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import PageHeader from "../../components/PageHeader";
 import RHFOutlinedTextField from "../../components/inputs/RHFTextField";
-import { useCreateCustomer } from "../../hooks/customer";
-import toast from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
-import { redirect } from "react-micro-router";
+import { ApiRoutes, CustomerRoutes } from "../../constants";
 import { customerInputsSchema } from "../../constants/schema";
+import { useCreateCustomer, useUpdateCustomer } from "../../hooks";
+import { Api } from "../../api";
 
 type Inputs = Omit<CustomerUpdateDTO, "dob"> & {
   dob: Date;
 };
 
-const CreateCustomer = () => {
+const EditCustomer = () => {
+  const { id } = useParams();
+  const customer = useLoaderData() as Customer;
+
+  console.log(customer);
+
+  const __defaultValue = {
+    ...customer,
+    dob: dayjs(customer.dob).toDate(),
+  };
+
   const location = useLocation();
   const from = location?.state?.from || "/";
   const navigate = useNavigate();
 
   const [_errors, setErrors] = useState("");
 
-  const { mutate } = useCreateCustomer({
+  const { mutate } = useUpdateCustomer({
     onSuccess(data) {
       if (data.statusCode == 200 || data.statusCode == 201) {
         toast.success(data.message);
@@ -38,7 +49,7 @@ const CreateCustomer = () => {
   });
 
   const { handleSubmit, control } = useForm<Inputs>({
-    defaultValues: customerInputsSchema.getDefault() || {},
+    defaultValues: __defaultValue || customerInputsSchema.getDefault() || {},
     resolver: yupResolver<Inputs>(customerInputsSchema),
   });
 
@@ -50,14 +61,16 @@ const CreateCustomer = () => {
       dob: dayjs(__data.dob).format(`YYYY-MM-DD`).toString(),
     };
 
+    const __id = id as string;
+
     console.log(customerDto);
 
-    mutate(customerDto);
+    mutate({ id: __id, data: customerDto });
   };
 
   return (
     <>
-      <PageHeader>New Customer</PageHeader>
+      <PageHeader>Edit Customer</PageHeader>
       {!!_errors && <Box sx={{ border: "solid red 1px", color: "red" }}>{_errors}</Box>}
       <form onSubmit={handleSubmit(onSubmitNew)}>
         <RHFOutlinedTextField
@@ -126,4 +139,4 @@ const CreateCustomer = () => {
   );
 };
 
-export default CreateCustomer;
+export default EditCustomer;

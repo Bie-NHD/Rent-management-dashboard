@@ -20,8 +20,9 @@ import useUser from "../../hooks/useUser";
 import { useGetCustomers, useUpdateCustomer } from "../../hooks";
 import getDefaultMRTOptions from "../../utils/defaultMRTOptions";
 import { MutateDialogProps } from "../../types/props";
-import { NM_CUSTOMER, QK_CUSTOMERs } from "../../constants";
+import { ApiRoutes, NM_CUSTOMER, QK_CUSTOMERs } from "../../constants";
 import toast from "react-hot-toast";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const columnDefs: MRT_ColumnDef<Customer>[] = [
   {
@@ -48,6 +49,9 @@ const CustomerList = () => {
   const [globalFilter, setGlobalFilter] = useState<string>(""); // search filter
   const client = useQueryClient();
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   /**
    *  Data fetching
    */
@@ -67,23 +71,10 @@ const CustomerList = () => {
     },
   });
 
-  const { mutate } = useUpdateCustomer({
-    onSuccess(data, variables, context) {
-      client.invalidateQueries({ queryKey: [QK_CUSTOMERs] });
-
-      data.statusCode == 200 ? toast.success(data.message) : toast.error(data.message);
-    },
-  });
-
   // when resolved, refetch current account & data
 
   const handleEditItem = (user: Customer) => {
-    const params: MutateDialogProps<Customer> = {
-      data: user,
-      onUpdate: mutate,
-    };
-
-    NiceModal.show(NM_CUSTOMER, params);
+    navigate(`${ApiRoutes.customer.GetAll}/${user.id}/edit`, { state: { from: location } });
   };
   // Define table -----------------------------------------
 
@@ -98,6 +89,7 @@ const CustomerList = () => {
       showAlertBanner: isError,
       showProgressBars: isLoading || isRefetching,
       sorting,
+      showColumnFilters: false,
     },
     renderRowActions: ({ row }) => (
       <MRTTableRowActions onEditItem={() => handleEditItem(customers[row.index])} />
