@@ -25,8 +25,8 @@ import toast from "react-hot-toast";
 
 const columnDefs: MRT_ColumnDef<Customer>[] = [
   {
-    accessorKey: "fullname",
-    header: "Role",
+    accessorKey: "fullName",
+    header: "Full name",
   },
   {
     accessorKey: "citizenId",

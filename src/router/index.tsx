@@ -1,12 +1,12 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
-import { StatisticPage } from "../features/Statistic/StatisticPage";
+import StatisticPage from "../features/Statistic/StatisticPage";
 // import { loader as importLoader } from "./pages/ImportPage";
 
 import ErrorPage from "../features/error-page/ErrorPage";
 import { lazy, Suspense } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-import { AppRoutes } from "../constants";
+import { ApiRoutes, AppRoutes } from "../constants";
 
 import RegisterPage from "../features/Login/RegisterPage";
 import RequireAdmin from "./RequireAdmin";
@@ -22,6 +22,9 @@ const ImportPage = lazy(() => import("../features/Import/ImportPage"));
 const ForgotPasswordPage = lazy(() => import("../features/Login/ForgotPasswordPage"));
 const RequireSignedIn = lazy(() => import("./RequireSignedIn"));
 
+const CreateContract = lazy(() => import("../features/Contract/CreateContract"));
+const CreateCustomer = lazy(() => import("../features/Customer/CreateCustomer"));
+
 // ---------------------------------------------------------
 
 const Loading = () => {
@@ -32,8 +35,7 @@ const Loading = () => {
         width: "100%",
         alignItems: "center",
         justifyContent: "center",
-      }}
-    >
+      }}>
       <CircularProgress sx={{ alignSelf: "center" }} />
     </Box>
   );
@@ -110,7 +112,19 @@ const requireSignedInRoutes: RouteObject[] = [
       </Suspense>
     ),
     errorElement: <ErrorPage />,
-    children: [...indexRoutes, ...importRoutes, ...requireAdminRoutes],
+    children: [
+      ...indexRoutes,
+      ...importRoutes,
+      ...requireAdminRoutes,
+      {
+        path: ApiRoutes.customer.Add,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <CreateCustomer />
+          </Suspense>
+        ),
+      },
+    ],
   },
 ];
 

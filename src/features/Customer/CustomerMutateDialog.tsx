@@ -146,7 +146,7 @@ const CustomerMutateDialog = NiceModal.create(
                     inputRef={field.ref}
                     onChange={(value) => field.onChange(value?.toDate())}
                     disableFuture
-                    maxDate={new Dayjs().subtract(1, "day")}
+                    maxDate={dayjs().subtract(1, "day")}
                     slotProps={{
                       textField: {
                         fullWidth: true,
