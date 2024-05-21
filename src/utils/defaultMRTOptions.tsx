@@ -19,7 +19,7 @@ const getDefaultMRTOptions = <TData extends MRT_RowData>({
   //   enableRowPinning: true,
   enableRowActions: true,
   initialState: { showColumnFilters: true },
-  manualFiltering: true,
+  // manualFiltering: true,
   manualPagination: true, //turn off built-in client-side pagination
   manualSorting: true, //turn off built-in client-side sorting
   onPaginationChange: setPagination,
