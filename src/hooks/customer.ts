@@ -1,6 +1,12 @@
 import { createMutation, createQuery } from "react-query-kit";
 import { Api } from "../api";
-import { ApartmentRoutes, AppRoutes, CustomerRoutes, QK_APARTMENTS } from "../constants";
+import {
+  ApartmentRoutes,
+  AppRoutes,
+  CustomerRoutes,
+  QK_APARTMENTS,
+  QK_CUSTOMERs,
+} from "../constants";
 import toast from "react-hot-toast";
 import { QueryClient, keepPreviousData } from "@tanstack/react-query";
 
@@ -33,18 +39,18 @@ export const useGetCustomers = createQuery<
   UseGetCutomerssHookReturns,
   ApiFetchParams & { q: string }
 >({
-  queryKey: [QK_APARTMENTS],
+  queryKey: [QK_CUSTOMERs],
   fetcher: (variables: ApiFetchParams & { q: string }) => {
     const { q, ...others } = variables;
 
     return !!q
-      ? Api.search<CustomerApiResponse>(ApartmentRoutes.Search, variables).then((value) => ({
+      ? Api.search<CustomerApiResponse>(CustomerRoutes.Search, variables).then((value) => ({
           data: value.customers,
           meta: {
             totalRowCount: value.page.totalElements,
           },
         }))
-      : Api.fetch<CustomerApiResponse>(ApartmentRoutes.GetAll, { ...others }).then((value) => ({
+      : Api.fetch<CustomerApiResponse>(CustomerRoutes.GetAll, { ...others }).then((value) => ({
           data: value.customers,
           meta: {
             totalRowCount: value.page.totalElements,
