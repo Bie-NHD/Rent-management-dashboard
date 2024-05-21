@@ -31,6 +31,8 @@ const EditCustomer = lazy(() => import("../features/Customer/EditCustomer"));
 
 const CreateUser = lazy(() => import("../features/user/CreateUser"));
 const EditUser = lazy(() => import("../features/user/EditUser"));
+
+const EditAccount = lazy(() => import("../features/Login/EditAccount"));
 // ---------------------------------------------------------
 
 const Loading = () => {
@@ -168,6 +170,14 @@ const requireSignedInRoutes: RouteObject[] = [
         path: `${ApiRoutes.customer.GetAll}/:id/edit`,
         element: <EditCustomer />,
         loader: customerLoader,
+      },
+      {
+        path: "account/edit",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <EditAccount />
+          </Suspense>
+        ),
       },
     ],
   },

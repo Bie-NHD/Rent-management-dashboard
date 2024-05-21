@@ -6,14 +6,16 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import EditIcon from "@mui/icons-material/Edit";
 import NiceModal from "@ebay/nice-modal-react";
 import UserUpdateDialog from "./UserUpdateDialog";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { NM_WARNING } from "../../constants";
 import UserUpdateDialogForAdmin from "./UserUpdateDialogForAdmin";
+import { WarningDialogProps } from "../../types/props";
 
 const UserNavPanel = () => {
   const { logout } = useAuth();
   const { user, isAdmin } = useUser();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = async () => {
     const wn_ctnt: WarningDialogProps = {
@@ -28,9 +30,10 @@ const UserNavPanel = () => {
   };
 
   const handleOnClickEdit = () => {
-    NiceModal.show(isAdmin ? UserUpdateDialogForAdmin : UserUpdateDialog, {
-      user: user,
-    });
+    // NiceModal.show(isAdmin ? UserUpdateDialogForAdmin : UserUpdateDialog, {
+    //   user: user,
+    // });
+    navigate("account/edit", { state: { from: location } });
   };
 
   return (
