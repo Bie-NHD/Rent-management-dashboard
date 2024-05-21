@@ -7,6 +7,19 @@ import { NM_CONTRACT, NM_USER_CREATE } from "../../constants";
 import { useCreateUser } from "../../hooks/user";
 import toast from "react-hot-toast";
 import { MutateDialogProps } from "../../types/props";
+import { Container, Button } from "@mui/material";
+import ExportButton from "../../components/buttons/ExportButton";
+import ImportButton from "../../components/buttons/ImportButton";
+import AddCircle from "@mui/icons-material/AddCircle";
+
+const styles = {
+  display: "flex",
+  justifyContent: "end",
+  justifyItems: "start",
+  marginRight: 0,
+};
+
+const location = window.location.pathname;
 
 const UserIndexPage = () => {
   const { mutateAsync } = useCreateUser({
@@ -24,7 +37,13 @@ const UserIndexPage = () => {
   return (
     <>
       <PageHeader />
-      <IndexToolBar handleNewItem={handleNewItem} />
+      <Container sx={styles}>
+        <Button variant="contained" startIcon={<AddCircle />} onClick={handleNewItem}>
+          New
+        </Button>
+        {/* <ImportButton /> */}
+        <ExportButton exportType={location} />
+      </Container>
       <UserList />
     </>
   );
