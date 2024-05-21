@@ -1,6 +1,5 @@
 export * from "./AppRoutes";
 
-export * from "./statusCodes";
 // Nice modal ids
 export const NM_APARTMENT = "apartment-dlg" as const;
 export const NM_WARNING = "warning-dlg" as const;
@@ -23,8 +22,15 @@ export const UserRoles = Object.freeze({
   MANAGER: "MANAGER",
 } as const);
 
+// REGEX
 export const REGEX_VALID_CITIZENID = new RegExp(/^[0-9]{12}$/g);
 export const REGEX_VALID_PHONE_NUMBER = new RegExp(
   /0(3[2-9]|5[689]|7[06-9]|8[1-68-9]|9[0-46-9])[0-9]{7}/g
 );
 export const REGEX_VALID_USERNAME = new RegExp(/[A-Za-z][A-Za-z0-9_]{4,24}/);
+
+// STATUS CODES
+export const StatusCode = Object.freeze({
+  OK: [200, 201],
+  Error: 400,
+});

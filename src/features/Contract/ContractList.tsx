@@ -24,22 +24,23 @@ import { useGetApartments } from "../../hooks";
 import TableLoading from "../../components/placeholder/TableLoading";
 import { useGetContracts } from "../../hooks";
 import { transformToContractVM } from "../../utils/transform";
+import getDefaultMRTOptions from "../../utils/defaultMRTOptions";
 
 // ------------------------------------
 
-// TODO: Fix Data type
-
-const columnDefs: MRT_ColumnDef<ContractVM>[] = [
+const columnDefs: MRT_ColumnDef<Contract>[] = [
   {
     accessorKey: "id",
     header: "Id",
   },
   {
-    accessorKey: "customerName",
+    id: "customerName",
+    accessorFn: (row) => row.customer.fullName,
     header: "Customer Name",
   },
   {
-    accessorKey: "apartmentAddress",
+    id: "apartmentAddress",
+    accessorFn: (row) => row.apartment.address,
     header: "Apartment",
   },
 ];
@@ -72,10 +73,6 @@ const ContractList = () => {
       pageSize: pagination.pageSize, //refetch when pagination.pageSize changes
       sortBy: sorting?.map((value) => value.id).toString(), //refetch when sorting changes
     },
-    select: (data) => ({
-      ...data,
-      contracts: data.contracts.map((item) => transformToContractVM(item)),
-    }),
   });
 
   // Define columns ---------------------------------------
@@ -83,14 +80,11 @@ const ContractList = () => {
 
   // Define table -----------------------------------------
 
-  const table = useMaterialReactTable<ContractVM>({
+  const table = useMaterialReactTable<Contract>({
+    ...getDefaultMRTOptions<Contract>({ setGlobalFilter, setPagination, setSorting, refetch }),
     columns: columnDefs,
     data: contracts,
     rowCount: meta?.totalRowCount ?? 0,
-    manualPagination: true, //turn off built-in client-side pagination
-    manualSorting: true, //turn off built-in client-side sorting
-    onPaginationChange: setPagination,
-    onSortingChange: setSorting,
     state: {
       isLoading,
       pagination,
@@ -98,21 +92,6 @@ const ContractList = () => {
       showProgressBars: isLoading || isRefetching,
       sorting,
     },
-    renderTopToolbarCustomActions: () => (
-      <Tooltip arrow title="Refresh Data">
-        <IconButton onClick={() => refetch()}>
-          <RefreshIcon />
-        </IconButton>
-      </Tooltip>
-    ),
-    renderToolbarInternalActions: ({ table }) => (
-      <>
-        {/* built-in buttons (must pass in table prop for them to work!) */}
-        <MRT_ToggleGlobalFilterButton table={table} />
-        <MRT_ShowHideColumnsButton table={table} />
-      </>
-    ),
-    enableRowActions: true,
   });
 
   // -------------------------------------------------------

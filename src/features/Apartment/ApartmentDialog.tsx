@@ -72,6 +72,7 @@ const ApartmentDialog = NiceModal.create(({ apartment }: { apartment: Apartment 
           label="Retail Price"
           type="number"
           control={control}
+          // TODO: Mask / Format currency
           inputProps={{ step: 1000, format: "###.###.###" }}
           margin="dense"
         />

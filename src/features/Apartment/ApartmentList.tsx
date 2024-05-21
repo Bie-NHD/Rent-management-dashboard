@@ -44,7 +44,7 @@ const ApartmentList = () => {
   });
 
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
-  // TODO: Add search in ```ApartmentList``` (untested)
+
   const [globalFilter, setGlobalFilter] = useState<string>(""); // search filter
   const client = useQueryClient();
 

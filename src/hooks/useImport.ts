@@ -1,18 +1,13 @@
 import { createMutation, createQuery } from "react-query-kit";
-import { ApartmentURLs, QK_APARTMENTS, StatusCode } from "../constants";
-import {
-  QueryClient,
-  keepPreviousData,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { ApartmentRoutes, QK_APARTMENTS, StatusCode } from "../constants";
+import { QueryClient, keepPreviousData, useQueryClient } from "@tanstack/react-query";
 import { Api } from "../api";
 import { checkChangesFromImportResponse } from "../utils/importUtils";
 import React from "react";
 
 type Data = { url: string; formData: FormData };
 
-const importData = (variables: Data) =>
-  Api.import(variables.url, variables.formData);
+const importData = (variables: Data) => Api.import(variables.url, variables.formData);
 
 export function useImportFile() {
   const client = useQueryClient();
