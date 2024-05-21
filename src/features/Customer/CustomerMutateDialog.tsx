@@ -47,7 +47,7 @@ const schema: ObjectSchema<Inputs> = object({
     .required()
     .default("")
     .label("Phone number")
-    .length(7)
+    .length(10)
     .matches(REGEX_VALID_PHONE_NUMBER),
 });
 
@@ -131,7 +131,7 @@ const CustomerMutateDialog = NiceModal.create(
             margin="dense"
             variant="outlined"
           />
-          <Box>
+          <Box marginBlock={1}>
             <Controller
               name="dob"
               control={control}
