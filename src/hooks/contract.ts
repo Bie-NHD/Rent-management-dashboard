@@ -1,5 +1,5 @@
 import { createMutation, createQuery } from "react-query-kit";
-import { ApartmentURLs, AppRoutes, ContractURLs, QK_CONTRACTS } from "../constants";
+import { ApartmentRoutes, AppRoutes, ContractRoutes, QK_CONTRACTS } from "../constants";
 import { QueryClient, keepPreviousData } from "@tanstack/react-query";
 import { Api } from "../api";
 import toast from "react-hot-toast";
@@ -12,7 +12,7 @@ type UseGetContractsHookReturns = {
 export const useGetContracts = createQuery<UseGetContractsHookReturns, ApiFetchParams>({
   queryKey: [QK_CONTRACTS],
   fetcher: (variables: ApiFetchParams): Promise<UseGetContractsHookReturns> =>
-    Api.fetch<ContractApiResponse>(ContractURLs.GetAll, variables).then((value) => ({
+    Api.fetch<ContractApiResponse>(ContractRoutes.GetAll, variables).then((value) => ({
       contracts: value.contracts,
       meta: {
         totalRowCount: value.page.totalElements,
@@ -22,7 +22,8 @@ export const useGetContracts = createQuery<UseGetContractsHookReturns, ApiFetchP
 });
 
 export const useCreateContract = createMutation({
-  mutationFn: async (variables: Omit<Apartment, "id">) => Api.create(ApartmentURLs.Add, variables),
+  mutationFn: async (variables: Omit<Apartment, "id">) =>
+    Api.create(ApartmentRoutes.Add, variables),
 
   onError(error, variables, context) {
     console.log(error);
@@ -37,8 +38,8 @@ export const useCreateContract = createMutation({
 export const useUpdateContract = createMutation({
   mutationFn: async (variables: { data: ApiUpdateParams<Omit<Apartment, "id">>; action: string }) =>
     variables.action === AppRoutes.Update
-      ? Api.update(ApartmentURLs.Update, variables.data)
-      : Api.delete(ApartmentURLs.Delete, variables.data),
+      ? Api.update(ApartmentRoutes.Update, variables.data)
+      : Api.delete(ApartmentRoutes.Delete, variables.data),
   onError(error, variables, context) {
     console.log(error || "Trouble updating apartment");
     toast.error(error.message || "Trouble updating apartment");

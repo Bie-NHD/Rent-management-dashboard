@@ -47,8 +47,8 @@ const UserList = () => {
     pageSize: 10,
   });
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
-  // TODO: Add search in ```UserList```
-  const [globalFilter, setGlobalFilter] = useState(""); // search filter
+
+  // const [globalFilter, setGlobalFilter] = useState(""); // search filter
   const client = useQueryClient();
 
   const { refetch: refechUser, isAdmin, user: _user } = useUser();
@@ -80,7 +80,7 @@ const UserList = () => {
   // Define table -----------------------------------------
 
   const table = useMaterialReactTable({
-    ...getDefaultMRTOptions<User>({ setGlobalFilter, setPagination, setSorting, refetch }),
+    ...getDefaultMRTOptions<User>({ setPagination, setSorting, refetch }),
     columns: columnDefs,
     data: users,
     rowCount: meta?.totalRowCount ?? 0,

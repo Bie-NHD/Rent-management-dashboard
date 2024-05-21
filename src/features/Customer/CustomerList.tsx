@@ -44,11 +44,10 @@ const CustomerList = () => {
     pageSize: 10,
   });
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
-  // TODO: Add search in ```CustomerList```
-  const [globalFilter, setGlobalFilter] = useState(""); // search filter
+
+  const [globalFilter, setGlobalFilter] = useState<string>(""); // search filter
   const client = useQueryClient();
 
-  const { refetch: refechUser, isAdmin, user: _user } = useUser();
   /**
    *  Data fetching
    */
@@ -64,6 +63,7 @@ const CustomerList = () => {
       page: pagination.pageIndex, //refetch when pagination.pageIndex changes
       pageSize: pagination.pageSize, //refetch when pagination.pageSize changes
       sortBy: sorting?.map((value) => value.id).toString(), //refetch when sorting changes
+      q: globalFilter,
     },
   });
 

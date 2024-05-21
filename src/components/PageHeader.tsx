@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
-import React from "react";
+import { ReactNode } from "react";
 
-const PageHeader = () => {
+const PageHeader = ({ children }: { children?: string | ReactNode | ReactNode[] }) => {
   const pageHeader: string = (() => {
     const location = window.location.pathname.slice(1);
 
@@ -9,7 +9,7 @@ const PageHeader = () => {
   })();
   return (
     <Typography variant="h2" gutterBottom>
-      {pageHeader}
+      {children || pageHeader}
     </Typography>
   );
 };

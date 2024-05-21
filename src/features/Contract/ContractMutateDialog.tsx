@@ -52,7 +52,7 @@ const ContractMutateDialog = NiceModal.create(
     ) => {
       event?.preventDefault();
 
-      // TODO: Handle submit customer
+      // TODO: Handle submit contract
 
       /**
        * https://stackoverflow.com/a/67535605/20423795

@@ -39,18 +39,18 @@ export const AppRoutes = Object.freeze({
 const RoutesFactory = (url: string) =>
   Object.freeze({
     GetAll: url,
-    Add: url + AppRoutes.Add,
-    Update: url + AppRoutes.Update,
-    Delete: url + AppRoutes.Delete,
-    Import: url + AppRoutes.Import,
-    Export: url + AppRoutes.Export,
+    Add: url + ADD,
+    Update: url + UPDATE,
+    Delete: url + DELETE,
+    Import: url + IMPORT,
+    Export: url + EXPORT,
     Search: url + SEARCH,
     Statistics: url + STATISTICS,
   } as const);
 
-export const ApartmentURLs = RoutesFactory(APARTMENT);
+export const ApartmentRoutes = RoutesFactory(APARTMENT);
 
-export const ContractURLs = RoutesFactory(CONTRACT);
+export const ContractRoutes = RoutesFactory(CONTRACT);
 
 export const CustomerRoutes = RoutesFactory(CUSTOMER);
 
@@ -67,6 +67,7 @@ export const UserRoutes = Object.freeze({
   update: "/users/update",
   changePassword: "/users/changePassword",
   add: "/users/add",
+  search: "/users/search",
 } as const);
 
 /**
@@ -74,8 +75,8 @@ export const UserRoutes = Object.freeze({
  */
 
 export const ApiRoutes = Object.freeze({
-  apartment: ApartmentURLs,
-  contract: ContractURLs,
+  apartment: ApartmentRoutes,
+  contract: ContractRoutes,
   auth: AuthRoutes,
   user: UserRoutes,
   customer: CustomerRoutes,

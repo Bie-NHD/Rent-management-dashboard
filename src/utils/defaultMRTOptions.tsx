@@ -36,7 +36,7 @@ const getDefaultMRTOptions = <TData extends MRT_RowData>({
   renderToolbarInternalActions: ({ table }) => (
     <>
       {/* built-in buttons (must pass in table prop for them to work!) */}
-      <MRT_ToggleGlobalFilterButton table={table} />
+      {setGlobalFilter ? <MRT_ToggleGlobalFilterButton table={table} /> : null}
       <MRT_ShowHideColumnsButton table={table} />
       {/* <MRT_ToggleDensePaddingButton table={table} /> */}
     </>

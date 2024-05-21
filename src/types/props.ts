@@ -30,6 +30,6 @@ export type MutateDialogProps<TData = Apartment | Customer | Contract> = {
 export type AppDefaultMRTOptionsProps = {
   setPagination: React.Dispatch<React.SetStateAction<MRT_PaginationState>>;
   setSorting: React.Dispatch<React.SetStateAction<MRT_SortingState>>;
-  setGlobalFilter: React.Dispatch<React.SetStateAction<string | any>>;
+  setGlobalFilter?: React.Dispatch<React.SetStateAction<string | any>>;
   refetch: (...args: any[]) => Promise<any>;
 };
