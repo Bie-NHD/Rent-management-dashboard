@@ -24,7 +24,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { REGEX_VALID_CITIZENID, REGEX_VALID_PHONE_NUMBER } from "../../constants";
 import { MutateDialogProps } from "../../types/props";
 
-type Inputs = Omit<CustomerUpdateDTO, "dob"> & {
+type CustomerInputs = Omit<CustomerUpdateDTO, "dob"> & {
   dob: Date;
 };
 
@@ -32,7 +32,7 @@ type Inputs = Omit<CustomerUpdateDTO, "dob"> & {
  * TODO: Validate inputs
  */
 
-const schema: ObjectSchema<Inputs> = object({
+const schema: ObjectSchema<CustomerInputs> = object({
   address: string().required().default(""),
   fullName: string().required().default(""),
   citizenId: string()
@@ -61,12 +61,12 @@ const CustomerMutateDialog = NiceModal.create(
       [data]
     );
 
-    const { handleSubmit, control } = useForm<Inputs>({
+    const { handleSubmit, control } = useForm<CustomerInputs>({
       defaultValues: _defaultValue,
-      resolver: yupResolver<Inputs>(schema),
+      resolver: yupResolver<CustomerInputs>(schema),
     });
 
-    const onSubmitNew: SubmitHandler<Inputs> = (__data, event) => {
+    const onSubmitNew: SubmitHandler<CustomerInputs> = (__data, event) => {
       event?.preventDefault();
 
       const customerDto: CustomerUpdateDTO = {

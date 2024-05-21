@@ -113,6 +113,11 @@ const requireSignedInRoutes: RouteObject[] = [
     ),
     errorElement: <ErrorPage />,
     children: [
+      {
+        path: "/",
+        index: true,
+        element: <StatisticPage />,
+      },
       ...indexRoutes,
       ...importRoutes,
       ...requireAdminRoutes,
@@ -121,6 +126,14 @@ const requireSignedInRoutes: RouteObject[] = [
         element: (
           <Suspense fallback={<Loading />}>
             <CreateCustomer />
+          </Suspense>
+        ),
+      },
+      {
+        path: ApiRoutes.contract.Add,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <CreateContract />
           </Suspense>
         ),
       },

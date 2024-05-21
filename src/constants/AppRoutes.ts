@@ -11,7 +11,7 @@ const EXPORT = "/export" as const;
 const APARTMENT = "/apartments" as const;
 const CONTRACT = "/contracts" as const;
 const CUSTOMER = "/customers" as const;
-const USER = "/user" as const;
+const USER = "/users" as const;
 const STATISTICS = "/statistic" as const;
 /**
  * App routes in client
@@ -68,6 +68,7 @@ export const UserRoutes = Object.freeze({
   changePassword: "/users/changePassword",
   add: "/users/add",
   search: "/users/search",
+  Statistics: `/users${STATISTICS}`,
 } as const);
 
 /**

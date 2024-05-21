@@ -17,7 +17,7 @@ const ImportConfig = {
 
 // --------------------------------------------------
 
-const FetchApi = async <TData>(url: string, params: ApiFetchParams) =>
+const FetchApi = async <TData>(url: string, params: Partial<ApiFetchParams>) =>
   privateInstance
     .get<ApiResponse<TData>>(url, { params: params })
     .then((response) => response.data.data); // AxiosResponse = {data: <T = TApiResponse>, ...others}
@@ -52,6 +52,7 @@ const SearchApi = async <TData>(url: string, params: ApiSearchParams) =>
 // ---------------------------------------------------
 
 export const Api = Object.freeze({
+  instance: privateInstance,
   fetch: FetchApi,
   update: UpdateApi,
   export: ExportApi,

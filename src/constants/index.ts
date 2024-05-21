@@ -16,6 +16,9 @@ export const QK_CUSTOMERs = "customers" as const;
 export const QK_USERS = "users" as const;
 export const QK_ACCOUNT = "account" as const;
 export const QK_ACCESS_TOKEN = "access_token" as const;
+export const QK_STAT_APARMENT = "QK_STAT_APARMENT" as const;
+export const QK_STAT_CUSTOMER = "QK_STAT_CUSTOMER" as const;
+export const QK_STAT_USER = "QK_STAT_USER" as const;
 
 export const UserRoles = Object.freeze({
   STAFF: "STAFF",
