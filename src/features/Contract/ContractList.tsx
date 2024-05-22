@@ -1,19 +1,21 @@
 import {
   MRT_ColumnDef,
   MRT_PaginationState,
+  MRT_Row,
   MRT_ShowHideColumnsButton,
   MRT_SortingState,
+  MRT_TableInstance,
   MRT_ToggleGlobalFilterButton,
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
 import { useState } from "react";
-import { MenuItem } from "@mui/material";
+import { Alert, CircularProgress, MenuItem, Stack } from "@mui/material";
 
 import ErrorPlaceHolder from "../../components/placeholder/ErrorPlaceHolder";
 import NiceModal from "@ebay/nice-modal-react";
 import toast from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { Edit } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
@@ -26,6 +28,9 @@ import { useGetContracts } from "../../hooks";
 
 import getDefaultMRTOptions from "../../utils/defaultMRTOptions";
 import { formatCurrency } from "../../utils/stringFormats";
+import MRTTableRowActions from "../../components/MRTRowAction";
+import { Api } from "../../api";
+import { ApiRoutes } from "../../constants";
 
 // ------------------------------------
 
@@ -52,6 +57,36 @@ const columnDefs: MRT_ColumnDef<ContractResponseDTO>[] = [
     header: "createDate",
   },
 ];
+
+const DetailPanel = ({ row,table }: { row: MRT_Row<ContractResponseDTO>,table: MRT_TableInstance<ContractResponseDTO> }) => {
+  const {
+    data: userInfo,
+    isLoading,
+    isError,
+  } = useQuery(
+    {
+      queryFn: async () => await Api.instance.get<ApiResponse<Customer> >(ApiRoutes.customer.GetAll+`/${row.original.customerId}`).then(res=>res.data?.data)
+    }
+  );
+  if (isLoading) return <CircularProgress />;
+  if (isError) return <Alert severity="error">Error Loading User Info</Alert>;
+
+  const { favoriteMusic, favoriteSong, quote } = userInfo ?? {};
+
+  return (
+    <Stack gap="0.5rem" minHeight="00px">
+      <div>
+        <b>Favorite Music:</b> {favoriteMusic}
+      </div>
+      <div>
+        <b>Favorite Song:</b> {favoriteSong}
+      </div>
+      <div>
+        <b>Quote:</b> {quote}
+      </div>
+    </Stack>
+  );
+};
 
 // ------------------------------------
 
@@ -100,6 +135,16 @@ const ContractList = () => {
       showProgressBars: isLoading || isRefetching,
       sorting,
     },
+    // renderRowActions: ({ row }) => (
+    //   // <MRTTableRowActions
+      
+    //   //   onEditItem={() => handleEditITem(row.index)}
+    //   // />,
+      
+    // ),
+renderDetailPanel(props) {
+    
+},
   });
 
   // -------------------------------------------------------
