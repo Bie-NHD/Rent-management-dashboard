@@ -53,3 +53,11 @@ export const useGetApartments = createQuery<UseGetApartmentsHookReturns, ApiSear
   },
   placeholderData: keepPreviousData,
 });
+
+export const useGetApartmentById = createQuery({
+  queryKey: [QK_APARTMENTS],
+  fetcher: async (variables: { id: string }) =>
+    await Api.instance
+      .get<ApiResponse<Apartment>>(ApartmentRoutes.GetAll + `/${variables.id}`)
+      .then((res) => res.data?.data),
+});

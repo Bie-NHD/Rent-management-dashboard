@@ -57,6 +57,13 @@ export const useGetCustomers = createQuery<
           },
         }));
   },
-
   placeholderData: keepPreviousData,
+});
+
+export const useGetCustomerById = createQuery({
+  queryKey: [QK_CUSTOMERs],
+  fetcher: async (variables: { id: string }) =>
+    await Api.instance
+      .get<ApiResponse<Customer>>(CustomerRoutes.GetAll + `/${variables.id}`)
+      .then((res) => res.data?.data),
 });
