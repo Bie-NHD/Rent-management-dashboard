@@ -81,6 +81,18 @@ type ContractDTO = {
   startDate: string;
 };
 
+type ContractResponseDTO = {
+  apartmentId: string;
+createDate: string;
+customerId: string;
+endDate: string;
+id: string;
+retailPrice:number;
+startDate:string;
+total:number;
+userId: string;
+}
+
 type UserUpdateDTO = Pick<User, "email" | "role" | "active" | "fullName">;
 type UserCreateDTO = Omit<UserUpdateDTO, "active"> & Pick<User, "username">;
 type ApartmentUpdateDTO = Omit<Apartment, "id">;
@@ -126,7 +138,7 @@ type ApartmentApiResponse = {
 
 type ContractApiResponse = {
   page: TPagination;
-  contracts: Contract[];
+  contracts: ContractResponseDTO[];
 };
 
 type CustomerApiResponse = {

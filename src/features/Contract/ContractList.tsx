@@ -23,25 +23,33 @@ import { useGetApartments } from "../../hooks";
 
 import TableLoading from "../../components/placeholder/TableLoading";
 import { useGetContracts } from "../../hooks";
-import { transformToContractVM } from "../../utils/transform";
+
 import getDefaultMRTOptions from "../../utils/defaultMRTOptions";
+import { formatCurrency } from "../../utils/stringFormats";
 
 // ------------------------------------
 
-const columnDefs: MRT_ColumnDef<Contract>[] = [
+const columnDefs: MRT_ColumnDef<ContractResponseDTO>[] = [
+  { accessorKey: "apartmentId",
+    header: "apartmentId",
+  },
+    { accessorKey: "customerId",
+    header: "customerId",
+  },
   {
     accessorKey: "id",
     header: "Id",
   },
   {
-    id: "customerName",
-    accessorFn: (row) => row.customer.fullName,
-    header: "Customer Name",
+    accessorKey: "retailPrice",
+
+    header: "retailPrice",
+    Cell: ({cell})=> formatCurrency (cell.getValue<number>())
   },
   {
-    id: "apartmentAddress",
-    accessorFn: (row) => row.apartment.address,
-    header: "Apartment",
+    accessorKey: "createDate",
+   
+    header: "createDate",
   },
 ];
 
@@ -80,8 +88,8 @@ const ContractList = () => {
 
   // Define table -----------------------------------------
 
-  const table = useMaterialReactTable<Contract>({
-    ...getDefaultMRTOptions<Contract>({ setGlobalFilter, setPagination, setSorting, refetch }),
+  const table = useMaterialReactTable<ContractResponseDTO>({
+    ...getDefaultMRTOptions<ContractResponseDTO>({ setGlobalFilter, setPagination, setSorting, refetch }),
     columns: columnDefs,
     data: contracts,
     rowCount: meta?.totalRowCount ?? 0,

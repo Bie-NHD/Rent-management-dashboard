@@ -27,7 +27,7 @@ export function sanitize(input: string) {
 }
 
 export function transformArrayDateToString(arrayDate: ArrayDate): string {
-  return arrayDate.join("-");
+  return Array.call(arrayDate).join("-")
 }
 
 export const formatCurrency = (value: number) => {
