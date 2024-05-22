@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { Button, FormControl, Box, Stack, LinearProgress, List, ListItem, Typography, Paper } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  Box,
+  Stack,
+  LinearProgress,
+  List,
+  ListItem,
+  Typography,
+  Paper,
+} from "@mui/material";
 import Container from "@mui/material/Container";
 // icons
 import { CloudUploadOutlined } from "@mui/icons-material";
@@ -11,8 +21,6 @@ import { styled } from "@mui/material/styles";
 import DeleteButton from "../../components/buttons/DeleteButton";
 import { useImportFile } from "../../hooks/useImport";
 // -----------------------------------------------------------------
-
-const pathName = window.location.pathname;
 
 const styles = {
   button: {
@@ -75,6 +83,9 @@ function getImportMessages(response: ApiResponse<ImportResponse>) {
 }
 
 const ImportPage = () => {
+  const pathName = window.location.pathname.split("/").at(-1) as string;
+  console.log(pathName);
+
   const [fileStates, setFileStates] = useState<FileState[]>([]);
   // const [fileStates,dispatchFileStates] = useReducer(fileStatesReducer,[])
   const [showProgressBar, setShowProgressBar] = React.useState(false);
@@ -140,7 +151,12 @@ const ImportPage = () => {
             startIcon={<CloudUploadOutlined />}
             sx={styles.button}>
             Upload file
-            <VisuallyHiddenInput type="file" accept=".csv" multiple onChange={(e) => updateFiles(e.target.files)} />
+            <VisuallyHiddenInput
+              type="file"
+              accept=".csv"
+              multiple
+              onChange={(e) => updateFiles(e.target.files)}
+            />
           </Button>
           <Button
             variant="contained"
