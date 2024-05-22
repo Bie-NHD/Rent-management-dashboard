@@ -20,7 +20,7 @@ const styles = {
   marginRight: 0,
 };
 
-const location = window.location.pathname;
+
 
 const UserIndexPage = () => {
   const { mutateAsync } = useCreateUser({
@@ -49,7 +49,7 @@ const UserIndexPage = () => {
           New
         </Button>
         {/* <ImportButton /> */}
-        <ExportButton exportType={location} />
+        <ExportButton exportType={location.pathname} />
       </Container>
       <UserList />
     </>
