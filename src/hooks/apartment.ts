@@ -25,7 +25,7 @@ export const useUpdateApartment = createMutation({
   mutationFn: async (variables: { data: ApiUpdateParams<ApartmentUpdateDTO>; action: string }) =>
     variables.action === AppRoutes.Update
       ? Api.update(ApartmentRoutes.Update, variables.data)
-      : Api.delete(ApartmentRoutes.Delete, variables.data),
+      : Api.delete(ApartmentRoutes.Delete, { id: variables.data.id }),
   onError(error, variables, context) {
     console.log(error || "Trouble updating apartment");
     toast.error(error.message || "Trouble updating apartment");

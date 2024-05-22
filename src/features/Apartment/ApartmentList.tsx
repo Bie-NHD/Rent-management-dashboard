@@ -50,13 +50,6 @@ const ApartmentList = () => {
   const [globalFilter, setGlobalFilter] = useState<string>(""); // search filter
   const client = useQueryClient();
 
-  const { mutate } = useUpdateApartment({
-    onSuccess(data, variables, context) {
-      toast.success(data.message);
-      client.invalidateQueries({ queryKey: [QK_APARTMENTS] });
-    },
-  });
-
   /**
    *  Data fetching
    */
@@ -73,6 +66,18 @@ const ApartmentList = () => {
       pageSize: pagination.pageSize, //refetch when pagination.pageSize changes
       sortBy: sorting?.map((value) => value.id).toString(), //refetch when sorting changes
       q: globalFilter,
+    },
+  });
+
+  const { mutate } = useUpdateApartment({
+    onSuccess(data, variables, context) {
+      if (data?.statusCode == 200) {
+        toast.success(data?.message);
+        refetch();
+      } else {
+        console.log(data.statusCode, data.message);
+        toast.error(data.message);
+      }
     },
   });
 

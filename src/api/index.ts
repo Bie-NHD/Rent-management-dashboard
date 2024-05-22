@@ -30,7 +30,7 @@ const UpdateApi = async <TData = TApiUpdateDTO>(url: string, params: ApiUpdatePa
     .post<ApiResponse>(url + "/" + params.id, params.data)
     .then((response) => response.data);
 
-const DeleteApi = async (url: string, params: ApiUpdateParams) =>
+const DeleteApi = async (url: string, params: { id: string }) =>
   privateInstance.delete<ApiResponse>(url + "/" + params.id).then((response) => response.data);
 
 const ImportApi = async (url: string, formData: FormData) =>

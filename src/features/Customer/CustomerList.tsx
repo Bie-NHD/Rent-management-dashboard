@@ -19,10 +19,11 @@ import NiceModal from "@ebay/nice-modal-react";
 import useUser from "../../hooks/useUser";
 import { useGetCustomers, useUpdateCustomer } from "../../hooks";
 import getDefaultMRTOptions from "../../utils/defaultMRTOptions";
-import { MutateDialogProps } from "../../types/props";
-import { ApiRoutes, NM_CUSTOMER, QK_CUSTOMERs } from "../../constants";
+import { MutateDialogProps, WarningDialogProps } from "../../types/props";
+import { ApiRoutes, NM_CUSTOMER, NM_WARNING, QK_CUSTOMERs } from "../../constants";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Api } from "../../api";
 
 const columnDefs: MRT_ColumnDef<Customer>[] = [
   {
@@ -73,8 +74,29 @@ const CustomerList = () => {
 
   // when resolved, refetch current account & data
 
-  const handleEditItem = (user: Customer) => {
-    navigate(`${ApiRoutes.customer.GetAll}/${user.id}/edit`, { state: { from: location } });
+  const handleEditItem = (customer: Customer) => {
+    navigate(`${ApiRoutes.customer.GetAll}/${customer.id}/edit`, { state: { from: location } });
+  };
+
+  const handleDeleteItem = (customer: Customer) => {
+    const wn_cntn: WarningDialogProps = {
+      title: `Confirm Delete account?`,
+      content: `Confirm delete apartment:\nId:${customer.id}\nAddress: ${customer.address}`,
+    };
+
+    NiceModal.show(NM_WARNING, { props: wn_cntn })
+      .then(async () => {
+        const resp = await Api.delete(ApiRoutes.customer.Delete, { id: customer.id });
+
+        if (resp?.statusCode == 200) {
+          toast.success(resp?.message);
+          refetch();
+        } else {
+          console.log(resp.statusCode, resp.message);
+          toast.error(resp.message);
+        }
+      })
+      .catch(null);
   };
   // Define table -----------------------------------------
 
@@ -92,7 +114,10 @@ const CustomerList = () => {
       showColumnFilters: false,
     },
     renderRowActions: ({ row }) => (
-      <MRTTableRowActions onEditItem={() => handleEditItem(customers[row.index])} />
+      <MRTTableRowActions
+        onEditItem={() => handleEditItem(customers[row.index])}
+        onDeleteItem={() => handleDeleteItem(customers[row.index])}
+      />
     ),
   });
 
