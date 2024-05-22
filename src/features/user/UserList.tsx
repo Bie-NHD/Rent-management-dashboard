@@ -82,7 +82,7 @@ const UserList = () => {
       Cell: ({ cell }) => (
         <>
           {cell.getValue<boolean>() ? "Active" : "Inactive"}
-          <Button startIcon={<Edit />}>Edit </Button>
+          {/* <Button startIcon={<Edit />}>Edit </Button> */}
         </>
       ),
     },

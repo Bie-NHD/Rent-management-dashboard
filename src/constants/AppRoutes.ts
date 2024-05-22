@@ -69,6 +69,8 @@ export const UserRoutes = Object.freeze({
   add: "/users/add",
   search: "/users/search",
   Statistics: `/users${STATISTICS}`,
+  block: "/users/block",
+  unblock: "/users/unblock",
 } as const);
 
 /**

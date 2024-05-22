@@ -26,7 +26,7 @@ import {
 } from "../../constants";
 import RHFOutlinedTextField from "../../components/inputs/RHFTextField";
 import { Api } from "../../api";
-import { useUpdateUser } from "../../hooks/user";
+import { useToggleBlockUser, useUpdateUser } from "../../hooks/user";
 import toast from "react-hot-toast";
 import styled from "@emotion/styled";
 import NiceModal from "@ebay/nice-modal-react";
@@ -87,6 +87,19 @@ const EditUser = () => {
     },
   });
 
+  const { mutate: toggle } = useToggleBlockUser({
+    onSuccess(data) {
+      if (data.statusCode == 200 || data.statusCode == 201) {
+        toast.success(data.message);
+        //  window.location.reload()
+        navigate(from || UserRoutes.index);
+      } else {
+        console.log(data.statusCode, data.message);
+        setErrors(data.message);
+      }
+    },
+  });
+
   const { handleSubmit, control, setValue, getValues, formState } = useForm<UserUpdateDTO>({
     resolver: yupResolver(schema),
     defaultValues: __defaultValues || schema.getDefault() || {},
@@ -101,13 +114,13 @@ const EditUser = () => {
   const handleDisableAccount = () => {
     const __active: boolean = getValues()["active"];
     const wn_cntn: WarningDialogProps = {
-      title: `Confirm disabling account?`,
+      title: `Confirm ${__active ? "disabling" : "enabling"} account?`,
     };
     NiceModal.show(NM_WARNING, { props: wn_cntn })
       .then(() => {
         setValue("active", !__active);
 
-        onSubmit(getValues());
+        toggle({ active: __active, id: user.id });
       })
       .catch(null);
   };
@@ -130,11 +143,9 @@ const EditUser = () => {
                   checked={!!field.value}
                   // onChange={(e) => field.onChange(e.target.checked)}
                 />
-                {!!field.value && (
-                  <Button onClick={handleDisableAccount} variant="outlined">
-                    Disable account
-                  </Button>
-                )}
+                <Button onClick={handleDisableAccount} variant="outlined">
+                  {`${field.value ? "Disable" : "Enable"} account`}
+                </Button>
               </>
             )}
           />

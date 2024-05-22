@@ -49,3 +49,12 @@ export const useUpdateUser = createMutation({
   mutationFn: (variables: { data: UserUpdateDTO } & { id: string }) =>
     Api.update<UserUpdateDTO>(ApiRoutes.user.update, variables),
 });
+
+export const useToggleBlockUser = createMutation({
+  mutationFn: (variables: { active: boolean } & { id: string }) =>
+    Api.instance
+      .post<ApiResponse>(
+        `${variables.active ? ApiRoutes.user.block : ApiRoutes.user.unblock}/${variables.id}`
+      )
+      .then((res) => res.data),
+});
