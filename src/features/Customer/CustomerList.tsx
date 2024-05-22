@@ -81,7 +81,7 @@ const CustomerList = () => {
   const handleDeleteItem = (customer: Customer) => {
     const wn_cntn: WarningDialogProps = {
       title: `Confirm Delete account?`,
-      content: `Confirm delete apartment:\nId:${customer.id}\nAddress: ${customer.address}`,
+      content: `Confirm delete apartment:\nId:${customer.id}\nName: ${customer.fullName}`,
     };
 
     NiceModal.show(NM_WARNING, { props: wn_cntn })

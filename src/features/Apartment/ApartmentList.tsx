@@ -19,6 +19,7 @@ import MRTTableRowActions from "../../components/MRTRowAction";
 import MRTRefreshButton from "../../components/MRTRefreshButton";
 import getDefaultMRTOptions from "../../utils/defaultMRTOptions";
 import { formatCurrency } from "../../utils/stringFormats";
+import { WarningDialogProps } from "../../types/props";
 // ------------------------------------
 
 const columnDefs: MRT_ColumnDef<Apartment>[] = [
@@ -82,17 +83,19 @@ const ApartmentList = () => {
   });
 
   const handleDeleteItem = (index: number) => {
+    const { id, ...others } = data[index];
+    const wn_cntn: WarningDialogProps = {
+      title: "Confirm Delete Apartment?",
+      content: `Confirm delete apartment:\nId:${id}\nAddress: ${others.address}`,
+    };
     NiceModal.show(NM_WARNING, {
-      props: { title: "Confirm Delete Apartment" },
-    }).then((res) => {
-      if (res === true) {
-        const { id, ...others } = data[index];
-        // TODO: This is not type-safe
-        mutate({
-          data: { id: id, data: others },
-          action: AppRoutes.Delete,
-        });
-      }
+      props: wn_cntn,
+    }).then(() => {
+      // TODO: This is not type-safe
+      mutate({
+        data: { id: id, data: others },
+        action: AppRoutes.Delete,
+      });
     });
   };
 
