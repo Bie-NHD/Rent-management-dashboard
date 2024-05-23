@@ -5,7 +5,7 @@ import { Api } from "../api";
 import toast from "react-hot-toast";
 
 type UseGetContractsHookReturns = {
-  contracts: ContractResponseDTO[];
+  contracts: Contract[];
   meta: { totalRowCount: number };
 };
 

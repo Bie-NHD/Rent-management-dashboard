@@ -31,76 +31,62 @@ import { formatCurrency } from "../../utils/stringFormats";
 import MRTTableRowActions from "../../components/MRTRowAction";
 import { Api } from "../../api";
 import { ApiRoutes } from "../../constants";
+import useUser from "../../hooks/useUser";
 
 // ------------------------------------
 
-const columnDefs: MRT_ColumnDef<ContractResponseDTO>[] = [
-  { accessorKey: "apartmentId", header: "apartmentId" },
-  { accessorKey: "customerId", header: "customerId" },
-  {
-    accessorKey: "id",
-    header: "Id",
-  },
+const columnDefs: MRT_ColumnDef<Contract>[] = [
+  { accessorKey: "customer.fullName", header: "Customer Fullname" },
+  { accessorKey: "apartment.address", header: "Apartment Address" },
   {
     accessorKey: "retailPrice",
-
     header: "retailPrice",
     Cell: ({ cell }) => formatCurrency(cell.getValue<number>()),
   },
-  {
-    accessorKey: "createDate",
-
-    header: "createDate",
-  },
+  { accessorKey: "createDate", header: "createDate" },
 ];
 
 const DetailPanel = ({
   row,
   table,
 }: {
-  row: MRT_Row<ContractResponseDTO>;
-  table: MRT_TableInstance<ContractResponseDTO>;
+  row: MRT_Row<Contract>;
+  table: MRT_TableInstance<Contract>;
 }) => {
-  const {
-    data: customerInfo,
-    isLoading: isLoading_C,
-    isError: isError_C,
-  } = useGetCustomerById({ variables: { id: row.original.customerId } });
+  const { isAdmin } = useUser();
 
-  const {
-    data: apartmentInfo,
-    isLoading: isLoading_A,
-    isError: isError_A,
-  } = useGetApartmentById({ variables: { id: row.original.apartmentId } });
-
-  if (isLoading_C || isLoading_A) return <CircularProgress />;
-  if (isError_C || isError_A)
-    return <Alert severity="error">Error Loading Customer & Apartmnent Info</Alert>;
-
-  const { fullName, id: userId } = customerInfo ?? {};
-  const { address, id: apartmentId } = apartmentInfo ?? {};
   return (
     <Stack gap="0.5rem" minHeight="00px">
-      {isLoading_C ? (
-        <CircularProgress />
-      ) : (
-        <Card>
-          <b>Id:</b> {userId}
-          <Typography>
-            <b>Fullname:</b> {fullName}
-          </Typography>
-        </Card>
-      )}
-
-      {isLoading_A ? (
-        <CircularProgress />
-      ) : (
-        <Card>
-          <b>Id:</b> {apartmentId}
-          <Typography>
-            <b>Address:</b> {address}
-          </Typography>
-        </Card>
+      <div>
+        Customer Info:
+        <p>
+          <b>Id:</b> {row.original.customer.id}
+        </p>
+        <p>
+          <b>Fullname:</b> {row.original.customer.fullName}
+        </p>
+      </div>
+      <div>
+        Apartment Info:
+        <p>
+          <b>Address:</b> {row.original.apartment.address}
+        </p>
+        <p>
+          <b>Retail price:</b> {row.original.apartment.retailPrice}
+        </p>
+      </div>
+      {isAdmin && (
+        <div>
+          User Info:
+          <p>
+            <b>UserName or Email:</b>
+            {row.original.user.username} {" | " && row.original.user.email}
+          </p>
+          <p>
+            <b>Role:</b>
+            {row.original.user.role}
+          </p>
+        </div>
       )}
     </Stack>
   );
@@ -141,8 +127,8 @@ const ContractList = () => {
 
   // Define table -----------------------------------------
 
-  const table = useMaterialReactTable<ContractResponseDTO>({
-    ...getDefaultMRTOptions<ContractResponseDTO>({
+  const table = useMaterialReactTable<Contract>({
+    ...getDefaultMRTOptions<Contract>({
       setGlobalFilter,
       setPagination,
       setSorting,

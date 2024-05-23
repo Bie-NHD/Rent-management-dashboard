@@ -47,6 +47,7 @@ type Contract = {
   endDate: ArrayDate;
   customer: Customer;
   apartment: Apartment;
+  user: User;
 };
 
 type Apartment = {
@@ -138,7 +139,7 @@ type ApartmentApiResponse = {
 
 type ContractApiResponse = {
   page: TPagination;
-  contracts: ContractResponseDTO[];
+  contracts: Contract[];
 };
 
 type CustomerApiResponse = {
