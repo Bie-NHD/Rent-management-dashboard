@@ -46,13 +46,14 @@ type SelectCustomerProps = AutocompleteProps<string, false, false, false> & {
   control: Control<any>;
 };
 
-type CustomerOption = { id: string; fullName: string };
+type CustomerOption = { id: string; label: string };
 
 const schema: ObjectSchema<ContractInputs> = object({
   apartmentId: string().required().default(""),
   customerId: string().required().default(""),
   endDate: date().required().default(new Date()),
   startDate: date().required().default(new Date()),
+  // customer
 });
 
 type FetchCustomerData = { data: Customer[]; currentPage: number; nextPage: number | null };
@@ -89,7 +90,7 @@ const SelectCustomer = forwardRef(
     const renderedData = useMemo(
       () =>
         data?.pages.flatMap((page) =>
-          page.data.flatMap((item) => ({ id: item.id, fullName: item.fullName }))
+          page.data.flatMap((item) => ({ id: item.id, label: `${item.fullName }-${item.citizenId}`}))
         ) || [],
       [data?.pages]
     );
@@ -113,7 +114,8 @@ const SelectCustomer = forwardRef(
     );
 
     useEffect(() => {
-      if (inView && hasNextPage) fetchNextPage();
+      if (inView && hasNextPage){ setTimeout (()=>fetchNextPage(),3000) ; console.log("hasNExtPage:",hasNextPage);
+      }
     }, [inView]);
 
     return (
@@ -130,23 +132,26 @@ const SelectCustomer = forwardRef(
           />
         )}
         options={renderedData || []}
-        getOptionLabel={(option) => option.fullName}
+        // getOptionLabel={(option) => option.fullName}
         // renderOption={({id,fullName})=><Menu}
         PaperComponent={({ children }) => (
           <Paper sx={{ maxHeight: 200, overflow: "auto" }}>
-            {renderedMenuItems}
+            {/* {renderedMenuItems} */}
+            {children}
             {hasNextPage && (
               <div id="customer-intersection-observer" ref={observerRef}>
-                {isLoading && (
+                {/* {isLoading && ( */}
                   <>
                     <CircularProgress variant="indeterminate" />
                     Loading...
                   </>
-                )}
+                {/* )} */}
               </div>
             )}
           </Paper>
         )}
+        onChange={(e,value)=>console.log(value)
+        }
       />
     );
 
