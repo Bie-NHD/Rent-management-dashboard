@@ -32,7 +32,7 @@ import { ObjectSchema, object, string, date } from "yup";
 import { AutocompleteProps } from "@mui/material";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Api } from "../../api";
-import { ApiRoutes } from "../../constants";
+import { ApiRoutes, QK_CUSTOMERs } from "../../constants";
 import { useInView } from "react-intersection-observer";
 
 // TODO: Create Contract Page
@@ -45,6 +45,8 @@ type ContractInputs = Omit<ContractDTO, "endDate" | "startDate"> & {
 type SelectCustomerProps = AutocompleteProps<string, false, false, false> & {
   control: Control<any>;
 };
+
+type CustomerOption = { id: string; fullName: string };
 
 const schema: ObjectSchema<ContractInputs> = object({
   apartmentId: string().required().default(""),
@@ -67,23 +69,31 @@ const fetchCustomer = ({ pageParam = 0 }: { pageParam?: number }): Promise<Fetch
   );
 const SelectCustomer = forwardRef(
   (
-    props: Omit<AutocompleteProps<unknown, false, false, false>, "options" | "renderInput">,
+    props: Omit<AutocompleteProps<CustomerOption, false, false, false>, "options" | "renderInput">,
     ref
   ) => {
     // https://youtu.be/aMfBeXD_rnE?si=mXPfGOHLn2pMzPb_
 
-    const { data, isLoading, error, fetchNextPage } = useInfiniteQuery({
-      queryKey: ["select-customer"],
+    const { data, isLoading, error, fetchNextPage, isFetched } = useInfiniteQuery({
+      queryKey: [QK_CUSTOMERs],
       initialPageParam: 0,
       queryFn: fetchCustomer,
       getNextPageParam: (lastPage) => lastPage.nextPage,
     });
 
-    const { ref: observerRef, inView } = useInView();
+    // const { ref: observerRef, inView } = useInView();
 
     // const selectOptions
 
-    const dataOptions = useMemo(
+    const renderedData = useMemo(
+      () =>
+        data?.pages.flatMap((page) =>
+          page.data.flatMap((item) => ({ id: item.id, fullName: item.fullName }))
+        ) || [],
+      [data?.pages.length]
+    );
+
+    const renderedMenuItems = useMemo(
       () => (
         <List>
           {!!data &&
@@ -98,32 +108,39 @@ const SelectCustomer = forwardRef(
             ))}
         </List>
       ),
-      [data?.pages]
+      [isFetched]
     );
 
-    useEffect(() => {
-      if (inView) fetchNextPage();
-    }, [inView]);
+    // useEffect(() => {
+    //   if (inView) fetchNextPage();
+    // }, [inView]);
 
     return (
       <Autocomplete
+        ref={ref}
         {...props}
         renderInput={(params: AutocompleteRenderInputParams): React.ReactNode => (
-          <TextField {...params} inputRef={ref} />
+          <TextField
+            {...params}
+            InputProps={{
+              ...params.InputProps,
+              // type: 'search',
+            }}
+          />
         )}
-        options={!!data ? data?.pages.map((page) => page.data.map((item) => item)) : []}
-        // getOptionLabel={(option)=> }
+        options={renderedData || []}
+        getOptionLabel={(option) => option.fullName}
         PaperComponent={(params) => (
           <Paper {...params}>
             {isLoading ? (
-              <CircularProgress variant="indeterminate" />
+              <CircularProgress />
             ) : (
               <>
-                {dataOptions}
-                <div id="customer-intersection-observer" ref={observerRef}>
+                {renderedMenuItems}
+                {/* <div id="customer-intersection-observer" ref={observerRef}>
                   <CircularProgress variant="indeterminate" />
                   Loading...
-                </div>
+                </div> */}
               </>
             )}
           </Paper>
@@ -170,6 +187,7 @@ const CreateContract = () => {
         <Controller
           control={control}
           name="customerId"
+          // FIXME: Incompatible value ref
           render={({ field }) => <SelectCustomer {...field} />}
         />
         <Box>
