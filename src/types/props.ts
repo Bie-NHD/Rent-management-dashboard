@@ -19,6 +19,7 @@ export interface ChangePasswordProps {
 }
 export type IndexToolbarProps = {
   handleNewItem?: (...args: any[]) => any;
+  enableImport?: true | boolean;
 };
 
 export type MutateDialogProps<TData = Apartment | Customer | Contract> = {

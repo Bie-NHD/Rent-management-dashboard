@@ -16,7 +16,7 @@ const ContractIndex = () => {
   return (
     <>
       <PageHeader />
-      <IndexToolBar handleNewItem={handleNewItem} />
+      <IndexToolBar handleNewItem={handleNewItem} enableImport={false} />
       <ContractList />
     </>
   );

@@ -14,15 +14,15 @@ const styles = {
   marginRight: 0,
 };
 
-const IndexToolBar = ({ handleNewItem }: IndexToolbarProps) => {
+const IndexToolBar = (props: IndexToolbarProps) => {
   const location = window.location.pathname;
 
   return (
     <Container sx={styles}>
-      <Button variant="contained" startIcon={<AddCircleIcon />} onClick={handleNewItem}>
+      <Button variant="contained" startIcon={<AddCircleIcon />} onClick={props.handleNewItem}>
         New
       </Button>
-      <ImportButton />
+      {props.enableImport && <ImportButton />}
       <ExportButton exportType={location} />
     </Container>
   );
