@@ -131,22 +131,19 @@ const SelectCustomer = forwardRef(
         )}
         options={renderedData || []}
         getOptionLabel={(option) => option.fullName}
-        PaperComponent={(params) => (
-          <Paper {...params}>
-            {isLoading ? (
-              <CircularProgress />
-            ) : (
-              <>
-                {renderedMenuItems}
-                <div id="customer-intersection-observer" ref={observerRef}>
-                  {isLoading && hasNextPage && (
-                    <>
-                      <CircularProgress variant="indeterminate" />
-                      Loading...
-                    </>
-                  )}
-                </div>
-              </>
+        // renderOption={({id,fullName})=><Menu}
+        PaperComponent={({ children }) => (
+          <Paper sx={{ maxHeight: 200, overflow: "auto" }}>
+            {renderedMenuItems}
+            {hasNextPage && (
+              <div id="customer-intersection-observer" ref={observerRef}>
+                {isLoading && (
+                  <>
+                    <CircularProgress variant="indeterminate" />
+                    Loading...
+                  </>
+                )}
+              </div>
             )}
           </Paper>
         )}
