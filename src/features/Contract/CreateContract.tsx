@@ -81,43 +81,56 @@ const SelectCustomer = forwardRef(
         initialPageParam: 0,
         queryFn: fetchCustomer,
         getNextPageParam: (lastPage) => lastPage.nextPage,
+        select: (data) =>
+          data?.pages.flatMap((page) =>
+            page.data.flatMap((item) => ({
+              id: item.id,
+              label: `${item.fullName}-${item.citizenId}`,
+            }))
+          ) || [],
       });
 
     const { ref: observerRef, inView } = useInView();
 
     // const selectOptions
 
-    const renderedData = useMemo(
-      () =>
-        data?.pages.flatMap((page) =>
-          page.data.flatMap((item) => ({ id: item.id, label: `${item.fullName }-${item.citizenId}`}))
-        ) || [],
-      [data?.pages]
-    );
+    // const renderedData = useMemo(
+    //   () =>
+    //     data?.pages.flatMap((page) =>
+    //       page.data.flatMap((item) => ({
+    //         id: item.id,
+    //         label: `${item.fullName}-${item.citizenId}`,
+    //       }))
+    //     ) || [],
+    //   [data?.pages]
+    // );
 
-    const renderedMenuItems = useMemo(
-      () => (
-        <List>
-          {!!data &&
-            data?.pages.map((page) => (
-              <div key={page.currentPage}>
-                {page.data.map((item) => (
-                  <MenuItem value={item.id} key={item.id}>
-                    {item.fullName}
-                  </MenuItem>
-                ))}
-              </div>
-            ))}
-        </List>
-      ),
-      [data?.pages]
-    );
+    // const renderedMenuItems = useMemo(
+    //   () => (
+    //     <List>
+    //       {!!data &&
+    //         data?.pages.map((page) => (
+    //           <div key={page.currentPage}>
+    //             {page.data.map((item) => (
+    //               <MenuItem value={item.id} key={item.id}>
+    //                 {item.fullName}
+    //               </MenuItem>
+    //             ))}
+    //           </div>
+    //         ))}
+    //     </List>
+    //   ),
+    //   [data?.pages]
+    // );
 
     useEffect(() => {
-      if (inView && hasNextPage){ setTimeout (()=>fetchNextPage(),3000) ; console.log("hasNExtPage:",hasNextPage);
+      if (inView && hasNextPage) {
+        setTimeout(() => fetchNextPage(), 3000);
+        console.log("hasNExtPage:", hasNextPage);
       }
     }, [inView]);
 
+    // https://github.com/mui/material-ui/issues/18450#issuecomment-776922391
     return (
       <Autocomplete
         ref={ref}
@@ -131,7 +144,9 @@ const SelectCustomer = forwardRef(
             }}
           />
         )}
-        options={renderedData || []}
+        // options={renderedData || []}
+        options={data || []}
+        loading={isLoading}
         // getOptionLabel={(option) => option.fullName}
         // renderOption={({id,fullName})=><Menu}
         PaperComponent={({ children }) => (
@@ -141,17 +156,16 @@ const SelectCustomer = forwardRef(
             {hasNextPage && (
               <div id="customer-intersection-observer" ref={observerRef}>
                 {/* {isLoading && ( */}
-                  <>
-                    <CircularProgress variant="indeterminate" />
-                    Loading...
-                  </>
+                <>
+                  <CircularProgress variant="indeterminate" />
+                  Loading...
+                </>
                 {/* )} */}
               </div>
             )}
           </Paper>
         )}
-        onChange={(e,value)=>console.log(value)
-        }
+        onChange={(e, value) => console.log(value)}
       />
     );
 
@@ -215,7 +229,7 @@ const CreateContract = () => {
           control={control}
           name="customerId"
           // FIXME: Incompatible value ref
-          render={({ field }) => <SelectCustomer {...field} />}
+          render={({ field }) => <SelectCustomer {...field} onChange={(e,v)=>field.onChange(v?.id)}/>}
         /> */}
         <Box>
           <Button onClick={() => navigate(from)}>Go back</Button>
@@ -224,7 +238,7 @@ const CreateContract = () => {
           </Button>
         </Box>
       </form>
-      <SelectCustomer />
+      {/* <SelectCustomer /> */}
     </>
   );
 };
