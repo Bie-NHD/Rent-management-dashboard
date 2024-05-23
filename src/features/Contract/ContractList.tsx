@@ -10,7 +10,16 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { useState } from "react";
-import { Alert, Card, CircularProgress, MenuItem, Stack, Typography } from "@mui/material";
+import {
+  Alert,
+  Card,
+  CircularProgress,
+  List,
+  ListItem,
+  MenuItem,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 import ErrorPlaceHolder from "../../components/placeholder/ErrorPlaceHolder";
 import NiceModal from "@ebay/nice-modal-react";
@@ -43,7 +52,15 @@ const columnDefs: MRT_ColumnDef<Contract>[] = [
     header: "retailPrice",
     Cell: ({ cell }) => formatCurrency(cell.getValue<number>()),
   },
-  { accessorKey: "createDate", header: "createDate" },
+  {
+    id: "duration",
+    Cell: ({ row }) => (
+      <span>
+        {row.original.startDate}~{row.original.endDate}
+      </span>
+    ),
+    header: "Duration",
+  },
 ];
 
 const DetailPanel = ({
@@ -55,37 +72,61 @@ const DetailPanel = ({
 }) => {
   const { isAdmin } = useUser();
 
+  const user = row.original.user;
+  const apartment = row.original.apartment;
+  const customer = row.original.customer;
+
   return (
     <Stack gap="0.5rem" minHeight="00px">
       <div>
+        Contract Info:
+        <List>
+          <ListItem>
+            <b>Duration:</b> {row.original.startDate}~{row.original.endDate}
+          </ListItem>
+        </List>
+      </div>
+      <div>
         Customer Info:
-        <p>
-          <b>Id:</b> {row.original.customer.id}
-        </p>
-        <p>
-          <b>Fullname:</b> {row.original.customer.fullName}
-        </p>
+        <List>
+          <ListItem>
+            <b>Id:</b> {customer.id}
+          </ListItem>
+          <ListItem>
+            <b>Fullname:</b> {customer.fullName}
+          </ListItem>
+          <ListItem>
+            <b>Phone:</b> {customer.phoneNumber}
+          </ListItem>
+        </List>
       </div>
       <div>
         Apartment Info:
         <p>
-          <b>Address:</b> {row.original.apartment.address}
+          <b>Address:</b> {apartment.address}
         </p>
         <p>
-          <b>Retail price:</b> {row.original.apartment.retailPrice}
+          <b>Retail price:</b> {formatCurrency(apartment.retailPrice)}
         </p>
       </div>
       {isAdmin && (
         <div>
           User Info:
-          <p>
-            <b>UserName or Email:</b>
-            {row.original.user.username} {" | " && row.original.user.email}
-          </p>
-          <p>
-            <b>Role:</b>
-            {row.original.user.role}
-          </p>
+          <List>
+            <ListItem>
+              <b>Fullname:</b>
+              {user.fullName}
+            </ListItem>
+            <ListItem>
+              <b>UserName:</b>
+              {user.username} {user.email}
+            </ListItem>
+            <ListItem></ListItem>
+            <ListItem>
+              <b>Role:</b>
+              {user.role}
+            </ListItem>
+          </List>
         </div>
       )}
     </Stack>

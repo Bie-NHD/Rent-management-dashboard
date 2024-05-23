@@ -43,8 +43,8 @@ type ArrayDate = [number, number, number];
 
 type Contract = {
   id: string;
-  startDate: ArrayDate;
-  endDate: ArrayDate;
+  startDate: string;
+  endDate: string;
   customer: Customer;
   apartment: Apartment;
   user: User;
@@ -84,15 +84,15 @@ type ContractDTO = {
 
 type ContractResponseDTO = {
   apartmentId: string;
-createDate: string;
-customerId: string;
-endDate: string;
-id: string;
-retailPrice:number;
-startDate:string;
-total:number;
-userId: string;
-}
+  createDate: string;
+  customerId: string;
+  endDate: string;
+  id: string;
+  retailPrice: number;
+  startDate: string;
+  total: number;
+  userId: string;
+};
 
 type UserUpdateDTO = Pick<User, "email" | "role" | "active" | "fullName">;
 type UserCreateDTO = Omit<UserUpdateDTO, "active"> & Pick<User, "username">;

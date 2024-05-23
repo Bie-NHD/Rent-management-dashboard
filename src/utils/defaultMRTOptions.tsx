@@ -15,7 +15,8 @@ const getDefaultMRTOptions = <TData extends MRT_RowData>({
   refetch,
 }: AppDefaultMRTOptionsProps): Partial<MRT_TableOptions<TData>> => ({
   //list all of your default table options here
-  enableGlobalFilter: false,
+  enableGlobalFilter: true,
+  enableColumnFilters: false,
   //   enableRowPinning: true,
   enableRowActions: true,
   initialState: { showColumnFilters: true },
