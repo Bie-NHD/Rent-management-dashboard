@@ -74,14 +74,15 @@ const SelectCustomer = forwardRef(
   ) => {
     // https://youtu.be/aMfBeXD_rnE?si=mXPfGOHLn2pMzPb_
 
-    const { data, isLoading, error, fetchNextPage, isFetched } = useInfiniteQuery({
-      queryKey: [QK_CUSTOMERs],
-      initialPageParam: 0,
-      queryFn: fetchCustomer,
-      getNextPageParam: (lastPage) => lastPage.nextPage,
-    });
+    const { data, isLoading, error, fetchNextPage, isFetched, isFetching, hasNextPage } =
+      useInfiniteQuery({
+        queryKey: [QK_CUSTOMERs],
+        initialPageParam: 0,
+        queryFn: fetchCustomer,
+        getNextPageParam: (lastPage) => lastPage.nextPage,
+      });
 
-    // const { ref: observerRef, inView } = useInView();
+    const { ref: observerRef, inView } = useInView();
 
     // const selectOptions
 
@@ -90,7 +91,7 @@ const SelectCustomer = forwardRef(
         data?.pages.flatMap((page) =>
           page.data.flatMap((item) => ({ id: item.id, fullName: item.fullName }))
         ) || [],
-      [data?.pages.length]
+      [data?.pages]
     );
 
     const renderedMenuItems = useMemo(
@@ -108,12 +109,12 @@ const SelectCustomer = forwardRef(
             ))}
         </List>
       ),
-      [isFetched]
+      [data?.pages]
     );
 
-    // useEffect(() => {
-    //   if (inView) fetchNextPage();
-    // }, [inView]);
+    useEffect(() => {
+      if (inView && hasNextPage) fetchNextPage();
+    }, [inView]);
 
     return (
       <Autocomplete
@@ -137,16 +138,40 @@ const SelectCustomer = forwardRef(
             ) : (
               <>
                 {renderedMenuItems}
-                {/* <div id="customer-intersection-observer" ref={observerRef}>
-                  <CircularProgress variant="indeterminate" />
-                  Loading...
-                </div> */}
+                <div id="customer-intersection-observer" ref={observerRef}>
+                  {isLoading && hasNextPage && (
+                    <>
+                      <CircularProgress variant="indeterminate" />
+                      Loading...
+                    </>
+                  )}
+                </div>
               </>
             )}
           </Paper>
         )}
       />
     );
+
+    // return (
+    //   <div>
+    //     {isLoading ? (
+    //       <CircularProgress />
+    //     ) : (
+    //       <>
+    //         {renderedMenuItems}
+    //         <div id="customer-intersection-observer" ref={observerRef}>
+    //           {isLoading && hasNextPage && (
+    //             <>
+    //               <CircularProgress variant="indeterminate" />
+    //               Loading...
+    //             </>
+    //           )}
+    //         </div>
+    //       </>
+    //     )}
+    //   </div>
+    // );
   }
 );
 
@@ -184,12 +209,12 @@ const CreateContract = () => {
       <PageHeader>New Contract</PageHeader>
       <Box sx={{ border: "solid red 1px", color: "red" }}>{_errors}</Box>
       <form onSubmit={handleSubmit(onSubmitNew)}>
-        <Controller
+        {/* <Controller
           control={control}
           name="customerId"
           // FIXME: Incompatible value ref
           render={({ field }) => <SelectCustomer {...field} />}
-        />
+        /> */}
         <Box>
           <Button onClick={() => navigate(from)}>Go back</Button>
           <Button type="submit" variant="contained" disableElevation>
@@ -197,6 +222,7 @@ const CreateContract = () => {
           </Button>
         </Box>
       </form>
+      <SelectCustomer />
     </>
   );
 };
