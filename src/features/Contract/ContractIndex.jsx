@@ -7,11 +7,9 @@ import NiceModal from "@ebay/nice-modal-react";
 import { useNavigate } from "react-router-dom";
 
 const ContractIndex = () => {
-  const handleNewItem = () => NiceModal.show(NM_CONTRACT);
+  const navigate = useNavigate();
 
-  // const navigate = useNavigate();
-
-  // const handleNewItem = () => navigate("./add");
+  const handleNewItem = () => navigate("./add", { state: { from: window.location.pathname } });
 
   return (
     <>

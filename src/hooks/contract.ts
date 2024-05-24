@@ -22,24 +22,19 @@ export const useGetContracts = createQuery<UseGetContractsHookReturns, ApiFetchP
 });
 
 export const useCreateContract = createMutation({
-  mutationFn: async (variables: Omit<Apartment, "id">) =>
-    Api.create(ApartmentRoutes.Add, variables),
+  mutationFn: async (variables: ContractDTO) => Api.create(ContractRoutes.Add, variables),
 
   onError(error, variables, context) {
     console.log(error);
-    toast.error(error.message || "Trouble creating new apartment");
+    toast.error(error.message || "Trouble creating new contract");
   },
 });
-/**
- * To ```edit``` & ```delete``` Apartments
- @param data data
- @param action from ```ApiActions```
- */
+// TODO: Fix Update contract hook
 export const useUpdateContract = createMutation({
   mutationFn: async (variables: { data: ApiUpdateParams<Omit<Apartment, "id">>; action: string }) =>
     variables.action === AppRoutes.Update
-      ? Api.update(ApartmentRoutes.Update, variables.data)
-      : Api.delete(ApartmentRoutes.Delete, variables.data),
+      ? Api.update(ContractRoutes.Update, variables.data)
+      : Api.delete(ContractRoutes.Delete, variables.data),
   onError(error, variables, context) {
     console.log(error || "Trouble updating apartment");
     toast.error(error.message || "Trouble updating apartment");
