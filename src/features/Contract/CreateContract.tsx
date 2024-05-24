@@ -37,8 +37,9 @@ import { ApiRoutes, QK_APARTMENTS, QK_CUSTOMERs } from "../../constants";
 import { useInView } from "react-intersection-observer";
 import { useCreateContract } from "../../hooks";
 import toast from "react-hot-toast";
+import useUser from "../../hooks/useUser";
 
-type ContractInputs = Omit<ContractDTO, "endDate" | "startDate"> & {
+type ContractInputs = Omit<ContractDTO, "endDate" | "startDate" | "userId"> & {
   endDate: Date;
   startDate: Date;
 };
@@ -205,6 +206,7 @@ const CreateContract = () => {
   const location = useLocation();
   const from = location?.state?.from || "/";
   const navigate = useNavigate();
+  const { user } = useUser();
 
   const [_errors, setErrors] = useState("");
 
@@ -246,6 +248,7 @@ const CreateContract = () => {
       apartmentId: _data.apartmentId,
       startDate: dayjs(_data.startDate).format(`YYYY-MM-DD`).toString(),
       endDate: dayjs(_data.endDate).format(`YYYY-MM-DD`).toString(),
+      userId: user!.id,
     };
     console.log(dto);
     mutate(dto);
