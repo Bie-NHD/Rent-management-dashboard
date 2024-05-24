@@ -8,9 +8,9 @@ const RequireAdmin = () => {
   const location = useLocation();
   const from = location.state?.from || "/";
 
-  if (!isAdmin) {
-    return <Navigate to={from} />;
-  }
+  // if (!isAdmin) {
+  //   return <Navigate to={from} />;
+  // }
 
   return <Outlet />;
 };
