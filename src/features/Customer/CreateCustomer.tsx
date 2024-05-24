@@ -84,10 +84,12 @@ const CreateCustomer = () => {
         <RHFOutlinedTextField
           control={control}
           name="phoneNumber"
+          type="tel"
           label="Phone number"
           margin="dense"
           variant="outlined"
         />
+        {/* FIXME: at DatePicker: TextField cannot receive input */}
         <Box marginBlock={2}>
           <FormLabel htmlFor="dob"> Date of birth</FormLabel>
           <Controller

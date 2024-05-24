@@ -24,5 +24,6 @@ export const customerInputsSchema: ObjectSchema<
     .default("")
     .label("Phone number")
     .length(10)
+    // TODO: trim phoneNum inputs
     .matches(REGEX_VALID_PHONE_NUMBER, ({ label }) => `${label} is not valid`),
 });
