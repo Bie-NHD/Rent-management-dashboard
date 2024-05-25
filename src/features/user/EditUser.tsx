@@ -32,6 +32,8 @@ import styled from "@emotion/styled";
 import NiceModal from "@ebay/nice-modal-react";
 import { WarningDialogProps } from "../../types/props";
 
+// TODO: Disable blocking for role:MANAGERs
+
 const roleOptions = [...Object.values(UserRoles)].map((item) => (
   <MenuItem key={item} value={item}>
     {item}
