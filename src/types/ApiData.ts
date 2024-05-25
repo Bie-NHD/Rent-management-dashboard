@@ -80,6 +80,7 @@ type ContractDTO = {
   customerId: string;
   endDate: string;
   startDate: string;
+  userId: string;
 };
 
 type ContractResponseDTO = {
@@ -189,4 +190,9 @@ type ApiResponseData =
 
 type ApiResponse<TData = ApiResponseData> = ApiQueryStatus & {
   data: TData;
+};
+
+type ContractInputs = Omit<ContractDTO, "endDate" | "startDate" | "userId"> & {
+  endDate: Date;
+  startDate: Date;
 };

@@ -14,7 +14,7 @@ import { createContractSchema } from "../../constants/schema";
 import SelectCustomer from "../../components/inputs/SelectCustomer";
 import SelectApartment from "../../components/inputs/SelectApartment";
 
-const CreateContract = () => {
+const EditContract = () => {
   const location = useLocation();
   const from = location?.state?.from || "/";
   const navigate = useNavigate();
@@ -173,4 +173,4 @@ const CreateContract = () => {
   );
 };
 
-export default CreateContract;
+export default EditContract;

@@ -11,34 +11,8 @@ import ToggleablePasswordTextField from "../../components/inputs/ToggleablePassw
 import { Label } from "@mui/icons-material";
 import { Api } from "../../api";
 import toast from "react-hot-toast";
+import { changePasswordSchema } from "../../constants/schema";
 
-const schema: ObjectSchema<ChangePasswordProps> = object().shape({
-  currentPassword: string().required().default("").label("Current password"),
-  newPassword: string()
-    .label("New password")
-    .ensure()
-    .when("currentPassword", {
-      is: (value: string) => value != "",
-      then: (schema) =>
-        schema
-          .required()
-          .test(
-            "newPassword_check",
-            "New password must be different from current password",
-            function (value: string, context) {
-              return context.parent["currentPassword"] != value;
-            }
-          ),
-    }),
-  repeatNewPassword: string()
-    .label("Repeat password")
-    .ensure()
-    .when("newPassword", {
-      is: (value: string) => value != "",
-      then: (schema) =>
-        schema.required().oneOf([ref("newPassword")], ({ label }) => `${label} doesn't match.`),
-    }),
-});
 const ChangePassword = () => {
   const { user } = useUser();
   const location = useLocation();
@@ -46,7 +20,7 @@ const ChangePassword = () => {
   const navigate = useNavigate();
   const [_errors, setErrors] = useState("");
   const { handleSubmit, control } = useForm<ChangePasswordProps>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(changePasswordSchema),
   });
 
   const onSubmit: SubmitHandler<ChangePasswordProps> = async (data) => {
