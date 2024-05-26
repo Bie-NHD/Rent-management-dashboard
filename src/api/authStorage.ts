@@ -6,9 +6,9 @@ const no_available = (type: string) => `No ${type} available.`;
 const getAccessToken = () => {
   const token = localStorage.getItem(ACCESS_TOKEN);
   if (!token) {
-    return Promise.reject(new Error(no_available(ACCESS_TOKEN)));
+    console.log(new Error(no_available(ACCESS_TOKEN)));
   }
-  return Promise.resolve(token);
+  return token;
 };
 const getRefreshToken = () => {
   const token = localStorage.getItem(REFRESH_TOKEN);
@@ -26,13 +26,12 @@ const removeAllTokens = () => {
   localStorage.removeItem(REFRESH_TOKEN);
 };
 const removeAccessToken = () => {
-  return getAccessToken()
-    .then(() => {
-      localStorage.removeItem(ACCESS_TOKEN);
-      console.log(`${ACCESS_TOKEN} removed.`);
-      return Promise.resolve();
-    })
-    .catch((error) => Promise.reject(error));
+  try {
+    localStorage.removeItem(ACCESS_TOKEN);
+    console.log(`${ACCESS_TOKEN} removed.`);
+  } catch (error) {
+    console.log(error);
+  }
 };
 const refreshTokens = (tokens: AuthTokens) => {
   setRefreshToken(tokens.refresh_token);

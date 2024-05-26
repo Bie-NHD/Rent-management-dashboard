@@ -161,13 +161,11 @@ type ImportResponseData = {
 
 type ImportResponse = ImportResponseData[];
 
-// TODO: check data type
-
-type TokenData = {
+type TokenPayloadData = {
   role: string;
   iss: string; //issuer
-  iat: 1716227715; //issuedAt
-  exp: 1716228015;
+  iat: number | string; //issuedAt
+  exp: number | string;
 };
 
 type AuthTokens = {

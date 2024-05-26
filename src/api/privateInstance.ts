@@ -17,13 +17,11 @@ const privateInstance = axios.create({
 
 privateInstance.interceptors.request.use(
   // Do something before request is sent
-  async (config) => {
-    await AuthStorageService.getAccessToken()
-      .then((token) => {
-        config.headers.Authorization = `Bearer ${token}`;
-        console.info("New access_token appended...");
-      })
-      .catch((error) => Promise.reject(error));
+  (config) => {
+    const token = AuthStorageService.getAccessToken();
+
+    config.headers.Authorization = `Bearer ${token}`;
+    console.info("New access_token appended...");
 
     return config;
   },
@@ -48,19 +46,13 @@ privateInstance.interceptors.response.use(
         AuthApi.refreshToken().catch((error) => {
           throw error;
         });
+        const access_token = AuthStorageService.getAccessToken();
 
-        AuthStorageService.getAccessToken()
-          // Retry the original request with the new token
-          .then((access_token) => {
-            prevReqConfig.headers.Authorization = `Bearer ${access_token}`;
-            console.info("New access_token appended...");
-            return privateInstance(prevReqConfig);
-          })
-          // Handle refresh token error or redirect to login
-          .catch((error) => {
-            // console.error(`ERROR while refresh token\n${error}`);
-            throw error;
-          });
+        // Retry the original request with the new token
+
+        prevReqConfig.headers.Authorization = `Bearer ${access_token}`;
+        console.info("New access_token appended...");
+        return privateInstance(prevReqConfig);
       }
     } catch (error) {
       console.error(`ERROR while refresh token\n${error}`);

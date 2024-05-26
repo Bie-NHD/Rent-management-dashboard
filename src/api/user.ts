@@ -1,7 +1,7 @@
 import { UserRoutes } from "../constants";
 import privateInstance from "./privateInstance";
 
-const getUserDetails = () =>
+export const getUserDetails = () =>
   privateInstance
     .get<ApiResponse<User>>(UserRoutes.details)
     .then((res) => res.data)

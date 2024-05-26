@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import AuthContext from "../context/AuthContext";
+import AuthContext from "../context/AuthProvider";
 
-const useAuth = (): IUseAuthHookReturns => useContext(AuthContext);
+const useAuth = (): AuthContextReturns => useContext(AuthContext);
 export default useAuth;

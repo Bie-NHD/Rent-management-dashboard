@@ -23,7 +23,7 @@ export const useGetUser = createQuery({
     console.log(`FETCHING USER FROM HOOK ${new Date()}`);
     return await UserApi.details();
   },
-  placeholderData: keepPreviousData,
+  // placeholderData: keepPreviousData,
   staleTime: Infinity,
 });
 

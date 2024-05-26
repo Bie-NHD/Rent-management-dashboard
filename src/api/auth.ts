@@ -9,20 +9,20 @@ const authInstance = axios.create({
   withCredentials: true,
 });
 
-authInstance.interceptors.request.use(
-  // Do something before request is sent
-  (config) => config,
-  // Do something with request error
-  function (error) {
-    return Promise.reject(error);
-  }
-);
+// authInstance.interceptors.request.use(
+//   // Do something before request is sent
+//   (config) => config,
+//   // Do something with request error
+//   function (error) {
+//     return Promise.reject(error);
+//   }
+// );
 
 const login = async (params: ApiLoginParams) =>
   await authInstance
     .post<ApiResponse<AuthTokens>>(ApiRoutes.auth.login, params)
     .then((response) => {
-      console.log(response.data);
+      console.log("login: ", response.data);
       const _loginResp = response.data;
       if (_loginResp.statusCode === 200) {
         AuthStorageService.refreshTokens(_loginResp.data);
@@ -77,10 +77,7 @@ const forgotPassword = (data: { email: string }): Promise<ApiQueryStatus> =>
       statusCode: apiRes.statusCode,
     }));
 
-const getAccessToken = () =>
-  AuthStorageService.getAccessToken()
-    .then((_) => Promise.resolve(_))
-    .catch((error) => Promise.reject(error));
+const getAccessToken = () => AuthStorageService.getAccessToken();
 
 const AuthApi = Object.freeze({
   login,

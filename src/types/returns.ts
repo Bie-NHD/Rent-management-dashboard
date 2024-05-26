@@ -5,15 +5,17 @@ interface IUseUserContextHookReturns {
   refetch: () => Promise<any> | any;
   isLoading: boolean;
 }
-interface IUseAuthHookReturns {
+interface AuthContextReturns {
   token: string | null;
   // setToken: (token: string) => any;
-  login: (params: ApiLoginParams) => Promise<ApiQueryStatus> | ApiQueryStatus;
+  login: (params: ApiLoginParams) => Promise<ApiQueryStatus> | ApiQueryStatus | any;
   logout: (...args: any[]) => Promise<any> | any;
   refresh?: () => any;
   isLoading: boolean;
-  // user: IUser | undefined;
-  // isAdmin: false | boolean;
+  // expiresAt: number | null;
+  user: User | undefined;
+  isAdmin: false | boolean;
+  // role: string | null;
   // setUser: React.Dispatch<React.SetStateAction<IUser | undefined>> | undefined;
 }
 
