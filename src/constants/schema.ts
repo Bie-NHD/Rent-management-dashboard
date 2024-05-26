@@ -60,15 +60,16 @@ export const changePasswordSchema: ObjectSchema<ChangePasswordProps> = object().
 // TODO: update contract validation
 // endDate must be after startDate, gap = min 1 month
 export const createContractSchema: ObjectSchema<ContractInputs> = object({
-  apartmentId: string().required().default(""),
-  customerId: string().required().default(""),
-  startDate: date().required().default(new Date()),
+  apartmentId: string().required().default("").label("Apartment"),
+  customerId: string().required().default("").label("Customer"),
+  startDate: date().required().default(new Date()).label("Start date"),
   endDate: date()
     .required()
     .default(new Date())
+    .label("End date")
     .test(
       "isOneMonthAfter",
-      ({ label }) => `${label} should be 1 month after`,
+      ({ label }) => `${label} should be 1 month after Start date`,
       (v, context) => {
         const oneMonthAfter = dayjs(context.parent.startDate).add(1, "month");
         return dayjs(v).isAfter(oneMonthAfter, "day") || dayjs(v).isSame(oneMonthAfter, "day");

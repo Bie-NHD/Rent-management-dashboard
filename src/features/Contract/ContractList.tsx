@@ -41,6 +41,7 @@ import MRTTableRowActions from "../../components/MRTRowAction";
 import { Api } from "../../api";
 import { ApiRoutes } from "../../constants";
 import useUser from "../../hooks/useUser";
+import { useNavigate } from "react-router-dom";
 
 // ------------------------------------
 
@@ -144,6 +145,7 @@ const ContractList = () => {
   // TODO: Add search in ```ContractList```
   const [globalFilter, setGlobalFilter] = useState(""); // search filter
   const client = useQueryClient();
+  const navigate = useNavigate();
 
   /**
    *  Data fetching
@@ -187,14 +189,11 @@ const ContractList = () => {
     },
     enableExpanding: true,
     enableExpandAll: false,
-    // renderRowActions: ({ row }) => (
-    //   // <MRTTableRowActions
 
-    //   //   onEditItem={() => handleEditITem(row.index)}
-    //   // />,
-
-    // ),
     renderDetailPanel: ({ row, table }) => <DetailPanel row={row} table={table} />,
+    renderRowActions: ({ row }) => (
+      <MRTTableRowActions onEditItem={() => navigate(`./${contracts[row.index].id}/edit`)} />
+    ),
   });
 
   // -------------------------------------------------------

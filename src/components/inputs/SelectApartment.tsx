@@ -51,18 +51,13 @@ const SelectApartment = forwardRef(
       initialPageParam: 0,
       queryFn: fetchApartments,
       getNextPageParam: (lastPage) => lastPage.nextPage,
-      select: (data) => {
-        console.log(data?.pages);
-
-        return (
-          data?.pages.flatMap((page) =>
-            page.data.flatMap((item) => ({
-              value: item.id,
-              label: `${item.address} - ${item.numberOfRoom} rooms`,
-            }))
-          ) || []
-        );
-      },
+      select: (data) =>
+        data?.pages.flatMap((page) =>
+          page.data.flatMap((item) => ({
+            value: item.id,
+            label: `${item.address} - ${item.numberOfRoom} rooms`,
+          }))
+        ) || [],
     });
 
     return (

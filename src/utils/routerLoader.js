@@ -14,3 +14,10 @@ export const userLoader = async ({ params }) => {
     .then((res) => res.data?.data);
   return user;
 };
+
+export const contractLoader = async ({ params }) => {
+  const user = await Api.instance
+    .get(`${ApiRoutes.contract.GetAll}/${params?.id}`)
+    .then((res) => res.data?.data);
+  return user;
+};

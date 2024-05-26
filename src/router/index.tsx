@@ -13,7 +13,7 @@ import RequireAdmin from "./RequireAdmin";
 import UserIndexPage from "../features/user/UserIndexPage";
 import LoginPage from "../features/Login/LoginPage";
 
-import { customerLoader, userLoader } from "../utils/routerLoader";
+import { contractLoader, customerLoader, userLoader } from "../utils/routerLoader";
 
 // ---------------------------------------------------------
 const ApartmentIndex = lazy(() => import("../features/Apartment/ApartmentIndex"));
@@ -34,6 +34,8 @@ const EditUser = lazy(() => import("../features/user/EditUser"));
 
 const EditAccount = lazy(() => import("../features/Login/EditAccount"));
 const ChangePassword = lazy(() => import("../features/Login/ChangePassword"));
+
+const EditContract = lazy(() => import("../features/Contract/EditContract"));
 // ---------------------------------------------------------
 
 const Loading = () => {
@@ -187,6 +189,15 @@ const requireSignedInRoutes: RouteObject[] = [
             <ChangePassword />
           </Suspense>
         ),
+      },
+      {
+        path: `${ApiRoutes.contract.GetAll}/:id/edit`,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <EditContract />
+          </Suspense>
+        ),
+        loader: contractLoader,
       },
     ],
   },

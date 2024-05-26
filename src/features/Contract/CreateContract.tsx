@@ -77,13 +77,7 @@ const CreateContract = () => {
           render={({ field: { onChange, name, ref, value }, fieldState: { error } }) => (
             <>
               <FormLabel htmlFor={name}>Customer</FormLabel>
-              <SelectCustomer
-                ref={ref}
-                onChange={(e, v) => {
-                  onChange(v?.value);
-                  console.log(`from RHF:`, value);
-                }}
-              />
+              <SelectCustomer ref={ref} onChange={(e, v) => onChange(v?.value)} />
               <FormHelperText>
                 {"Choose the customer" || (!!error && error?.message)}
               </FormHelperText>
@@ -96,13 +90,7 @@ const CreateContract = () => {
           render={({ field: { onChange, name, ref, value }, fieldState: { error } }) => (
             <>
               <FormLabel htmlFor={name}>Apartment</FormLabel>
-              <SelectApartment
-                ref={ref}
-                onChange={(e, v) => {
-                  onChange(v?.value);
-                  console.log(`from RHF:`, value);
-                }}
-              />
+              <SelectApartment ref={ref} onChange={(e, v) => onChange(v?.value)} />
               <FormHelperText>
                 {"Choose the apartment" || (!!error && error?.message)}
               </FormHelperText>

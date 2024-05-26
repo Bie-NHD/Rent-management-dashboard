@@ -29,14 +29,20 @@ export const useCreateContract = createMutation({
     toast.error(error.message || "Trouble creating new contract");
   },
 });
-// TODO: Fix Update contract hook
+
 export const useUpdateContract = createMutation({
-  mutationFn: async (variables: { data: ApiUpdateParams<Omit<Apartment, "id">>; action: string }) =>
-    variables.action === AppRoutes.Update
-      ? Api.update(ContractRoutes.Update, variables.data)
-      : Api.delete(ContractRoutes.Delete, variables.data),
+  mutationFn: async (variables: { data: ContractDTO; id: string }) =>
+    Api.update<ContractDTO>(ContractRoutes.Update, variables),
   onError(error, variables, context) {
-    console.log(error || "Trouble updating apartment");
-    toast.error(error.message || "Trouble updating apartment");
+    console.log(error || "Trouble updating contract");
+    toast.error(error.message || "Trouble updating contract");
+  },
+});
+
+export const useDeleteContract = createMutation({
+  mutationFn: async (variables: { id: string }) => Api.delete(ContractRoutes.Delete, variables),
+  onError(error, variables, context) {
+    console.log(error || "Trouble updating contract");
+    toast.error(error.message || "Trouble updating contract");
   },
 });
