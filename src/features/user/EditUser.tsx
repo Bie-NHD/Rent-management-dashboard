@@ -32,8 +32,6 @@ import styled from "@emotion/styled";
 import NiceModal from "@ebay/nice-modal-react";
 import { WarningDialogProps } from "../../types/props";
 
-// TODO: Disable blocking for role:MANAGERs
-
 const roleOptions = [...Object.values(UserRoles)].map((item) => (
   <MenuItem key={item} value={item}>
     {item}
@@ -76,6 +74,8 @@ const EditUser = () => {
     }),
     []
   );
+
+  const isManager = useMemo(() => user.role == UserRoles.MANAGER, []);
 
   const { mutate } = useUpdateUser({
     onSuccess(data) {
@@ -145,9 +145,11 @@ const EditUser = () => {
                   checked={!!field.value}
                   // onChange={(e) => field.onChange(e.target.checked)}
                 />
-                <Button onClick={handleDisableAccount} variant="outlined">
-                  {`${field.value ? "Disable" : "Enable"} account`}
-                </Button>
+                {!isManager && (
+                  <Button onClick={handleDisableAccount} variant="outlined">
+                    {`${field.value ? "Disable" : "Enable"} account`}
+                  </Button>
+                )}
               </>
             )}
           />
