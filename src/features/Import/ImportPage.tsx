@@ -83,7 +83,7 @@ function getImportMessages(response: ApiResponse<ImportResponse>) {
 }
 
 const ImportPage = () => {
-  const pathName = window.location.pathname.split("/").at(-1) as string;
+  const pathName = window.location.pathname;
   console.log(pathName);
 
   const [fileStates, setFileStates] = useState<FileState[]>([]);
