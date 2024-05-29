@@ -17,6 +17,7 @@ interface AuthContextReturns {
   isAdmin: false | boolean;
   // role: string | null;
   // setUser: React.Dispatch<React.SetStateAction<IUser | undefined>> | undefined;
+  credentials?: { username: string; password: string }
 }
 
 type UseGetHookReturns<TData> = {
