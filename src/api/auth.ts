@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { ApiRoutes } from "../constants";
 import AuthStorageService from "./authStorage";
+import privateInstance from "./privateInstance";
 
 const TEST_URL = "http://localhost:9090" as const;
 
@@ -35,7 +36,7 @@ const login = async (params: ApiLoginParams) =>
 const logout = () => {
   AuthStorageService.removeAllTokens();
 
-  return authInstance.get(ApiRoutes.auth.logout).finally(() => {
+  return privateInstance.get(ApiRoutes.auth.logout).finally(() => {
     console.log("LOGGED OUT");
     return Promise.resolve();
   });
