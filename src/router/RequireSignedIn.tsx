@@ -4,13 +4,13 @@ import { Outlet, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { UserProvider } from "../context/UserProvider";
 import { useEffect } from "react";
 const RequireSignedIn = () => {
-  const { token, logout, isLoading } = useAuth();
+  const { token, logout, isLoading , credentials} = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
   console.info(`${Date.now()}\nAt RequireSignedIn:\naccess_token =\n${token}`);
 
-  const isSignOut = !isLoading && (!token || token === "");
+  const isSignOut = !isLoading && (!token || token === "") && credentials;
   // useEffect(() => {
   //   // Check if the user is authenticated
   //   if (isSignOut) {

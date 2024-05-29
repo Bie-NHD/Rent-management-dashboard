@@ -24,6 +24,7 @@ const UserNavPanel = () => {
 
     NiceModal.show(NM_WARNING, { props: wn_ctnt }).then(async () => {
       await logout().finally(() => {
+        console.log("Handling log out");
         navigate("/login", { replace: true });
       });
     });

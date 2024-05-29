@@ -34,9 +34,9 @@ const login = async (params: ApiLoginParams) =>
     .catch((error) => Promise.reject(error));
 
 const logout = () => {
-  AuthStorageService.removeAllTokens();
-
+  
   return privateInstance.get(ApiRoutes.auth.logout).finally(() => {
+    AuthStorageService.removeAllTokens();
     console.log("LOGGED OUT");
     return Promise.resolve();
   });
@@ -51,7 +51,7 @@ const refreshToken = () => {
         .then((response) => response.data),
     (error) => {
       // logout if  no refresh token
-      logout();
+      // logout();
       return Promise.reject(error);
     }
   );
