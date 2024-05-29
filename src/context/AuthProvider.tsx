@@ -3,7 +3,7 @@
 import { createContext, useEffect, useMemo, useState } from "react";
 
 import AuthApi from "../api/auth";
-import { QK_ACCESS_TOKEN, UserRoles } from "../constants";
+import { QK_ACCESS_TOKEN, QK_ACCOUNT, QK_USERS, UserRoles } from "../constants";
 import { useGetAccessToken, useGetUser } from "../hooks/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import queryClient from "../configs/queryClient";
@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import { getPayload } from "../utils/JWT-utils";
 import { useNavigate } from "react-router-dom";
 import AuthStorageService from "../api/authStorage";
+import UserApi from "../api/user";
 const authContextDefaults: AuthContextReturns = {
   token: null,
   // setToken: function (token: string) {
@@ -52,16 +53,22 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
     staleTime: 120000,
     // throwOnError: (error) => error instanceof AxiosError || true,
   });
-
-  const { data: user, refetch: refetchUser } = useGetUser();
+// const [user,setUser] = useState<User>()
+  // const { data: user, refetch: refetchUser } = useGetUser();
 
   console.info(`${Date.now()}\nAt AuthProvider:\naccess_token = ${_token}`);
 
-  useEffect(() => {
-    refetchUser();
+  useEffect( () => {
+    // async () => {
+
+    //   const _user =  await UserApi.details();
+    //   setUser(()=>_user);
+    // }
+
+    //  refetchUser();
   }, [credentials]);
 
-  const isAdmin = useMemo(() => user?.role == UserRoles.MANAGER, [user?.role]);
+  // const isAdmin = useMemo(() => user?.role == UserRoles.MANAGER, [user?.role]);
 
   // if (isError && error) {
   // }
@@ -89,23 +96,24 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
   const logout = async (message?: string) => {
     // delete all credentials
     setCredetials(undefined);
-    const loggingToast = toast.loading("Logging out...");
+    // const loggingToast = toast.loading("Logging out...");
 
     return await AuthApi.logout()
       .then(async () => {
         const msgToast = message ? toast(message!) : undefined;
         // await client.invalidateQueries({ queryKey: [QK_ACCESS_TOKEN] });
         // refetch();
-        await queryClient.invalidateQueries();
-
+  // await queryClient.invalidateQueries();  
+// setUser(undefined);
         console.info(`At AuthProvider:\tLogout:\ntoken = ${_token}`);
         toast.dismiss(msgToast);
-        toast.dismiss(loggingToast);
+        // toast.dismiss(loggingToast);
 
         // navigate("/login", { state: { from: location } });
       })
       .finally(() => {
-        toast.dismiss(loggingToast);
+        // toast.dismiss(loggingToast);
+      //  client.cancelQueries({queryKey:[QK_ACCOUNT]})
       });
   };
 
@@ -123,8 +131,9 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
       logout,
       refresh,
       isLoading,
-      isAdmin,
-      user,
+      // isAdmin,
+      // user,
+      credentials
     }),
     [_token]
   );

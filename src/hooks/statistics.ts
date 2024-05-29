@@ -8,16 +8,26 @@ export const useGetApartmentCount = createQuery({
   fetcher: () =>
     Api.instance
       .get<ApiResponse<{ count: number }>>(ApiRoutes.apartment.Statistics)
-      .then((res) => res.data.data?.count),
+      .then((res) => res.data.data?.count)
+            .catch((error)=>{
+        throw error
+      })
+      ,
   placeholderData: keepPreviousData,
+    initialData: null,
 });
 export const useGetCustomerCount = createQuery({
   queryKey: [QK_STAT_CUSTOMER],
   fetcher: () =>
     Api.instance
       .get<ApiResponse<{ count: number }>>(ApiRoutes.customer.Statistics)
-      .then((res) => res.data.data?.count),
+      .then((res) => res.data.data?.count)
+            .catch((error)=>{
+        throw error
+      })
+      ,
   placeholderData: keepPreviousData,
+    initialData: null,
 });
 
 export const useGetUserCount = createQuery({
@@ -25,6 +35,11 @@ export const useGetUserCount = createQuery({
   fetcher: () =>
     Api.instance
       .get<ApiResponse<{ count: number }>>(ApiRoutes.user.Statistics)
-      .then((res) => res.data.data?.count),
+      .then((res) => res.data.data?.count)
+      .catch((error)=>{
+        throw error
+      })
+      ,
   placeholderData: keepPreviousData,
+    initialData: null,
 });

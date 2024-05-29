@@ -13,8 +13,8 @@ interface AuthContextReturns {
   refresh?: () => any;
   isLoading: boolean;
   // expiresAt: number | null;
-  user: User | undefined;
-  isAdmin: false | boolean;
+  user?: User | undefined;
+  isAdmin?: false | boolean;
   // role: string | null;
   // setUser: React.Dispatch<React.SetStateAction<IUser | undefined>> | undefined;
   credentials?: { username: string; password: string }
