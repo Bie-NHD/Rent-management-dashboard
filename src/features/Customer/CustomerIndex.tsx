@@ -18,7 +18,7 @@ const CustomerIndex = () => {
   return (
     <>
       <PageHeader />
-      <IndexToolBar handleNewItem={handleNewItem} />
+      <IndexToolBar handleNewItem={handleNewItem} enableImport/>
       <CustomerList />
     </>
   );

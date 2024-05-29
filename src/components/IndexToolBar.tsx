@@ -19,7 +19,9 @@ const IndexToolBar = (props: IndexToolbarProps) => {
 
   return (
     <Container sx={styles}>
-      <Button variant="contained" startIcon={<AddCircleIcon />} onClick={props.handleNewItem}>
+      <Button variant="contained" startIcon={<AddCircleIcon />} onClick={props.handleNewItem} sx={{
+            marginInline: ".5rem",
+        }}>
         New
       </Button>
       {props.enableImport && <ImportButton />}

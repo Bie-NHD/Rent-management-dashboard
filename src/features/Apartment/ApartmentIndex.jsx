@@ -18,7 +18,7 @@ const ApartmentIndex = () => {
   return (
     <>
       <PageHeader />
-      <IndexToolBar handleNewItem={handleNewApartment} />
+      <IndexToolBar handleNewItem={handleNewApartment} enableImport />
       <ApartmentList />
     </>
   );
