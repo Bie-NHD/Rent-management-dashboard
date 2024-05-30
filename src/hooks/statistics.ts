@@ -5,41 +5,20 @@ import { Api } from "../api";
 
 export const useGetApartmentCount = createQuery({
   queryKey: [QK_STAT_APARMENT],
-  fetcher: () =>
-    Api.instance
-      .get<ApiResponse<{ count: number }>>(ApiRoutes.apartment.Statistics)
-      .then((res) => res.data.data?.count)
-            .catch((error)=>{
-        throw error
-      })
-      ,
+  fetcher: () => Api.statistic.apartmentCount,
   placeholderData: keepPreviousData,
-    initialData: null,
+  initialData: null,
 });
 export const useGetCustomerCount = createQuery({
   queryKey: [QK_STAT_CUSTOMER],
-  fetcher: () =>
-    Api.instance
-      .get<ApiResponse<{ count: number }>>(ApiRoutes.customer.Statistics)
-      .then((res) => res.data.data?.count)
-            .catch((error)=>{
-        throw error
-      })
-      ,
+  fetcher: () => Api.statistic.customerCount,
   placeholderData: keepPreviousData,
-    initialData: null,
+  initialData: null,
 });
 
 export const useGetUserCount = createQuery({
   queryKey: [QK_STAT_USER],
-  fetcher: () =>
-    Api.instance
-      .get<ApiResponse<{ count: number }>>(ApiRoutes.user.Statistics)
-      .then((res) => res.data.data?.count)
-      .catch((error)=>{
-        throw error
-      })
-      ,
+  fetcher: () => Api.statistic.userCount,
   placeholderData: keepPreviousData,
-    initialData: null,
+  initialData: null,
 });

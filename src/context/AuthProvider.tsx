@@ -53,18 +53,16 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
     staleTime: 120000,
     // throwOnError: (error) => error instanceof AxiosError || true,
   });
-// const [user,setUser] = useState<User>()
+  // const [user,setUser] = useState<User>()
   // const { data: user, refetch: refetchUser } = useGetUser();
 
   console.info(`${Date.now()}\nAt AuthProvider:\naccess_token = ${_token}`);
 
-  useEffect( () => {
+  useEffect(() => {
     // async () => {
-
     //   const _user =  await UserApi.details();
     //   setUser(()=>_user);
     // }
-
     //  refetchUser();
   }, [credentials]);
 
@@ -103,8 +101,8 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
         const msgToast = message ? toast(message!) : undefined;
         // await client.invalidateQueries({ queryKey: [QK_ACCESS_TOKEN] });
         // refetch();
-  // await queryClient.invalidateQueries();  
-// setUser(undefined);
+        // await queryClient.invalidateQueries();
+        // setUser(undefined);
         console.info(`At AuthProvider:\tLogout:\ntoken = ${_token}`);
         toast.dismiss(msgToast);
         // toast.dismiss(loggingToast);
@@ -113,7 +111,7 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
       })
       .finally(() => {
         // toast.dismiss(loggingToast);
-      //  client.cancelQueries({queryKey:[QK_ACCOUNT]})
+        //  client.cancelQueries({queryKey:[QK_ACCOUNT]})
       });
   };
 
@@ -133,7 +131,7 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
       isLoading,
       // isAdmin,
       // user,
-      credentials
+      credentials,
     }),
     [_token]
   );

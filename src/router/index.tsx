@@ -1,5 +1,5 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
-import StatisticPage from "../features/Statistic/StatisticPage";
+// import StatisticPage from "../features/Statistic/StatisticPage";
 // import { loader as importLoader } from "./pages/ImportPage";
 
 import ErrorPage from "../features/error-page/ErrorPage";
@@ -36,6 +36,8 @@ const EditAccount = lazy(() => import("../features/Login/EditAccount"));
 const ChangePassword = lazy(() => import("../features/Login/ChangePassword"));
 
 const EditContract = lazy(() => import("../features/Contract/EditContract"));
+
+const StatisticPage = lazy(() => import("../features/Statistic/StatisticPage"));
 // ---------------------------------------------------------
 
 const Loading = () => {
@@ -148,7 +150,11 @@ const requireSignedInRoutes: RouteObject[] = [
       {
         path: "/",
         index: true,
-        element: <StatisticPage />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <StatisticPage />{" "}
+          </Suspense>
+        ),
       },
       ...indexRoutes,
       ...importRoutes,

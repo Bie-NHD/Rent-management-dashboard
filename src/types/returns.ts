@@ -2,8 +2,9 @@ interface IUseUserContextHookReturns {
   user: User | undefined;
   // setUser: React.Dispatch<React.SetStateAction<IUser | undefined>> | undefined;
   isAdmin: false | boolean;
-  refetch: () => Promise<any> | any;
-  isLoading: boolean;
+  refetch?: () => Promise<any> | any;
+  isLoading?: boolean;
+  setUser: React.Dispatch<React.SetStateAction<User | undefined>> | undefined;
 }
 interface AuthContextReturns {
   token: string | null;
@@ -17,7 +18,7 @@ interface AuthContextReturns {
   isAdmin?: false | boolean;
   // role: string | null;
   // setUser: React.Dispatch<React.SetStateAction<IUser | undefined>> | undefined;
-  credentials?: { username: string; password: string }
+  credentials?: { username: string; password: string };
 }
 
 type UseGetHookReturns<TData> = {

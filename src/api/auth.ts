@@ -5,7 +5,7 @@ import privateInstance from "./privateInstance";
 
 const TEST_URL = "http://localhost:9090" as const;
 
-const authInstance = axios.create({
+const publicInstance = axios.create({
   baseURL: TEST_URL,
   withCredentials: true,
 });
@@ -20,7 +20,7 @@ const authInstance = axios.create({
 // );
 
 const login = async (params: ApiLoginParams) =>
-  await authInstance
+  await publicInstance
     .post<ApiResponse<AuthTokens>>(ApiRoutes.auth.login, params)
     .then((response) => {
       console.log("login: ", response.data);
@@ -34,19 +34,23 @@ const login = async (params: ApiLoginParams) =>
     .catch((error) => Promise.reject(error));
 
 const logout = () => {
-  
-  return privateInstance.get(ApiRoutes.auth.logout).finally(() => {
-    AuthStorageService.removeAllTokens();
-    console.log("LOGGED OUT");
-    return Promise.resolve();
-  });
+  return privateInstance
+    .get(ApiRoutes.auth.logout)
+    .then(() => {
+      AuthStorageService.removeAllTokens();
+      console.log("LOGGED OUT");
+      return Promise.resolve();
+    })
+    .catch((error) => {
+      throw error;
+    });
 };
 
 const refreshToken = () => {
   const getRefreshToken = AuthStorageService.getRefreshToken();
   const reqAuthToken = getRefreshToken.then(
     (refresh_token) =>
-      authInstance
+      privateInstance
         .post<ApiResponse<AuthTokens>>(ApiRoutes.auth.refreshToken, { refresh_token })
         .then((response) => response.data),
     (error) => {
@@ -70,7 +74,7 @@ const refreshToken = () => {
 };
 
 const forgotPassword = (data: { email: string }): Promise<ApiQueryStatus> =>
-  authInstance
+  publicInstance
     .post<ApiQueryStatus>(ApiRoutes.auth.resetPassword, null, { params: data })
     .then((res) => res.data)
     .then((apiRes) => ({
