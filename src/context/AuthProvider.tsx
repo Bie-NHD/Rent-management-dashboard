@@ -96,23 +96,19 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
     setCredetials(undefined);
     // const loggingToast = toast.loading("Logging out...");
 
-    return await AuthApi.logout()
-      .then(async () => {
-        const msgToast = message ? toast(message!) : undefined;
-        // await client.invalidateQueries({ queryKey: [QK_ACCESS_TOKEN] });
-        // refetch();
-        // await queryClient.invalidateQueries();
-        // setUser(undefined);
-        console.info(`At AuthProvider:\tLogout:\ntoken = ${_token}`);
-        toast.dismiss(msgToast);
-        // toast.dismiss(loggingToast);
+    return await AuthApi.logout().then(async () => {
+      const msgToast = message ? toast(message!) : undefined;
+      client.invalidateQueries({ queryKey: [QK_ACCESS_TOKEN] });
 
-        // navigate("/login", { state: { from: location } });
-      })
-      .finally(() => {
-        // toast.dismiss(loggingToast);
-        //  client.cancelQueries({queryKey:[QK_ACCOUNT]})
-      });
+      // refetch();
+      // await queryClient.invalidateQueries();
+      // setUser(undefined);
+      console.info(`At AuthProvider:\tLogout:\ntoken = ${_token}`);
+      toast.dismiss(msgToast);
+      // toast.dismiss(loggingToast);
+
+      // navigate("/login", { state: { from: location } });
+    });
   };
 
   // Refresh Token
