@@ -1,5 +1,5 @@
 import NiceModal from "@ebay/nice-modal-react";
-import { Container, Button } from "@mui/material";
+import { Container, Button, Box } from "@mui/material";
 import React from "react";
 import { NM_APARTMENT, AppRoutes } from "../constants";
 import ExportButton from "./buttons/ExportButton";
@@ -19,13 +19,23 @@ const IndexToolBar = (props: IndexToolbarProps) => {
 
   return (
     <Container sx={styles}>
-      <Button variant="contained" startIcon={<AddCircleIcon />} onClick={props.handleNewItem} sx={{
-            marginInline: ".5rem",
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "flex-start",
         }}>
-        New
-      </Button>
-      {props.enableImport && <ImportButton />}
-      <ExportButton exportType={location} />
+        <Button
+          variant="contained"
+          startIcon={<AddCircleIcon />}
+          onClick={props.handleNewItem}
+          sx={{
+            marginInline: ".5rem",
+          }}>
+          New
+        </Button>
+        {props.enableImport && <ImportButton />}
+        <ExportButton exportType={location} />
+      </Box>
     </Container>
   );
 };

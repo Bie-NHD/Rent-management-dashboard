@@ -21,3 +21,10 @@ export const contractLoader = async ({ params }) => {
     .then((res) => res.data?.data);
   return user;
 };
+
+export const apartmentLoader = async ({ params }) => {
+  const apartment = await Api.instance
+    .get(`${ApiRoutes.apartment.GetAll}/${params?.id}`)
+    .then((res) => res.data?.data);
+  return apartment;
+};
