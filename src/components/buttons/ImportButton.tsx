@@ -8,19 +8,19 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
  * @returns
  */
 const ImportButton = () => {
-  const location = useLocation()
+  const location = useLocation();
   return (
     <Button
       startIcon={<CloudUploadIcon />}
       variant="outlined"
       component={RouterLink}
-      state={{from: location}}
+      state={{ from: location }}
       to={`./import`}
       sx={{
         alignSelf: "flex-end",
         marginInline: ".5rem",
-      }}
-    >
+        flexGrow: 1,
+      }}>
       Import
     </Button>
   );

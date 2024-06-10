@@ -7,22 +7,23 @@ import ImportButton from "./buttons/ImportButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { IndexToolbarProps } from "../types/props";
 
-const styles = {
-  display: "flex",
-  justifyContent: "end",
-  justifyItems: "start",
-  marginRight: 0,
-};
-
 const IndexToolBar = (props: IndexToolbarProps) => {
   const location = window.location.pathname;
 
   return (
-    <Container sx={styles}>
+    <Container
+      sx={{
+        display: "flex",
+        justifyContent: "end",
+        justifyItems: "start",
+        marginRight: 0,
+        padding: 0,
+      }}>
       <Box
         sx={{
           display: "flex",
           alignItems: "flex-start",
+          flexWrap: "wrap",
         }}>
         <Button
           variant="contained"
@@ -30,6 +31,7 @@ const IndexToolBar = (props: IndexToolbarProps) => {
           onClick={props.handleNewItem}
           sx={{
             marginInline: ".5rem",
+            flexGrow: 1,
           }}>
           New
         </Button>
