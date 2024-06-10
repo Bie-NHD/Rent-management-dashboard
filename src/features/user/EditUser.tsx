@@ -31,6 +31,7 @@ import toast from "react-hot-toast";
 import styled from "@emotion/styled";
 import NiceModal from "@ebay/nice-modal-react";
 import { WarningDialogProps } from "../../types/props";
+import useUser from "../../hooks/useUser";
 
 const roleOptions = [...Object.values(UserRoles)].map((item) => (
   <MenuItem key={item} value={item}>
@@ -55,6 +56,7 @@ const EditUser = () => {
   const location = useLocation();
   const from = location?.state?.from || "/";
   const navigate = useNavigate();
+  const { user: accountUser } = useUser();
 
   const [_errors, setErrors] = useState("");
 
@@ -145,7 +147,7 @@ const EditUser = () => {
                   checked={!!field.value}
                   // onChange={(e) => field.onChange(e.target.checked)}
                 />
-                {!isManager && (
+                {!isManager && accountUser?.id != user?.id && (
                   <Button onClick={handleDisableAccount} variant="outlined">
                     {`${field.value ? "Disable" : "Enable"} account`}
                   </Button>
