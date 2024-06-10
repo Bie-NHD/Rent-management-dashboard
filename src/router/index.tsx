@@ -14,6 +14,7 @@ import UserIndexPage from "../features/user/UserIndexPage";
 import LoginPage from "../features/Login/LoginPage";
 
 import { contractLoader, customerLoader, userLoader } from "../utils/routerLoader";
+import CreateApartment from "../features/Apartment/CreateApartment";
 
 // ---------------------------------------------------------
 const ApartmentIndex = lazy(() => import("../features/Apartment/ApartmentIndex"));
@@ -164,6 +165,14 @@ const requireSignedInRoutes: RouteObject[] = [
         element: (
           <Suspense fallback={<Loading />}>
             <CreateCustomer />
+          </Suspense>
+        ),
+      },
+      {
+        path: ApiRoutes.apartment.Add,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <CreateApartment />
           </Suspense>
         ),
       },

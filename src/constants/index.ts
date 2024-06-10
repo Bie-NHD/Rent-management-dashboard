@@ -37,3 +37,4 @@ export const StatusCode = Object.freeze({
   OK: [200, 201],
   Error: 400,
 });
+export const REGEX_VALID_ADDRESS = new RegExp(/^[a-zA-Z0-9,/]+$/g);

@@ -29,15 +29,14 @@ const Layout = ({ children }) => {
   return (
     <>
       <CssBaseline />
-      <AppBar color="transparent" position="fixed" open={open}>
+      <AppBar position="fixed" open={open}>
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
-          >
+            sx={{ mr: 2, ...(open && { display: "none" }) }}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">

@@ -51,26 +51,26 @@ const SearchApi = async <TData>(url: string, params: ApiSearchParams) =>
 
 // ---------------------------------------------------
 
-// const GetUserCount = privateInstance
-//   .get<ApiResponse<{ count: number }>>(ApiRoutes.user.Statistics)
-//   .then((res) => res.data.data?.count)
-//   .catch((error) => {
-//     throw error;
-//   });
+const GetUserCount = privateInstance
+  .get<ApiResponse<{ count: number }>>(ApiRoutes.user.Statistics)
+  .then((res) => res.data.data?.count)
+  .catch((error) => {
+    throw error;
+  });
 
-// const GetCustomerCount = privateInstance
-//   .get<ApiResponse<{ count: number }>>(ApiRoutes.customer.Statistics)
-//   .then((res) => res.data.data?.count)
-//   .catch((error) => {
-//     throw error;
-//   });
+const GetCustomerCount = privateInstance
+  .get<ApiResponse<{ count: number }>>(ApiRoutes.customer.Statistics)
+  .then((res) => res.data.data?.count)
+  .catch((error) => {
+    throw error;
+  });
 
-// const GetApartmentCount = privateInstance
-//   .get<ApiResponse<{ count: number }>>(ApiRoutes.apartment.Statistics)
-//   .then((res) => res.data.data?.count)
-//   .catch((error) => {
-//     throw error;
-//   });
+const GetApartmentCount = privateInstance
+  .get<ApiResponse<{ count: number }>>(ApiRoutes.apartment.Statistics)
+  .then((res) => res.data.data?.count)
+  .catch((error) => {
+    throw error;
+  });
 
 export const Api = Object.freeze({
   instance: privateInstance,
@@ -81,9 +81,9 @@ export const Api = Object.freeze({
   create: CreateApi,
   delete: DeleteApi,
   search: SearchApi,
-  // statistic: {
-  //   userCount: GetUserCount,
-  //   customerCount: GetCustomerCount,
-  //   apartmentCount: GetApartmentCount,
-  // },
+  statistic: {
+    userCount: GetUserCount,
+    customerCount: GetCustomerCount,
+    apartmentCount: GetApartmentCount,
+  },
 } as const);
