@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 /**
@@ -8,17 +8,19 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
  * @returns
  */
 const ImportButton = () => {
+  const location = useLocation();
   return (
     <Button
       startIcon={<CloudUploadIcon />}
       variant="outlined"
-      component={Link}
+      component={RouterLink}
+      state={{ from: location }}
       to={`./import`}
       sx={{
         alignSelf: "flex-end",
         marginInline: ".5rem",
-      }}
-    >
+        flexGrow: 1,
+      }}>
       Import
     </Button>
   );

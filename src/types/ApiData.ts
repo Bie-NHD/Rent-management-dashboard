@@ -169,8 +169,8 @@ type TokenPayloadData = {
 };
 
 type AuthTokens = {
-  access_token: string;
-  refresh_token: string;
+  access_token: string | undefined;
+  refresh_token: string | undefined;
 };
 
 type ApiQueryStatus = {

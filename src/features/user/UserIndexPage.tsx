@@ -44,13 +44,7 @@ const UserIndexPage = () => {
   return (
     <>
       <PageHeader />
-      <Container sx={styles}>
-        <Button variant="contained" startIcon={<AddCircle />} onClick={handleNewItem}>
-          New
-        </Button>
-        {/* <ImportButton /> */}
-        <ExportButton exportType={location.pathname} />
-      </Container>
+   <IndexToolBar handleNewItem={handleNewItem} />
       <UserList />
     </>
   );

@@ -9,6 +9,7 @@ const UserContext = createContext<IUseUserContextHookReturns>({
     throw new Error("Function not implemented.");
   },
   isLoading: false,
+  // setUser: undefined,
 });
 
 export default UserContext;
@@ -16,13 +17,15 @@ export default UserContext;
 export const UserProvider = ({ children }: { children: React.ReactNode | React.ReactNode[] }) => {
   const { data: user, refetch, isLoading } = useGetUser();
 
+  // const [user, setUser] = useState<User | undefined>(undefined);
+
   const isAdmin = useMemo(() => user?.role == UserRoles.MANAGER, [user?.role]);
 
   const contextValue = useMemo<IUseUserContextHookReturns>(
     () => ({
       user,
-      refetch,
-      isLoading,
+      // setUser,
+      // isLoading,
       isAdmin,
     }),
     [user]

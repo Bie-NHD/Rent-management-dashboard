@@ -2,8 +2,9 @@ interface IUseUserContextHookReturns {
   user: User | undefined;
   // setUser: React.Dispatch<React.SetStateAction<IUser | undefined>> | undefined;
   isAdmin: false | boolean;
-  refetch: () => Promise<any> | any;
-  isLoading: boolean;
+  refetch?: () => Promise<any> | any;
+  isLoading?: boolean;
+  // setUser: React.Dispatch<React.SetStateAction<User | undefined>> | undefined;
 }
 interface AuthContextReturns {
   token: string | null;
@@ -11,12 +12,14 @@ interface AuthContextReturns {
   login: (params: ApiLoginParams) => Promise<ApiQueryStatus> | ApiQueryStatus | any;
   logout: (...args: any[]) => Promise<any> | any;
   refresh?: () => any;
-  isLoading: boolean;
+  // isLoading: boolean;
   // expiresAt: number | null;
-  user: User | undefined;
-  isAdmin: false | boolean;
+  user?: User | undefined;
+  isAdmin?: false | boolean;
   // role: string | null;
   // setUser: React.Dispatch<React.SetStateAction<IUser | undefined>> | undefined;
+  credentials?: { username: string; password: string };
+  isLoggedIn: boolean;
 }
 
 type UseGetHookReturns<TData> = {

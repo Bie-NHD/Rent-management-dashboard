@@ -9,11 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 import React, { lazy } from "react";
-import { useGetApartmentCount, useGetCustomerCount, useGetUserCount } from "../../hooks/statistics";
+// import { useGetApartmentCount, useGetCustomerCount, useGetUserCount } from "../../hooks/statistics";
 import PageHeader from "../../components/PageHeader";
 import { useNavigate } from "react-router-dom";
 import { AppRoutes } from "../../constants";
 import useUser from "../../hooks/useUser";
+import { useGetApartmentCount, useGetCustomerCount, useGetUserCount } from "../../hooks/statistics";
 
 // TODO: Add statistics
 
@@ -22,7 +23,7 @@ const ApartmentStats = () => {
   const navigate = useNavigate();
 
   return (
-    <Card sx={{ flexGrow: 1, margin: 3, padding: 3, maxWidth: "25em" }}>
+    <Card sx={{ margin: 3, padding: 3, minWidth: "fit-content" }}>
       <CardContent>
         <Typography color="text.secondary" gutterBottom>
           Total number of
@@ -48,7 +49,7 @@ const CustomerStats = () => {
   const navigate = useNavigate();
 
   return (
-    <Card sx={{ flexGrow: 1, margin: 3, padding: 3, maxWidth: "25em" }}>
+    <Card sx={{ margin: 3, padding: 3, minWidth: "fit-content" }}>
       <CardContent>
         <Typography color="text.secondary" gutterBottom>
           Total number of
@@ -74,7 +75,7 @@ const UserStats = () => {
   const navigate = useNavigate();
 
   return (
-    <Card sx={{ flexGrow: 1, margin: 3, padding: 3, maxWidth: "25em" }}>
+    <Card sx={{ margin: 3, padding: 3, minWidth: "fit-content" }}>
       <CardContent>
         <Typography color="text.secondary" gutterBottom>
           Total number of
@@ -103,10 +104,8 @@ const StatisticPage = () => {
       <PageHeader>Statistics</PageHeader>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "stretch",
-          justifyContent: "flex-start",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
         }}>
         <ApartmentStats />
         <CustomerStats />

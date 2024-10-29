@@ -99,7 +99,7 @@ const CreateContract = () => {
         />
         {/* FIXME: at DatePicker: TextField cannot receive input */}
         <Box marginBlock={2}>
-          <FormLabel htmlFor="dob"> Date of birth</FormLabel>
+          <FormLabel htmlFor="startDate">Date start</FormLabel>
           <Controller
             name="startDate"
             control={control}
@@ -125,7 +125,7 @@ const CreateContract = () => {
         </Box>
         {/* FIXME: at DatePicker: TextField cannot receive input */}
         <Box marginBlock={2}>
-          <FormLabel htmlFor="dob"> Date of birth</FormLabel>
+          <FormLabel htmlFor="endDate">Date end</FormLabel>
           <Controller
             name="endDate"
             control={control}

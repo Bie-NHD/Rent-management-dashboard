@@ -1,9 +1,10 @@
 import { styled } from "@mui/material/styles";
-import { W_DRAWER } from "../constants/dimensions";
+import { HEADER, W_DRAWER } from "../constants/dimensions";
 
 const Main = styled("main", {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
+  marginTop: HEADER.H_DESKTOP,
   flexGrow: 1,
   alignItems: "start",
   minHeight: "5rem",

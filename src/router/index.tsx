@@ -1,5 +1,5 @@
 import { RouteObject, createBrowserRouter } from "react-router-dom";
-import StatisticPage from "../features/Statistic/StatisticPage";
+// import StatisticPage from "../features/Statistic/StatisticPage";
 // import { loader as importLoader } from "./pages/ImportPage";
 
 import ErrorPage from "../features/error-page/ErrorPage";
@@ -13,7 +13,8 @@ import RequireAdmin from "./RequireAdmin";
 import UserIndexPage from "../features/user/UserIndexPage";
 import LoginPage from "../features/Login/LoginPage";
 
-import { contractLoader, customerLoader, userLoader } from "../utils/routerLoader";
+import { apartmentLoader, contractLoader, customerLoader, userLoader } from "../utils/routerLoader";
+import CreateApartment from "../features/Apartment/CreateApartment";
 
 // ---------------------------------------------------------
 const ApartmentIndex = lazy(() => import("../features/Apartment/ApartmentIndex"));
@@ -36,6 +37,10 @@ const EditAccount = lazy(() => import("../features/Login/EditAccount"));
 const ChangePassword = lazy(() => import("../features/Login/ChangePassword"));
 
 const EditContract = lazy(() => import("../features/Contract/EditContract"));
+
+const StatisticPage = lazy(() => import("../features/Statistic/StatisticPage"));
+
+const EditApartment = lazy(() => import("../features/Apartment/EditApartment"));
 // ---------------------------------------------------------
 
 const Loading = () => {
@@ -148,7 +153,11 @@ const requireSignedInRoutes: RouteObject[] = [
       {
         path: "/",
         index: true,
-        element: <StatisticPage />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <StatisticPage />{" "}
+          </Suspense>
+        ),
       },
       ...indexRoutes,
       ...importRoutes,
@@ -158,6 +167,23 @@ const requireSignedInRoutes: RouteObject[] = [
         element: (
           <Suspense fallback={<Loading />}>
             <CreateCustomer />
+          </Suspense>
+        ),
+      },
+      {
+        path: `${ApiRoutes.apartment.GetAll}/:id/edit`,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <EditApartment />
+          </Suspense>
+        ),
+        loader: apartmentLoader,
+      },
+      {
+        path: ApiRoutes.apartment.Add,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <CreateApartment />
           </Suspense>
         ),
       },

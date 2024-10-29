@@ -3,22 +3,25 @@ import NiceModal from "@ebay/nice-modal-react";
 import ApartmentList from "./ApartmentList";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateApartment } from "../../hooks";
-import { NM_APARTMENT } from "../../constants";
+import { ApartmentRoutes, NM_APARTMENT } from "../../constants";
 import IndexToolBar from "../../components/IndexToolBar";
+import { useNavigate } from "react-router-dom";
 
 // ---------------------------------------------------------------------
 
 const ApartmentIndex = () => {
   const client = useQueryClient();
 
-  const { mutate } = useCreateApartment(client)();
+  const navigate = useNavigate();
 
-  const handleNewApartment = () => NiceModal.show(NM_APARTMENT).then((data) => mutate(data));
+  const handleNewItem = () => {
+    navigate(ApartmentRoutes.Add, { state: { from: window.location.pathname } });
+  };
 
   return (
     <>
       <PageHeader />
-      <IndexToolBar handleNewItem={handleNewApartment} />
+      <IndexToolBar handleNewItem={handleNewItem} enableImport />
       <ApartmentList />
     </>
   );

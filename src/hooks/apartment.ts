@@ -22,10 +22,17 @@ export const useCreateApartment = (client: QueryClient) =>
  @param action from ```ApiActions```
  */
 export const useUpdateApartment = createMutation({
-  mutationFn: async (variables: { data: ApiUpdateParams<ApartmentUpdateDTO>; action: string }) =>
-    variables.action === AppRoutes.Update
-      ? Api.update(ApartmentRoutes.Update, variables.data)
-      : Api.delete(ApartmentRoutes.Delete, { id: variables.data.id }),
+  mutationFn: async (variables: ApiUpdateParams<ApartmentUpdateDTO>) =>
+    Api.update(ApartmentRoutes.Update, variables),
+  onError(error, variables, context) {
+    console.log(error || "Trouble updating apartment");
+    toast.error(error.message || "Trouble updating apartment");
+  },
+});
+
+export const useDeleteApartment = createMutation({
+  mutationFn: async (variables: { id: string }) =>
+    Api.delete(ApartmentRoutes.Delete, { id: variables.id }),
   onError(error, variables, context) {
     console.log(error || "Trouble updating apartment");
     toast.error(error.message || "Trouble updating apartment");

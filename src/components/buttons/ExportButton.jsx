@@ -56,7 +56,10 @@ const ExportButton = ({ exportType: exportFileType }) => {
   return (
     <React.Fragment>
       <ButtonGroup variant="outlined" ref={anchorRef} aria-label="Button group with a nested menu">
-        <Button startIcon={<CloudDownloadIcon />} onClick={handleClick}>
+        <Button
+          startIcon={<CloudDownloadIcon />}
+          onClick={handleClick}
+          sx={{ flexGrow: 1, minWidth: "fit-content" }}>
           {options[selectedIndex]}
         </Button>
         <Button
@@ -65,8 +68,7 @@ const ExportButton = ({ exportType: exportFileType }) => {
           aria-expanded={open ? "true" : undefined}
           aria-label="select merge strategy"
           aria-haspopup="menu"
-          onClick={handleToggle}
-        >
+          onClick={handleToggle}>
           <ArrowDropDownIcon />
         </Button>
       </ButtonGroup>
@@ -78,15 +80,13 @@ const ExportButton = ({ exportType: exportFileType }) => {
         anchorEl={anchorRef.current}
         role={undefined}
         transition
-        disablePortal
-      >
+        disablePortal>
         {({ TransitionProps, placement }) => (
           <Grow
             {...TransitionProps}
             style={{
               transformOrigin: placement === "bottom" ? "center top" : "center bottom",
-            }}
-          >
+            }}>
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList id="split-button-menu" autoFocusItem>
@@ -94,8 +94,7 @@ const ExportButton = ({ exportType: exportFileType }) => {
                     <MenuItem
                       key={option}
                       selected={index === selectedIndex}
-                      onClick={(event) => handleMenuItemClick(event, index)}
-                    >
+                      onClick={(event) => handleMenuItemClick(event, index)}>
                       {option}
                     </MenuItem>
                   ))}

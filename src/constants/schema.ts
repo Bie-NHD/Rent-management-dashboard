@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
-import { ObjectSchema, object, string, date, ref } from "yup";
-import { REGEX_VALID_CITIZENID, REGEX_VALID_PHONE_NUMBER } from ".";
+import { ObjectSchema, object, string, date, ref, number } from "yup";
+import { REGEX_VALID_ADDRESS, REGEX_VALID_CITIZENID, REGEX_VALID_PHONE_NUMBER } from ".";
 import { ChangePasswordProps } from "../types/props";
 
 export const customerInputsSchema: ObjectSchema<
@@ -76,4 +76,15 @@ export const createContractSchema: ObjectSchema<ContractInputs> = object({
       }
     ),
   // customer
+});
+
+export const apartmentSchema: ObjectSchema<Omit<Apartment, "id">> = object({
+  address: string()
+    .max(50)
+    .matches(REGEX_VALID_ADDRESS, ({ label }) => `${label} is not valid`)
+    .label("Address")
+    .required("Address is required")
+    .default(""),
+  numberOfRoom: number().label("Number of Rooms").required().min(1).default(1),
+  retailPrice: number().label("Retail Price").required().min(100000).default(100000),
 });

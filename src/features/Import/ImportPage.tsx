@@ -20,6 +20,8 @@ import { styled } from "@mui/material/styles";
 
 import DeleteButton from "../../components/buttons/DeleteButton";
 import { useImportFile } from "../../hooks/useImport";
+import PageHeader from "../../components/PageHeader";
+import { useLocation } from "react-router-dom";
 // -----------------------------------------------------------------
 
 const styles = {
@@ -83,9 +85,9 @@ function getImportMessages(response: ApiResponse<ImportResponse>) {
 }
 
 const ImportPage = () => {
-  const pathName = window.location.pathname.split("/").at(-1) as string;
+  const pathName = window.location.pathname;
   console.log(pathName);
-
+const location = useLocation();
   const [fileStates, setFileStates] = useState<FileState[]>([]);
   // const [fileStates,dispatchFileStates] = useReducer(fileStatesReducer,[])
   const [showProgressBar, setShowProgressBar] = React.useState(false);
@@ -141,6 +143,7 @@ const ImportPage = () => {
         flexDirection: "column",
         paddingTop: "2rem",
       }}>
+        <PageHeader>Import Files</PageHeader>
       <FormControl>
         <Stack spacing={1}>
           <Button
