@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }: { children: any[] }) => {
 
         // done fetching token:
         // setCredetials(params);
-        setToken(res.data.access_token ?? "");
+        setToken(res.data?.access_token ?? "");
         toast.dismiss(loggingToast);
         return res;
       })
